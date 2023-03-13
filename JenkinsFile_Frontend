@@ -19,9 +19,9 @@ pipeline {
                         sh "npm run build"
                     }
                 }
-                dir('') {
+                dir('Dockerfiles/front') {
                     script {
-                        dockerImage = docker.build("xronace/d205-frontend:latest", "./Dockerfiles/front")
+                        dockerImage = docker.build("xronace/d205-frontend:latest")
                     }
                 }
             }
