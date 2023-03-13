@@ -39,9 +39,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 sshagent(credentials: ['ec2-ssh']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@i8d203.p.ssafy.io "docker stop d205-frontend || true"'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@i8d203.p.ssafy.io "docker rm -f d205-frontend || true"'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@i8d203.p.ssafy.io "docker run -dp 3000:80 --net=bridge --name d205-frontend xronace/d205-frontend:latest"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@h8d205.p.ssafy.io "docker stop d205-frontend || true"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker rm -f d205-frontend || true"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker run -dp 3000:80 --net=bridge --name d205-frontend xronace/d205-frontend:latest"'
                     sh 'docker image prune -f'
                 }
             }
