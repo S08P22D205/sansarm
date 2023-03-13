@@ -17,7 +17,7 @@ pipeline {
                 }
                 dir('Dockerfiles/sansam') {
                     script {
-                        dockerImage = docker.build "xronace/d205-SpringBoot:latest"
+                        dockerImage = docker.build "xronace/d205-springboot:latest"
                     }
                 }
             }
@@ -28,16 +28,16 @@ pipeline {
                     docker.withRegistry('', 'Docker-Hub') {
                         dockerImage.push("$BUILD_NUMBER")
                     }
-                    sh "docker rmi xronace/d205-SpringBoot:$BUILD_NUMBER"
+                    sh "docker rmi xronace/d205-springboot:$BUILD_NUMBER"
                 }
             }
         }
         stage('Deploy') {
             steps {
                 sshagent(credentials: ['ec2-ssh']) {
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker stop d205-SpringBoot"'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker rm -f d205-SpringBoot"'
-                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker run -dp 5000:5000 -e SPRING_DATASOURCE_URL=jdbc:mariadb://172.17.0.1:3306/sansam_db?serverTimezone=Asia/Seoul --net=bridge --name d205-SpringBoot xronace/d205-SpringBoot:latest"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker stop d205-springboot"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker rm -f d205-springboot"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker run -dp 5000:5000 -e SPRING_DATASOURCE_URL=jdbc:mariadb://172.17.0.1:3306/sansam_db?serverTimezone=Asia/Seoul --net=bridge --name d205-springboot xronace/d205-springboot:latest"'
                     sh 'docker image prune -f'
                 }
             }
