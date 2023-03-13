@@ -7,3 +7,6 @@ spring:
     url: jdbc:mariadb://localhost:3306/sansam_db?characterEncoding=UTF-8&&serverTimezone=UTC
     username: ssafy
     password: ssafy
+
+server:
+  port: 5000
