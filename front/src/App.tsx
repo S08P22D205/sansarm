@@ -14,21 +14,23 @@ import MyPage from "./Pages/MyPage/MyPage";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Start />} />
-        <Route path="/login/*" element={<Login />} />
-        <Route path="/signup/*" element={<SignUp />} />
-        <Route path="/main/*" element={<Main />} />
-        <Route path="/filtermt/*" element={<FilterMt />} />
-        <Route path="/filterrg/*" element={<FilterRg />} />
-        <Route path="/coursedetail/*" element={<CourseDetail />} />
-        <Route path="/hiking/*" element={<Hiking />} />
-        <Route path="/review/*" element={<Review />} />
-        <Route path="/photo/*" element={<Photo />} />
-        <Route path="/mypage/*" element={<MyPage />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="App">
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Start />} />
+          <Route path="/login/*" element={<Login />} />
+          <Route path="/signup/*" element={<SignUp />} />
+          <Route path="/main/*" element={<Main />} />
+          <Route path="/filtermt/*" element={<FilterMt />} />
+          <Route path="/filterrg/*" element={<FilterRg />} />
+          <Route path="/coursedetail/*" element={<CourseDetail />} />
+          <Route path="/hiking/*" element={<Hiking />} />
+          <Route path="/review/*" element={<Review />} />
+          <Route path="/photo/*" element={<Photo />} />
+          <Route path="/mypage/*" element={<MyPage />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
