@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Select, { Options } from "react-select";
+import Select from "react-select";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 
@@ -42,13 +42,6 @@ function SignUp1() {
     userLocation: "",
   });
 
-  const [selectedOption, setSelectedOption] = useState<Option | null>(null);
-  const [size, setSize] = useState<number>(1);
-
-  const handleOptionChange = (option: any) => {
-    setSelectedOption(option as Option);
-  };
-
   const changeSignUp = (
     event: React.ChangeEvent<HTMLInputElement>,
     type: any
@@ -59,27 +52,10 @@ function SignUp1() {
     });
   };
 
-  // const selectList = ["apple", "banana", "grape", "orange"];
-
-  // const [Selected, setSelected] = useState("");
-
-  // const handleSelect = (e: any) => {
-  //   setSelected(e.target.value);
-  // };
-
   return (
     <StyledDiv>
       <StyledH1>고객님의 정보를 입력해주세요</StyledH1>
-      <StyledDiv2>
-        <StyledInput
-          type="text"
-          value={signUp.userNm}
-          onChange={(event) => {
-            changeSignUp(event, "userNm");
-          }}
-          placeholder="이름"
-        />
-      </StyledDiv2>
+      <StyledSpace></StyledSpace>
       <StyledDiv2>
         <StyledInput
           type="text"
@@ -102,25 +78,22 @@ function SignUp1() {
       </StyledDiv2>
       <StyledDiv2>
         <StyledSelect
-          defaultValue={selectedOption}
-          onChange={handleOptionChange}
+          onChange={(event) => changeSignUp}
           options={genders}
           isSearchable={true}
           maxMenuHeight={150}
           placeholder={"성별"}
         />
       </StyledDiv2>
-
-      <StyledDiv3>
+      <StyledDiv2>
         <StyledSelect
-          defaultValue={selectedOption}
-          onChange={handleOptionChange}
+          onChange={(event) => changeSignUp}
           options={options}
           isSearchable={true}
           maxMenuHeight={150}
           placeholder={"사는지역"}
         />
-      </StyledDiv3>
+      </StyledDiv2>
 
       <StyledButton>완료</StyledButton>
     </StyledDiv>
@@ -139,19 +112,13 @@ const StyledH1 = styled.div`
   padding: 4vw;
 `;
 
+const StyledSpace = styled.div`
+  margin-top: 10%;
+`;
+
 const StyledDiv2 = styled.div`
   margin-bottom: 4%;
   text-align: center;
-`;
-
-const StyledDiv3 = styled.div`
-  margin-bottom: 4%;
-  margin-left: 12.5%;
-  text-align: center;
-  width: 75vw;
-  height: 5vh;
-  // border: 1px solid black;
-  border-radius: 7px;
 `;
 
 const StyledInput = styled.input`
