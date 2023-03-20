@@ -1,0 +1,23 @@
+{
+  "name": "dummy",
+  "data": [
+    {
+      "mt_nm": "앞산",
+      "course_diff": 1,
+      "course_length": 3,
+      "course_time" : 4
+    },
+    {
+      "mt_nm": "한라산",
+      "course_diff": 3,
+      "course_length": 7,
+      "course_time" : 10
+    },
+    {
+      "mt_nm": "지리산",
+      "course_diff": 5,
+      "course_length": 10,
+      "course_time" : 20
+    }
+  ]
+}

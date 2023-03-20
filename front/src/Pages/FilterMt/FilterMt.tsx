@@ -1,7 +1,11 @@
+import Navbar from "../../Common/Navbar/Navbar";
+import ResultList from "../../Common/Result/ResultList";
+
 function FilterMt() {
   return (
     <div className="FilterMt">
-      <h1>FilterMt</h1>
+      <Navbar/>
+      <ResultList/>
     </div>
   );
 }
