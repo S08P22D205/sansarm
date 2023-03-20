@@ -1,4 +1,4 @@
-import React, { useState, ButtonHTMLAttributes } from "react";
+import { useState} from "react";
 import styled from "styled-components";
 import HamBtn from "./HamBtn";
 import { useNavigate } from "react-router-dom";
@@ -12,11 +12,11 @@ function Navbar() {
     navigate("/main") }
 
   const [toggleOn, setToggleOn] = useState<boolean>(false);
-  
-  const openMenu = (event: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
-    setToggleOn(!toggleOn);
-  }
 
+  const openMenu = () => {
+    setToggleOn(!toggleOn)
+  }
+  
   return (
     <div className="Navbar">
       <StyledDiv>
