@@ -1,41 +1,47 @@
 import React, { useState } from "react";
-import Select from "react-select";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
+import axios from "axios";
 
 interface Option {
   value: string;
   label: string;
 }
 
-const options: Option[] = [
-  { value: "1", label: "서울시" },
-  { value: "2", label: "부산시" },
-  { value: "3", label: "대구시" },
-  { value: "4", label: "인천시" },
-  { value: "5", label: "광주시" },
-  { value: "6", label: "대전시" },
-  { value: "7", label: "울산시" },
-  { value: "8", label: "세종시" },
-  { value: "9", label: "경기도" },
-  { value: "10", label: "강원도" },
-  { value: "11", label: "충청북도" },
-  { value: "12", label: "충청남도" },
-  { value: "13", label: "전라북도" },
-  { value: "14", label: "전라남도" },
-  { value: "15", label: "경상북도" },
-  { value: "15", label: "경상남도" },
-  { value: "16", label: "제주도" },
+const locations: Option[] = [
+  { value: "서울시", label: "서울시" },
+  { value: "부산시", label: "부산시" },
+  { value: "대구시", label: "대구시" },
+  { value: "인천시", label: "인천시" },
+  { value: "광주시", label: "광주시" },
+  { value: "대전시", label: "대전시" },
+  { value: "울산시", label: "울산시" },
+  { value: "세종시", label: "세종시" },
+  { value: "경기도", label: "경기도" },
+  { value: "강원도", label: "강원도" },
+  { value: "충청북도", label: "충청북도" },
+  { value: "충청남도", label: "충청남도" },
+  { value: "전라북도", label: "전라북도" },
+  { value: "전라남도", label: "전라남도" },
+  { value: "경상북도", label: "경상북도" },
+  { value: "경상남도", label: "경상남도" },
+  { value: "제주도", label: "제주도" },
 ];
 
 const genders: Option[] = [
-  { value: "1", label: "성별: 남" },
-  { value: "2", label: "성별: 여" },
+  { value: "M", label: "성별: 남" },
+  { value: "F", label: "성별: 여" },
 ];
 
 function SignUp1() {
+  const navigate = useNavigate();
+
+  const moveToSignUp2 = () => {
+    navigate("/signup/2");
+  };
+
   const [signUp, setSignUp] = useState({
-    userNm: "",
     userNicknm: "",
     userAge: "",
     userGender: "",
@@ -46,6 +52,18 @@ function SignUp1() {
     event: React.ChangeEvent<HTMLInputElement>,
     type: any
   ) => {
+    console.log(event.target.value);
+    setSignUp({
+      ...signUp,
+      [type]: event.target.value,
+    });
+  };
+
+  const handleSelect = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    type: any
+  ) => {
+    console.log(event.target.value);
     setSignUp({
       ...signUp,
       [type]: event.target.value,
@@ -78,21 +96,24 @@ function SignUp1() {
       </StyledDiv2>
       <StyledDiv2>
         <StyledSelect
-          onChange={(event) => changeSignUp}
-          options={genders}
-          isSearchable={true}
-          maxMenuHeight={150}
-          placeholder={"성별"}
-        />
+          placeholder="성별"
+          onChange={(event) => handleSelect(event, "userGender")}
+        >
+          {genders.map((gender) => (
+            <StyledOption value={gender.value} key={gender.value}>
+              {gender.label}
+            </StyledOption>
+          ))}
+        </StyledSelect>
       </StyledDiv2>
       <StyledDiv2>
-        <StyledSelect
-          onChange={(event) => changeSignUp}
-          options={options}
-          isSearchable={true}
-          maxMenuHeight={150}
-          placeholder={"사는지역"}
-        />
+        <StyledSelect onChange={(event) => handleSelect(event, "userLocation")}>
+          {locations.map((location) => (
+            <StyledOption value={location.value} key={location.value}>
+              {location.label}
+            </StyledOption>
+          ))}
+        </StyledSelect>
       </StyledDiv2>
 
       <StyledButton>완료</StyledButton>
@@ -104,7 +125,6 @@ const StyledDiv = styled.div`
   padding-top: 40%;
   height: 100vh;
   font-family: "GmarketSansLight";
-  scroll= "no";
 `;
 
 const StyledH1 = styled.div`
@@ -128,12 +148,16 @@ const StyledInput = styled.input`
   border-radius: 10px;
 `;
 
-const StyledSelect = styled(Select)`
+const StyledSelect = styled.select`
   width: 75vw;
-  height: 4vh;
-  text-align: left;
-  display: inline-block;
-  margin-bottom: 1vh;
+  height: 5vh;
+  border: 1px solid black;
+  border-radius: 5px;
+  overflow-y: auto;
+`;
+
+const StyledOption = styled.option`
+  overflow-y: scroll;
 `;
 
 const StyledButton = styled.button`
