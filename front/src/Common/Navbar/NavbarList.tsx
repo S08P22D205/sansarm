@@ -46,6 +46,7 @@ const StyledUl = styled.ul`
   background-color: white;
   width: 100%;
 `
+
 const StyledLi = styled.li`
   font-family: "GmarketSansMedium";
   font-size: 7vw;
@@ -59,4 +60,5 @@ const StyledHr = styled.hr`
   width: 90%;
   border: 1px solid #E3E3E3;
 `
+
 export default NavbarList;
