@@ -36,12 +36,15 @@ function NavbarList() {
 }
 
 const StyledUl = styled.ul`
+  position: absolute;
   justify-content: end;
   border-bottom: 2px solid #D9D9D9;
   margin-top: 0px;
   padding-left: 25px;
   padding-top: 15px;
   padding-bottom: 10px;
+  background-color: white;
+  width: 100%;
 `
 const StyledLi = styled.li`
   font-family: "GmarketSansMedium";

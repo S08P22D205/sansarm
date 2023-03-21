@@ -1,14 +1,22 @@
 import styled from "styled-components";
 
-function ResultItem () {
+interface ResultInfo {
+  id: number; 
+  mt_nm: string; 
+  course_diff: number; 
+  course_length: number; 
+  course_time: number; 
+}
+
+function ResultItem ({mt_nm, course_diff, course_length, course_time} :ResultInfo) {
   return (
     <StyledDiv>
       <StyledImg src="\img\mt2.png.png" alt="mt" />
       <StyledDiv2>
-        <StyledP>산 이름 : </StyledP>
-        <StyledP>난이도 : </StyledP>
-        <StyledP>코스 길이 : </StyledP>
-        <StyledP>산행 시간 : </StyledP>
+        <StyledP>산 이름 : {mt_nm}</StyledP>
+        <StyledP>난이도 : {course_diff}</StyledP>
+        <StyledP>코스 길이 : {course_length} km</StyledP>
+        <StyledP>산행 시간 : {course_time} 시간</StyledP>
       </StyledDiv2>
     </StyledDiv>
   )
