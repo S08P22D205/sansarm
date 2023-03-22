@@ -6,8 +6,8 @@ import ResultList from "../../Common/Result/ResultList";
 function FilterMt() {
 
   const time :string[] = ["전체", "1미만", "1-2", "2초과"];
-  // const [onTime, setOnTime] = useState<boolean>(false);
-  
+  const [onTime, setOnTime] = useState<string>("");
+
   const length :string[] = ["전체", "1미만", "1-3", "3-5", "5초과"];
 
   const [searchMt, setSearchMt] = useState<object>({
@@ -22,7 +22,10 @@ function FilterMt() {
       [type]: data,
     })
   }
-  console.log(searchMt)
+
+  console.log(searchMt);
+  console.log(onTime);
+
 
   return (
     <div className="FilterMt">
@@ -33,12 +36,10 @@ function FilterMt() {
       <StyledDiff>
         {time.map((data, index)=>{
           return (
+
             <StyledBtn 
               key={index} 
-              onClick={()=>{handleMt(data, "course_time");}} 
-            
-              // onClick={()=>{handleMt(data, "course_time");setOnTime(!onTime);}} 
-              // style={onTime?{border: "2px #238C47 solid" , color: "#238C47"}:{ border: "2px solid #818181"}}
+              onClick={()=>{handleMt(data, "course_time");setOnTime(data);}}
             >
               {data}
             </StyledBtn>
@@ -91,13 +92,10 @@ const StyledBtn = styled.button`
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border: 2px solid #818181;
-  &:focus {
+  /* &:focus {
     border: 2px #238C47 solid;
     color: #238C47;
-  }
-  &:focus-visible {
-    background-color: yellow;
-  }
+  } */
   border-radius: 13px;
   margin: 5px;
 `
@@ -111,10 +109,6 @@ const StyledBtn1 = styled.button`
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border: 2px solid #818181;
-  &:focus {
-    border: 2px #238C47 solid;
-    color: #238C47;
-  }
   border-radius: 13px;
   margin: 3px;
 `
