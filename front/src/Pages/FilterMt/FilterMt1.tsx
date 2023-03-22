@@ -92,6 +92,8 @@ const StyledBtn = styled.button`
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border: 2px solid #818181;
+  ${({ key }) =>
+    key ? 'white' : '#737373'};
   /* &:focus {
     border: 2px #238C47 solid;
     color: #238C47;
