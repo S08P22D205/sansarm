@@ -11,12 +11,10 @@ const StyledH = styled.p`
 `;
 
 function Main() {
-  // const [btnInfo, setbtnInfo] = useState<BtnInfo[] | undefined>([]);
-
   useEffect(() => {
     const getRecommendList = async () => {
-      const res = axios.get("/dummy/ListItemData.json");
-      console.log(res);
+      const res = await axios.get("/dummy/ListItemData.json");
+      console.log(res.data);
     };
     getRecommendList();
   }, []);
