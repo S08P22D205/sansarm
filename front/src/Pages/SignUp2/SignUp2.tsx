@@ -14,6 +14,10 @@ function SignUp2() {
         <p>최근 1년 내 다녀온</p><p>등산 경험을 입력해주세요.</p>
       </div>
       <SearchBar />
+      <br />
+      <ExperienceList />
+      <ExperienceList />
+      <ExperienceList />
       <ExperienceList />
       <br />
       <SubmitBtn>완료</SubmitBtn>
@@ -22,6 +26,8 @@ function SignUp2() {
 }
 
 export default SignUp2;
+
+
 
 const SubmitBtn = styled.button`
  width : 50vw;
@@ -33,4 +39,5 @@ const SubmitBtn = styled.button`
  margin-top : 10vw;
  float: right;
  margin-right : 10vw;
+ margin-bottom : 5vw;
 `
