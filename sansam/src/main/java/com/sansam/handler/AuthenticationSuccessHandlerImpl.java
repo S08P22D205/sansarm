@@ -37,7 +37,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                 userService.SaveRefreshToken(refreshToken, user.getUserNo());
                 response.sendRedirect("http://localhost:3000/login?"+accessToken+"?"+refreshToken);
             } else {
-                response.sendRedirect("http://localhost:3000/signup?no="+user.getUserNo());
+                response.sendRedirect("http://localhost:3000/signup/1?no="+user.getUserNo());
             }
         } catch (Exception e) {
             System.out.println(e);
