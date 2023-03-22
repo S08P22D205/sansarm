@@ -18,7 +18,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<String> createMountainList() {
         List<String> mountainList = new ArrayList<>();
-        System.out.println(mountainRepository.findAll());
         List<Mountain> mtList = mountainRepository.findAll(Sort.by(Sort.Direction.ASC, "mtNm"));
         for (Mountain mountain : mtList) {
             mountainList.add(mountain.getMtNm());
