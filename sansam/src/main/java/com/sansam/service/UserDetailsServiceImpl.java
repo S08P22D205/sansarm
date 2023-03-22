@@ -11,14 +11,14 @@ public class UserDetailsServiceImpl implements org.springframework.security.core
 
 	private final UserRepository userRepository;
 
-	  @Autowired
-	  public UserDetailsServiceImpl(UserRepository userRepository) {
+	@Autowired
+	public UserDetailsServiceImpl(UserRepository userRepository) {
 	    this.userRepository = userRepository;
 	  }
 
 	@Override
 	public UserDetails loadUserByUsername(String userEmail) throws UsernameNotFoundException {
-		return (UserDetails) userRepository.findByUserEmail(userEmail);
+		return userRepository.findByUserEmail(userEmail);
 	}
 
 }

@@ -1,10 +1,13 @@
 package com.sansam.service;
 
 import com.sansam.config.jwt.JwtProvider;
+import com.sansam.data.entity.Experience;
 import com.sansam.data.entity.Token;
 import com.sansam.data.entity.User;
+import com.sansam.data.repository.ExperienceRepository;
 import com.sansam.data.repository.TokenRepository;
 import com.sansam.data.repository.UserRepository;
+import com.sansam.dto.request.ExperienceRequest;
 import com.sansam.dto.request.SignUpRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,8 @@ import javax.transaction.Transactional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final TokenRepository tokenRepository;
-
+    private final ExperienceRepository experienceRepository;
     private final JwtProvider jwtProvider;
 
     @Override
@@ -50,5 +52,13 @@ public class UserServiceImpl implements UserService {
         String userEmail = jwtProvider.getEmailFromToken(refreshToken);
         Token token = tokenRepository.findByUserEmail(userEmail);
         token.updateRefreshToken(null);
+    }
+
+    @Override
+    @Transactional
+    public void SaveInitialExperience(int userNo, ExperienceRequest experienceRequest) {
+        Experience experience = new Experience();
+        experience.createExperience(userNo, experienceRequest.getExMtNm(), experienceRequest.getExDiff());
+        experienceRepository.save(experience);
     }
 }
