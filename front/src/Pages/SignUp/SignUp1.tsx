@@ -85,32 +85,27 @@ function SignUp1() {
   };
 
   const apiSignUp1 = () => {
-    console.log(signUp.userNo);
-    console.log(signUp.userNicknm);
-    console.log(signUp.userAge);
-    console.log(signUp.userGender);
-    console.log(signUp.userLocation);
-    // console.log(typeof Number(signUp.userAge));
-
-    axios
-      .post("/user/signup", {
-        userNo: signUp.userNo,
-        userNicknm: signUp.userNicknm,
-        userAge: Number(signUp.userAge),
-        userGender: signUp.userGender,
-        userLocation: signUp.userLocation,
-      })
-      .then((response) => {
-        console.log("success");
-        if (response.data) {
-          sessionStorage.setItem("accessToken", response.data.accessToken);
-          sessionStorage.setItem("refreshToken", response.data.refreshToken);
-          moveToSignUp2();
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    if (signUp.userNicknm !== "" && signUp.userAge !== "") {
+      axios
+        .post("/user/signup", {
+          userNo: signUp.userNo,
+          userNicknm: signUp.userNicknm,
+          userAge: Number(signUp.userAge),
+          userGender: signUp.userGender,
+          userLocation: signUp.userLocation,
+        })
+        .then((response) => {
+          console.log("success");
+          if (response.data) {
+            sessionStorage.setItem("accessToken", response.data.accessToken);
+            sessionStorage.setItem("refreshToken", response.data.refreshToken);
+            moveToSignUp2();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
