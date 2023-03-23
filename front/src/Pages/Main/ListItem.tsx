@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ItemInfo } from "../../store/mainSlice";
 
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
@@ -7,21 +8,27 @@ const StyledH = styled.p`
   text-align: left;
 `;
 
-const StyledCard = styled.div`
-  width: 30vw;
-  height: 7vw;
-  background-color: #cfe2c8;
+const StyledDiv = styled.div`
+  display: flex;
 `;
 
-function ListItem() {
+const StyledCard = styled.div`
+  width: 30vw;
+  height: 22vw;
+  background-color: #cfe2c8;
+  border: none;
+  border-radius: 5px;
+`;
+
+function ListItem({ userAge, userGender, courses }: ItemInfo) {
   return (
     <div className="ListItem">
       <StyledH>20대 여성분들이 선호하는 코스</StyledH>
-      <div>
-        <StyledCard></StyledCard>
-        <StyledCard></StyledCard>
-        <StyledCard></StyledCard>
-      </div>
+      <StyledDiv>
+        {courses.map(course => (
+          <StyledCard key={course}>{course}</StyledCard>
+        ))}
+      </StyledDiv>
     </div>
   );
 }
