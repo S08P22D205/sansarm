@@ -1,4 +1,7 @@
-import React from "react";
+
+import React from 'react';
+import styled from "styled-components";
+
 import "./SignUp2.css";
 import SearchBar from "./Components/SearchBar";
 import ExperienceList from "./Components/ExperienceList";
@@ -12,9 +15,30 @@ function SignUp2() {
         <p>등산 경험을 입력해주세요.</p>
       </div>
       <SearchBar />
+      <br />
       <ExperienceList />
+      <ExperienceList />
+      <ExperienceList />
+      <ExperienceList />
+      <br />
+      <SubmitBtn>완료</SubmitBtn>
     </div>
   );
 }
 
 export default SignUp2;
+
+
+
+const SubmitBtn = styled.button`
+ width : 50vw;
+ height : 20vw;
+ border-radius : 20px;
+ background-color : #238C47;
+ font-size : 12vw;
+ color : white;
+ margin-top : 10vw;
+ float: right;
+ margin-right : 10vw;
+ margin-bottom : 5vw;
+`
