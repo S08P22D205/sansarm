@@ -35,11 +35,11 @@ function List() {
       <ListItem
         userAge={genderAge[0].userAge}
         userGender={genderAge[0].userGender}
-        courses={genderAge[0].courses}
+        courseList={genderAge[0].courseList}
       />
-      <ListItem courses={easyCourse[0].courses} />
-      <ListItem courses={normalCourse[0].courses} />
-      <ListItem courses={hardCourse[0].courses} />
+      <ListItem courseList={easyCourse[0].courseList} />
+      <ListItem courseList={normalCourse[0].courseList} />
+      <ListItem courseList={hardCourse[0].courseList} />
     </StyledDiv>
   );
 }
