@@ -3,9 +3,11 @@ package com.sansam.controller;
 import com.sansam.config.jwt.JwtProvider;
 import com.sansam.data.entity.User;
 import com.sansam.data.repository.UserRepository;
-import com.sansam.dto.request.ExperienceRequest;
+import com.sansam.dto.request.SaveExperienceRequest;
+import com.sansam.dto.request.FavoriteRequest;
 import com.sansam.dto.request.SignOutRequest;
 import com.sansam.dto.request.SignUpRequest;
+import com.sansam.dto.response.FavoriteListResponse;
 import com.sansam.dto.response.SignUpResponse;
 import com.sansam.service.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -23,24 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 public class UserController {
     private final JwtProvider jwtProvider;
-
     private final UserServiceImpl userService;
-
     private final UserRepository userRepository;
-
-    @ApiOperation(
-			value = "카카오 인가코드 발송",
-			notes = "인가코드를 받으면 success를 반환하고, 실패하면 fail을 반환한다.")
-    @GetMapping("/oauth/code")
-    public ResponseEntity<String> kakaoCode(@RequestParam String code) {
-        try {
-            System.out.println(code);
-            return new ResponseEntity<>("success", HttpStatus.OK);
-        } catch (Exception e) {
-            System.out.println(e);
-            return new ResponseEntity<>("fail", HttpStatus.BAD_REQUEST);
-        }
-    }
 
     @ApiOperation(
 			value = "카카오 OAuth 회원가입",
@@ -59,7 +45,6 @@ public class UserController {
             signUpResponse.setRefreshToken(refreshToken);
             return new ResponseEntity<>(signUpResponse, HttpStatus.OK);
         } catch (Exception e) {
-            System.out.println(e);
             return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
         }
     }
@@ -80,8 +65,8 @@ public class UserController {
     @ApiOperation(
 			value = "최초 회원가입 시 산 정보 저장",
 			notes = "산 정보 저장이 성공적으로 이루어지면 Success를, 실패하면 Fail을 반환한다.")
-    @PostMapping("/experience")
-    public ResponseEntity<?> experience(@RequestHeader(value="X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody ExperienceRequest experienceRequest) {
+    @PostMapping("/experience/insert")
+    public ResponseEntity<?> saveExperience(@RequestHeader(value="X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody SaveExperienceRequest saveExperienceRequest) {
         HttpHeaders headers = new HttpHeaders();
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
             headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
@@ -93,7 +78,67 @@ public class UserController {
         User user = userRepository.findByUserEmail(userEmail);
 
         try {
-            userService.SaveInitialExperience(user.getUserNo(), experienceRequest);
+            userService.SaveExperience(user.getUserNo(), saveExperienceRequest);
+            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+			value = "찜 목록",
+			notes = "찜 목록을 조회하고 성공하면 찜 목록을, 실패하면 Fail을 반환한다.")
+    @GetMapping("/favorite")
+    public ResponseEntity<?> getFavoriteList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        try {
+            FavoriteListResponse favoriteListResponse = userService.getFavoriteList(jwtProvider.getEmailFromToken(accessToken));
+            return new ResponseEntity<>(favoriteListResponse, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/favorite/insert")
+    public ResponseEntity<?> saveFavorite(@RequestHeader(value="X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody FavoriteRequest favoriteRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
+
+        try {
+            userService.SaveFavorite(user.getUserNo(), favoriteRequest);
+            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @DeleteMapping("/favorite/delete")
+    public ResponseEntity<?> removeFavorite(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody FavoriteRequest favoriteRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
+
+        try {
+            userService.removeFavorite(user.getUserNo(), favoriteRequest);
             return new ResponseEntity<>("Success", headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);

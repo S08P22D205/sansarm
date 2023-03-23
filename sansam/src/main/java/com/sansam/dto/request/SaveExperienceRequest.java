@@ -4,9 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @Getter
 @Setter
-public class LoginRequest {
-    private String userEmail;
+@NoArgsConstructor
+public class SaveExperienceRequest {
+    private String exMtNm;
+    private Character exDiff;
 }

@@ -7,7 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ExperienceRequest {
-    private String exMtNm;
-    private Character exDiff;
+public class FavoriteRequest {
+    private int courseNo;
 }
