@@ -3,13 +3,13 @@ import styled from "styled-components"
 import Navbar from "../../Common/Navbar/Navbar";
 import ResultList from "../../Common/Result/ResultList";
 
-interface btnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  onTime?: number;
-  onLength? :number;
-}
+// interface btnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+//   onTime?: number;
+//   onLength? :number;
+// }
 
-function FilterMt(obj: btnProps) {
-  // console.log(obj.onTime)
+function FilterMt() {
+
   const time :string[] = ["전체", "1미만", "1-2", "2초과"];
   const [onTime, setOnTime] = useState<number>(0);
   
@@ -29,9 +29,9 @@ function FilterMt(obj: btnProps) {
     })
   }
 
-  console.log(searchMt);
-  console.log(onTime);
-  console.log(onLength);
+  // console.log(searchMt);
+  // console.log(onTime);
+  // console.log(onLength);
 
 
   return (
@@ -112,6 +112,7 @@ const StyledBtn = styled.button<{onTime: number; index: number}>`
   border-radius: 13px;
   margin: 5px;
 `;
+
 const StyledBtn1 = styled.button<{onLength: number; index: number}>`
   width: 16.5vw;
   height: 30px;
