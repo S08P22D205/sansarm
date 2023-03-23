@@ -103,6 +103,8 @@ function SignUp1() {
       .then((response) => {
         console.log("success");
         if (response.data) {
+          sessionStorage.setItem("accessToken", response.data.accessToken);
+          sessionStorage.setItem("refreshToken", response.data.refreshToken);
           moveToSignUp2();
         }
       })
