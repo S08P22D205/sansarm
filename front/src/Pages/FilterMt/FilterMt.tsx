@@ -11,18 +11,19 @@ function FilterMt() {
   const [onLength, setOnLength] = useState<number>(0);
 
   const [searchMt, setSearchMt] = useState<object>({
-    mt_nm: "",
-    course_length: "",
-    course_time: "",
+    courseMtNm: "",
+    courseLengthBtNo: 0,
+    courseTimeBtNo: 0,
   });
 
-  const handleMt = (data: string, type: string) => {
+  const handleMt = (data: string | number, type: string) => {
     setSearchMt({
       ...searchMt,
       [type]: data,
     });
   };
 
+  console.log(searchMt);
   return (
     <div className="FilterMt">
       <Navbar />
@@ -35,7 +36,7 @@ function FilterMt() {
             <StyledBtn
               key={index}
               onClick={() => {
-                handleMt(data, "course_time");
+                handleMt(index, "courseTimeBtNo");
                 setOnTime(index);
               }}
               onTime={onTime}
@@ -56,7 +57,7 @@ function FilterMt() {
             <StyledBtn1
               key={index}
               onClick={() => {
-                handleMt(data, "course_length");
+                handleMt(index, "courseLengthBtNo");
                 setOnLength(index);
               }}
               onLength={onLength}
