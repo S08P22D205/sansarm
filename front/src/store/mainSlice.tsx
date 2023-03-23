@@ -1,22 +1,66 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
+export interface ItemInfo {
+  userAge?: number;
+  userGender?: string;
+  courses: Array<string>;
+}
+
 interface MainState {
-  courseData: Array<Object>;
+  genderAge: ItemInfo[];
+  easyCourse: ItemInfo[];
+  normalCourse: ItemInfo[];
+  hardCourse: ItemInfo[];
 }
 
 const initialState: MainState = {
-  courseData: [],
+  genderAge: [
+    {
+      userAge: 0,
+      userGender: "",
+      courses: [],
+    },
+  ],
+  easyCourse: [
+    {
+      courses: [],
+    },
+  ],
+  normalCourse: [
+    {
+      courses: [],
+    },
+  ],
+  hardCourse: [
+    {
+      courses: [],
+    },
+  ],
 };
 
 export const mainSlice = createSlice({
   name: "main",
   initialState,
   reducers: {
-    changeCourse: (state, action: PayloadAction<Array<Object>>) => {
-      state.courseData = action.payload;
+    changeGenderAge: (state, action: PayloadAction<ItemInfo[]>) => {
+      state.genderAge = action.payload;
+    },
+    changeEasyCourse: (state, action: PayloadAction<ItemInfo[]>) => {
+      state.easyCourse = action.payload;
+    },
+    changeNormalCourse: (state, action: PayloadAction<ItemInfo[]>) => {
+      state.normalCourse = action.payload;
+    },
+    changeHardCourse: (state, action: PayloadAction<ItemInfo[]>) => {
+      state.hardCourse = action.payload;
     },
   },
 });
 
-export const { changeCourse } = mainSlice.actions;
+export const {
+  changeGenderAge,
+  changeEasyCourse,
+  changeNormalCourse,
+  changeHardCourse,
+} = mainSlice.actions;
 export default mainSlice.reducer;

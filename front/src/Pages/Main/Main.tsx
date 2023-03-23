@@ -3,6 +3,13 @@ import List from "./List";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import MainBtn from "./MainBtn";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  changeGenderAge,
+  changeEasyCourse,
+  changeNormalCourse,
+  changeHardCourse,
+} from "../../store/mainSlice";
 
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
@@ -11,12 +18,35 @@ const StyledH = styled.p`
 `;
 
 function Main() {
+  // dispatch 사용하기 위해 정의해주기
+  const dispatch = useAppDispatch();
+
+  // 처음 마운트 됐을 때
   useEffect(() => {
-    const getRecommendList = async () => {
-      const res = await axios.get("/dummy/ListItemData.json");
-      console.log(res.data);
+    // 1. 성별, 나이에 맞는 코스 정보 받아와서 store에 저장해주기
+    const getGenderAge = async () => {
+      const res = await axios.get("/dummy/GenderAge.json");
+      dispatch(changeGenderAge(res.data));
     };
-    getRecommendList();
+    // 2. Easy 코스 정보 받아와서 store에 저장해주기
+    const getEasyCourse = async () => {
+      const res = await axios.get("/dummy/EasyCourse.json");
+      dispatch(changeEasyCourse(res.data));
+    };
+    // 3. Normal 코스 정보 받아와서 store에 저장해주기
+    const getNormalCourse = async () => {
+      const res = await axios.get("/dummy/NormalCourse.json");
+      dispatch(changeNormalCourse(res.data));
+    };
+    // 4. Hard 코스 정보 받아와서 store에 저장해주기
+    const getHardCourse = async () => {
+      const res = await axios.get("/dummy/HardCourse.json");
+      dispatch(changeHardCourse(res.data));
+    };
+    getGenderAge();
+    getEasyCourse();
+    getNormalCourse();
+    getHardCourse();
   }, []);
 
   return (
