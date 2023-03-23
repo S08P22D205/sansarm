@@ -11,6 +11,7 @@ import Hiking from "./Pages/Hiking/Hiking";
 import Review from "./Pages/Review/Review";
 import Photo from "./Pages/Photo/Photo";
 import MyPage from "./Pages/MyPage/MyPage";
+import NotFound from "./Pages/Exception/NotFound";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="/review/*" element={<Review />} />
         <Route path="/photo/*" element={<Photo />} />
         <Route path="/mypage/*" element={<MyPage />} />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
