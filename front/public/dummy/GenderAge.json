@@ -2,7 +2,7 @@
   {
     "userAge": 20,
     "userGender": "여성",
-    "courses": [
+    "courseList": [
       "동네산 1코스",
       "동네산 3코스",
       "동네산 5코스",

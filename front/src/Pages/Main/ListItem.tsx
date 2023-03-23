@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import { ItemInfo } from "../../store/mainSlice";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from "swiper";
+import "swiper/css";
+import "swiper/css/free-mode";
 
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
@@ -12,7 +16,7 @@ const StyledDiv = styled.div`
   display: flex;
 `;
 
-const StyledCard = styled.div`
+const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
   height: 22vw;
   background-color: #cfe2c8;
@@ -20,14 +24,22 @@ const StyledCard = styled.div`
   border-radius: 5px;
 `;
 
-function ListItem({ userAge, userGender, courses }: ItemInfo) {
+function ListItem({ userAge, userGender, courseList }: ItemInfo) {
   return (
     <div className="ListItem">
       <StyledH>20대 여성분들이 선호하는 코스</StyledH>
       <StyledDiv>
-        {courses.map(course => (
-          <StyledCard key={course}>{course}</StyledCard>
-        ))}
+        <Swiper
+          modules={[FreeMode]}
+          spaceBetween={10}
+          slidesPerView={3}
+          loop={true}
+          freeMode={true}
+        >
+          {courseList.map(course => (
+            <StyledSlide key={course}>{course}</StyledSlide>
+          ))}
+        </Swiper>
       </StyledDiv>
     </div>
   );

@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export interface ItemInfo {
   userAge?: number;
   userGender?: string;
-  courses: Array<string>;
+  courseList: Array<string>;
 }
 
 interface MainState {
@@ -18,22 +18,22 @@ const initialState: MainState = {
     {
       userAge: 0,
       userGender: "",
-      courses: [],
+      courseList: [],
     },
   ],
   easyCourse: [
     {
-      courses: [],
+      courseList: [],
     },
   ],
   normalCourse: [
     {
-      courses: [],
+      courseList: [],
     },
   ],
   hardCourse: [
     {
-      courses: [],
+      courseList: [],
     },
   ],
 };
