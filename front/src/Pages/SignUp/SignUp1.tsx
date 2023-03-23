@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Select, { Options } from "react-select";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
 
 interface Option {
