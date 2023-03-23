@@ -1,18 +1,19 @@
 package com.sansam.service;
 
 import com.sansam.config.jwt.JwtProvider;
-import com.sansam.data.entity.Experience;
-import com.sansam.data.entity.Token;
-import com.sansam.data.entity.User;
-import com.sansam.data.repository.ExperienceRepository;
-import com.sansam.data.repository.TokenRepository;
-import com.sansam.data.repository.UserRepository;
-import com.sansam.dto.request.ExperienceRequest;
+import com.sansam.data.entity.*;
+import com.sansam.data.repository.*;
+import com.sansam.dto.request.SaveExperienceRequest;
+import com.sansam.dto.request.FavoriteRequest;
 import com.sansam.dto.request.SignUpRequest;
+import com.sansam.dto.response.CourseResponse;
+import com.sansam.dto.response.FavoriteListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -22,6 +23,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final ExperienceRepository experienceRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final CourseServiceImpl courseService;
     private final JwtProvider jwtProvider;
 
     @Override
@@ -56,9 +59,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void SaveInitialExperience(int userNo, ExperienceRequest experienceRequest) {
+    public void SaveExperience(int userNo, SaveExperienceRequest saveExperienceRequest) {
         Experience experience = new Experience();
-        experience.createExperience(userNo, experienceRequest.getExMtNm(), experienceRequest.getExDiff());
+        experience.createExperience(userNo, saveExperienceRequest.getExMtNm(), saveExperienceRequest.getExDiff());
         experienceRepository.save(experience);
+    }
+
+    @Override
+    public FavoriteListResponse getFavoriteList(String userEmail) {
+        List<CourseResponse> favoriteCourses = new ArrayList<>();
+        User user = userRepository.findByUserEmail(userEmail);
+        List<Favorite> favorites = favoriteRepository.findAllByUserNo(user.getUserNo());
+        for (Favorite favorite : favorites) {
+            favoriteCourses.add(courseService.getCourseDetails(favorite.getCourseNo()));
+        }
+
+        return new FavoriteListResponse(favoriteCourses);
+    }
+
+    @Override
+    @Transactional
+    public void SaveFavorite(int userNo, FavoriteRequest favoriteRequest) {
+        Favorite favorite = new Favorite();
+        favorite.createFavorite(userNo, favoriteRequest.getCourseNo());
+        favoriteRepository.save(favorite);
+    }
+
+    @Override
+    @Transactional
+    public void removeFavorite(int userNo, FavoriteRequest favoriteRequest) {
+        favoriteRepository.deleteByUserNoAndCourseNo(userNo, favoriteRequest.getCourseNo());
     }
 }
