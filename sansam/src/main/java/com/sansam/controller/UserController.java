@@ -125,6 +125,9 @@ public class UserController {
         }
     }
 
+    @ApiOperation(
+			value = "찜 목록에서 삭제",
+			notes = "코스 번호에 해당하는 코스를 찜 목록에서 삭제하고, 성공하면 찜 목록을, 실패하면 Fail을 반환한다.")
     @DeleteMapping("/favorite/delete")
     public ResponseEntity<?> removeFavorite(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody FavoriteRequest favoriteRequest) {
         HttpHeaders headers = new HttpHeaders();
