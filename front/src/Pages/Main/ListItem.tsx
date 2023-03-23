@@ -4,43 +4,51 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
+import ListCard from "./ListCard";
 
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
   font-weight: bold;
   font-size: 4vw;
   text-align: left;
-`;
-
-const StyledDiv = styled.div`
-  display: flex;
+  margin-bottom: 5px;
 `;
 
 const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
-  height: 22vw;
-  background-color: #cfe2c8;
+  /* height: 30vw; */
+  background-color: #f0f5ee;
   border: none;
   border-radius: 5px;
 `;
 
-function ListItem({ userAge, userGender, courseList }: ItemInfo) {
+function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
   return (
     <div className="ListItem">
-      <StyledH>20대 여성분들이 선호하는 코스</StyledH>
-      <StyledDiv>
-        <Swiper
-          modules={[FreeMode]}
-          spaceBetween={10}
-          slidesPerView={3}
-          loop={true}
-          freeMode={true}
-        >
-          {courseList.map(course => (
-            <StyledSlide key={course}>{course}</StyledSlide>
-          ))}
-        </Swiper>
-      </StyledDiv>
+      {userAge && userGender ? (
+        <StyledH>
+          {userAge}대 {userGender}분들이 선호하는 코스
+        </StyledH>
+      ) : (
+        <StyledH>{courseName}</StyledH>
+      )}
+      <Swiper
+        modules={[FreeMode]}
+        spaceBetween={10}
+        slidesPerView={3}
+        loop={true}
+        freeMode={true}
+      >
+        {courseList.map(course => (
+          <StyledSlide key={course.courseNo}>
+            <ListCard
+              courseMtNm={course.courseMtNm}
+              courseMtNo={course.courseMtNo}
+              courseMtCd={course.courseMtCd}
+            />
+          </StyledSlide>
+        ))}
+      </Swiper>
     </div>
   );
 }

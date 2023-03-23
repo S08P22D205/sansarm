@@ -37,9 +37,18 @@ function List() {
         userGender={genderAge[0].userGender}
         courseList={genderAge[0].courseList}
       />
-      <ListItem courseList={easyCourse[0].courseList} />
-      <ListItem courseList={normalCourse[0].courseList} />
-      <ListItem courseList={hardCourse[0].courseList} />
+      <ListItem
+        courseList={easyCourse[0].courseList}
+        courseName="보다 편한 코스는 어때요?"
+      />
+      <ListItem
+        courseList={normalCourse[0].courseList}
+        courseName="이정도면 할만한데?"
+      />
+      <ListItem
+        courseList={hardCourse[0].courseList}
+        courseName="이 길은 쉽지 않을걸..."
+      />
     </StyledDiv>
   );
 }
