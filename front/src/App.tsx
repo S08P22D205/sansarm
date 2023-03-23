@@ -6,7 +6,6 @@ import Login from "./Pages/Login/Login";
 import SignUp from "./Pages/SignUp/SignUp";
 import Main from "./Pages/Main/Main";
 import FilterMt from "./Pages/FilterMt/FilterMt";
-import FilterMt1 from "./Pages/FilterMt/FilterMt1";
 import FilterRg from "./Pages/FilterRg/FilterRg";
 import Hiking from "./Pages/Hiking/Hiking";
 import Review from "./Pages/Review/Review";
@@ -21,7 +20,7 @@ function App() {
         <Route path="/login/*" element={<Login />} />
         <Route path="/signup/*" element={<SignUp />} />
         <Route path="/main/*" element={<Main />} />
-        <Route path="/filtermt/*" element={<FilterMt1 />} />
+        <Route path="/filtermt/*" element={<FilterMt />} />
         <Route path="/filterrg/*" element={<FilterRg />} />
         <Route path="/coursedetail/*" element={<CourseDetail />} />
         <Route path="/hiking/*" element={<Hiking />} />
