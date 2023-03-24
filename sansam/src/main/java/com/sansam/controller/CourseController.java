@@ -57,6 +57,5 @@ public class CourseController {
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
         }
-
     }
 }

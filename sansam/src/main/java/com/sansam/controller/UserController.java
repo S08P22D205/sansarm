@@ -3,11 +3,9 @@ package com.sansam.controller;
 import com.sansam.config.jwt.JwtProvider;
 import com.sansam.data.entity.User;
 import com.sansam.data.repository.UserRepository;
-import com.sansam.dto.request.SaveExperienceRequest;
-import com.sansam.dto.request.FavoriteRequest;
-import com.sansam.dto.request.SignOutRequest;
-import com.sansam.dto.request.SignUpRequest;
+import com.sansam.dto.request.*;
 import com.sansam.dto.response.FavoriteListResponse;
+import com.sansam.dto.response.ReviewListResponse;
 import com.sansam.dto.response.SignUpResponse;
 import com.sansam.service.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -87,7 +85,7 @@ public class UserController {
 
     @ApiOperation(
 			value = "찜 목록",
-			notes = "찜 목록을 조회하고 성공하면 찜 목록을, 실패하면 Fail을 반환한다.")
+			notes = "해당 유저의 찜 목록을 조회하고 성공하면 찜 목록을, 실패하면 Fail을 반환한다.")
     @GetMapping("/favorite")
     public ResponseEntity<?> getFavoriteList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
         HttpHeaders headers = new HttpHeaders();
@@ -97,14 +95,19 @@ public class UserController {
             headers.set("X-ACCESS-TOKEN", accessToken);
         }
 
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+
         try {
-            FavoriteListResponse favoriteListResponse = userService.getFavoriteList(jwtProvider.getEmailFromToken(accessToken));
+            FavoriteListResponse favoriteListResponse = userService.getFavoriteList(userEmail);
             return new ResponseEntity<>(favoriteListResponse, headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
         }
     }
 
+    @ApiOperation(
+            value = "찜 추가",
+            notes = "해당 유저의 찜 목록에 코스를 추가하고, 성공하면 Success를, 실패하면 Fail을 반환한다.")
     @PostMapping("/favorite/insert")
     public ResponseEntity<?> saveFavorite(@RequestHeader(value="X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody FavoriteRequest favoriteRequest) {
         HttpHeaders headers = new HttpHeaders();
@@ -142,6 +145,51 @@ public class UserController {
 
         try {
             userService.removeFavorite(user.getUserNo(), favoriteRequest);
+            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+			value = "리뷰 목록",
+			notes = "해당 유저의 리뷰 목록을 조회하고 성공하면 찜 목록을, 실패하면 Fail을 반환한다.")
+    @GetMapping("/review")
+    public ResponseEntity<?> getReviewList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+
+        try {
+            ReviewListResponse reviewListResponse = userService.getReviewList(userEmail);
+            return new ResponseEntity<>(reviewListResponse, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+            value = "리뷰 추가",
+            notes = "해당 유저의 리뷰 목록에 리뷰를 추가하고, 성공하면 Success를, 실패하면 Fail을 반환한다.")
+    @PostMapping("/review/insert")
+    public ResponseEntity<?> saveReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody SaveReviewRequest saveReviewRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
+
+        try {
+            userService.SaveReview(user.getUserNo(), saveReviewRequest);
             return new ResponseEntity<>("Success", headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
