@@ -1,7 +1,11 @@
+import Navbar from "../../Common/Navbar/Navbar";
+import Kakaomap from "./Kakaomap";
+
 function CourseDetail() {
   return (
     <div className="CourseDetail">
-      <h1>CourseDetail</h1>
+      <Navbar />
+      <Kakaomap />
     </div>
   );
 }
