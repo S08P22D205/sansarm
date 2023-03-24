@@ -2,6 +2,7 @@ import Navbar from "../../Common/Navbar/Navbar";
 import Kakaomap from "./Kakaomap";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
+import ReviewList from "./ReviewList";
 
 function CourseDetail() {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ function CourseDetail() {
       </StyledDiv>
 
       <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
+
+      <ReviewList />
     </div>
   );
 }
