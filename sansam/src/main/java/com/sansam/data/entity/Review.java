@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -26,7 +26,7 @@ public class Review {
     private int courseNo;
 
     @Column(name = "REVIEW_DATE", nullable = false)
-    private Date reviewDate;
+    private LocalDate reviewDate;
 
     @Column(name = "REVIEW_TIME", nullable = false)
     private int reviewTime;
@@ -47,7 +47,7 @@ public class Review {
         this.reviewContent = reviewContent;
     }
 
-    public void createReview(int userNo, int courseNo, Date reviewDate, int reviewTime, Character reviewRelDiff, String reviewContent) {
+    public void createReview(int userNo, int courseNo, LocalDate reviewDate, int reviewTime, Character reviewRelDiff, String reviewContent) {
         this.userNo = userNo;
         this.courseNo = courseNo;
         this.reviewDate = reviewDate;

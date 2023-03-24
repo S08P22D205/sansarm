@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +113,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void SaveReview(int userNo, SaveReviewRequest saveReviewRequest) {
         Review review = new Review();
-        review.createReview(userNo, saveReviewRequest.getCourseNo(), saveReviewRequest.getReviewDate(), saveReviewRequest.getReviewTime(), saveReviewRequest.getReviewDiff(), saveReviewRequest.getReviewContent());
+        review.createReview(userNo, saveReviewRequest.getCourseNo(), LocalDate.now(), saveReviewRequest.getReviewTime(), saveReviewRequest.getReviewDiff(), saveReviewRequest.getReviewContent());
         reviewRepository.save(review);
     }
 }
