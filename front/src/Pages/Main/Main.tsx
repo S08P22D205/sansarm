@@ -13,6 +13,7 @@ import {
 } from "../../store/mainSlice";
 
 const StyledH = styled.p`
+  text-align: center;
   font-family: "GmarketSansLight";
   font-weight: bold;
   font-size: 5.2vw;

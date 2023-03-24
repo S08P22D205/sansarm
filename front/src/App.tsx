@@ -15,24 +15,22 @@ import NotFound from "./Pages/Exception/NotFound";
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Start />} />
-          <Route path="/login/*" element={<Login />} />
-          <Route path="/signup/*" element={<SignUp />} />
-          <Route path="/main/*" element={<Main />} />
-          <Route path="/filtermt/*" element={<FilterMt />} />
-          <Route path="/filterrg/*" element={<FilterRg />} />
-          <Route path="/coursedetail/*" element={<CourseDetail />} />
-          <Route path="/hiking/*" element={<Hiking />} />
-          <Route path="/review/*" element={<Review />} />
-          <Route path="/photo/*" element={<Photo />} />
-          <Route path="/mypage/*" element={<MyPage />} />
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Start />} />
+        <Route path="/login/*" element={<Login />} />
+        <Route path="/signup/*" element={<SignUp />} />
+        <Route path="/main/*" element={<Main />} />
+        <Route path="/filtermt/*" element={<FilterMt />} />
+        <Route path="/filterrg/*" element={<FilterRg />} />
+        <Route path="/coursedetail/*" element={<CourseDetail />} />
+        <Route path="/hiking/*" element={<Hiking />} />
+        <Route path="/review/*" element={<Review />} />
+        <Route path="/photo/*" element={<Photo />} />
+        <Route path="/mypage/*" element={<MyPage />} />
+        <Route path="/*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

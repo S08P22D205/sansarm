@@ -9,6 +9,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledH = styled.p`
+  text-align: center;
   font-family: "GmarketSansLight";
   font-weight: bold;
   font-size: 4.5vw;
