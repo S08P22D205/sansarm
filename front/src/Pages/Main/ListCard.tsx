@@ -8,8 +8,8 @@ const StyledH = styled.p`
   font-weight: bold;
   font-size: small;
   text-align: center;
-  margin: 2px;
-  margin-top: -5px;
+  margin: 3px;
+  margin-top: -8px;
 `;
 
 const StyledImg = styled.img`
@@ -17,7 +17,7 @@ const StyledImg = styled.img`
   height: 18vw;
   border: none;
   border-radius: 5px;
-  margin-top: 4px;
+  margin: 5px;
 `;
 
 function ListCard({ courseMtNm, courseMtNo, courseMtCd }: courseInfo) {
