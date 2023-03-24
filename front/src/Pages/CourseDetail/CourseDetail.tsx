@@ -1,8 +1,14 @@
 import Navbar from "../../Common/Navbar/Navbar";
 import Kakaomap from "./Kakaomap";
 import styled from "styled-components";
+import { useNavigate } from "react-router";
 
 function CourseDetail() {
+  const navigate = useNavigate();
+
+  const moveToHiking = () => {
+    navigate("/hiking");
+  };
   return (
     <div className="CourseDetail">
       <Navbar />
@@ -15,7 +21,7 @@ function CourseDetail() {
         <StyledContent>상행 시간 : </StyledContent>
       </StyledDiv>
 
-      <StyledBtn>등산 시작하기</StyledBtn>
+      <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
     </div>
   );
 }
@@ -27,6 +33,8 @@ const StyledDiv = styled.div`
 
 const StyledTitle = styled.p`
   font-family: "GmarketSansMedium";
+  font-size: 25px;
+  margin-bottom: 10px;
 `;
 
 const StyledContent = styled.p`
