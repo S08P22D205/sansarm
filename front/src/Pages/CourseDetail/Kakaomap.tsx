@@ -29,9 +29,9 @@ function Kakaomap() {
 }
 
 const StyledMap = styled.div`
-  margin-left: 40px;
-  margin-top: 80px;
-  width: 280px;
+  margin-left: 10%;
+  margin-top: 50px;
+  width: 80%;
   height: 200px;
   border-radius: 5px;
 `;

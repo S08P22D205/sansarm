@@ -38,9 +38,15 @@ const StyledBtn = styled.button`
   background-color: #238c47;
   color: white;
   font-family: "GmarketSansMedium";
-  font-size: 15px;
+  font-size: 20px;
   border: 0;
-  padding: 8px;
+  border-radius: 10px;
+  padding-top: 10px;
+  padding-bottom: 12px;
+  width: 75%;
+  height: 50px;
+  margin-left: 12.5%;
+  margin-top: 20px;
 `;
 
 export default CourseDetail;
