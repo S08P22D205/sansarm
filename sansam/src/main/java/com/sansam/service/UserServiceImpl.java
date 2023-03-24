@@ -5,9 +5,12 @@ import com.sansam.data.entity.*;
 import com.sansam.data.repository.*;
 import com.sansam.dto.request.SaveExperienceRequest;
 import com.sansam.dto.request.FavoriteRequest;
+import com.sansam.dto.request.SaveReviewRequest;
 import com.sansam.dto.request.SignUpRequest;
 import com.sansam.dto.response.CourseResponse;
 import com.sansam.dto.response.FavoriteListResponse;
+import com.sansam.dto.response.ReviewCourseResponse;
+import com.sansam.dto.response.ReviewListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final TokenRepository tokenRepository;
     private final ExperienceRepository experienceRepository;
     private final FavoriteRepository favoriteRepository;
+    private final ReviewRepository reviewRepository;
     private final CourseServiceImpl courseService;
     private final JwtProvider jwtProvider;
 
@@ -89,5 +93,26 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void removeFavorite(int userNo, FavoriteRequest favoriteRequest) {
         favoriteRepository.deleteByUserNoAndCourseNo(userNo, favoriteRequest.getCourseNo());
+    }
+
+    @Override
+    public ReviewListResponse getReviewList(String userEmail) {
+        List<ReviewCourseResponse> reviewList = new ArrayList<>();
+        User user = userRepository.findByUserEmail(userEmail);
+        List<Review> reviews = reviewRepository.findAllByUserNo(user.getUserNo());
+        for (Review review : reviews) {
+            CourseResponse courseResponse = courseService.getCourseDetails(review.getCourseNo());
+            reviewList.add(new ReviewCourseResponse(courseResponse.getCourseNo(), courseResponse.getCourseMtNm(), courseResponse.getCourseMtCd(), courseResponse.getCourseMtNo(), courseResponse.getCourseXCoords(), courseResponse.getCourseYCoords(), courseResponse.getCourseAbsDiff(), courseResponse.getCourseUptime(), courseResponse.getCourseDowntime(), courseResponse.getCourseLength(), courseResponse.getCourseLocation(), courseResponse.getCourseAddress(), review.getReviewDate(), review.getReviewTime(), review.getReviewContent()));
+        }
+
+        return new ReviewListResponse(reviewList);
+    }
+
+    @Override
+    @Transactional
+    public void SaveReview(int userNo, SaveReviewRequest saveReviewRequest) {
+        Review review = new Review();
+        review.createReview(userNo, saveReviewRequest.getCourseNo(), saveReviewRequest.getReviewDate(), saveReviewRequest.getReviewTime(), saveReviewRequest.getReviewDiff(), saveReviewRequest.getReviewContent());
+        reviewRepository.save(review);
     }
 }
