@@ -3,10 +3,7 @@ package com.sansam.service;
 import com.sansam.config.jwt.JwtProvider;
 import com.sansam.data.entity.*;
 import com.sansam.data.repository.*;
-import com.sansam.dto.request.SaveExperienceRequest;
-import com.sansam.dto.request.FavoriteRequest;
-import com.sansam.dto.request.SaveReviewRequest;
-import com.sansam.dto.request.SignUpRequest;
+import com.sansam.dto.request.*;
 import com.sansam.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,14 +28,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void SignUp(SignUpRequest signUpRequest) {
+    public void signUp(SignUpRequest signUpRequest) {
         User user = userRepository.findByUserNo(signUpRequest.getUserNo());
         user.updateSignUp(signUpRequest.getUserNicknm(), signUpRequest.getUserAge(), signUpRequest.getUserGender(), signUpRequest.getUserLocation());
     }
 
     @Override
     @Transactional
-    public void SaveRefreshToken(String refreshToken, int userNo) {
+    public void saveRefreshToken(String refreshToken, int userNo) {
         Token token = tokenRepository.findByUserNo(userNo);
         User user = userRepository.findByUserNo(userNo);
 
@@ -49,11 +46,12 @@ public class UserServiceImpl implements UserService {
         }
 
         token.updateRefreshToken(refreshToken);
+        tokenRepository.save(token);
     }
 
     @Override
     @Transactional
-    public void SignOut(String refreshToken) {
+    public void signOut(String refreshToken) {
         String userEmail = jwtProvider.getEmailFromToken(refreshToken);
         Token token = tokenRepository.findByUserEmail(userEmail);
         token.updateRefreshToken(null);
@@ -61,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void SaveExperience(int userNo, SaveExperienceRequest saveExperienceRequest) {
+    public void saveExperience(int userNo, SaveExperienceRequest saveExperienceRequest) {
         Experience experience = new Experience();
         experience.createExperience(userNo, saveExperienceRequest.getExMtNm(), saveExperienceRequest.getExDiff());
         experienceRepository.save(experience);
@@ -81,7 +79,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void SaveFavorite(int userNo, FavoriteRequest favoriteRequest) {
+    public void saveFavorite(int userNo, FavoriteRequest favoriteRequest) {
         Favorite favorite = new Favorite();
         favorite.createFavorite(userNo, favoriteRequest.getCourseNo());
         favoriteRepository.save(favorite);
@@ -108,9 +106,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void SaveReview(int userNo, SaveReviewRequest saveReviewRequest) {
+    public void saveReview(int userNo, SaveReviewRequest saveReviewRequest) {
         Review review = new Review();
         review.createReview(userNo, saveReviewRequest.getCourseNo(), LocalDate.now(), saveReviewRequest.getReviewTime(), saveReviewRequest.getReviewDiff(), saveReviewRequest.getReviewContent());
         reviewRepository.save(review);
+    }
+
+    @Override
+    @Transactional
+    public void updateReview(int userNo, int courseNo, UpdateReviewRequest updateReviewRequest) {
+        Review review = reviewRepository.findByUserNoAndCourseNo(userNo, courseNo);
+        review.updateReview(updateReviewRequest.getReviewRelDiff(), updateReviewRequest.getReviewContent());
+        reviewRepository.save(review);
+    }
+
+    @Override
+    @Transactional
+    public void deleteReview(int userNo, int courseNo) {
+        Review review = reviewRepository.findByUserNoAndCourseNo(userNo, courseNo);
+        reviewRepository.delete(review);
     }
 }

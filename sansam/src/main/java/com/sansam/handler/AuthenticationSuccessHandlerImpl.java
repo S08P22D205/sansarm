@@ -34,7 +34,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
             if (user.getUserAge() != 0) {
                 String accessToken = jwtProvider.createAccessToken(user.getUserEmail());
                 String refreshToken = jwtProvider.createRefreshToken(user.getUserEmail());
-                userService.SaveRefreshToken(refreshToken, user.getUserNo());
+                userService.saveRefreshToken(refreshToken, user.getUserNo());
                 response.sendRedirect("http://localhost:3000/login?"+accessToken+"?"+refreshToken);
             } else {
                 response.sendRedirect("http://localhost:3000/signup/1?no="+user.getUserNo());

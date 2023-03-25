@@ -1,22 +1,21 @@
 package com.sansam.service;
 
-import com.sansam.dto.request.SaveExperienceRequest;
-import com.sansam.dto.request.FavoriteRequest;
-import com.sansam.dto.request.SaveReviewRequest;
-import com.sansam.dto.request.SignUpRequest;
+import com.sansam.dto.request.*;
 import com.sansam.dto.response.FavoriteListResponse;
 import com.sansam.dto.response.ReviewListResponse;
 import org.springframework.stereotype.Service;
 
 @Service
 public interface UserService {
-    void SignUp(SignUpRequest signUpRequest);
-    void SaveRefreshToken(String refreshToken, int userNo);
-    void SignOut(String refreshToken);
-    void SaveExperience(int userNo, SaveExperienceRequest saveExperienceRequest);
+    void signUp(SignUpRequest signUpRequest);
+    void saveRefreshToken(String refreshToken, int userNo);
+    void signOut(String refreshToken);
+    void saveExperience(int userNo, SaveExperienceRequest saveExperienceRequest);
     FavoriteListResponse getFavoriteList(String userEmail);
-    void SaveFavorite(int userNo, FavoriteRequest favoriteRequest);
+    void saveFavorite(int userNo, FavoriteRequest favoriteRequest);
     void removeFavorite(int userNo, FavoriteRequest favoriteRequest);
     ReviewListResponse getReviewList(String userEmail);
-    void SaveReview(int userNo, SaveReviewRequest saveReviewRequest);
+    void saveReview(int userNo, SaveReviewRequest saveReviewRequest);
+    void updateReview(int userNo, int courseNo, UpdateReviewRequest updateReviewRequest);
+    void deleteReview(int userNo, int courseNo);
 }
