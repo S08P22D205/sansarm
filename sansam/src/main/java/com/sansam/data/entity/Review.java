@@ -55,4 +55,9 @@ public class Review {
         this.reviewRelDiff = reviewRelDiff;
         this.reviewContent = reviewContent;
     }
+
+    public void updateReview(Character reviewRelDiff, String reviewContent) {
+        this.reviewRelDiff = reviewRelDiff;
+        this.reviewContent = reviewContent;
+    }
 }

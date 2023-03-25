@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
         try {
-            userService.SignUp(signUpRequest);
+            userService.signUp(signUpRequest);
             User user = userRepository.findByUserNo(signUpRequest.getUserNo());
 
             String accessToken = jwtProvider.createAccessToken(user.getUserEmail());
@@ -53,7 +53,7 @@ public class UserController {
     @PostMapping("/signout")
     public ResponseEntity<String> signOut(@RequestBody SignOutRequest signOutRequest) {
         try {
-            userService.SignOut(signOutRequest.getRefreshToken());
+            userService.signOut(signOutRequest.getRefreshToken());
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
@@ -76,7 +76,7 @@ public class UserController {
         User user = userRepository.findByUserEmail(userEmail);
 
         try {
-            userService.SaveExperience(user.getUserNo(), saveExperienceRequest);
+            userService.saveExperience(user.getUserNo(), saveExperienceRequest);
             return new ResponseEntity<>("Success", headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
@@ -121,7 +121,7 @@ public class UserController {
         User user = userRepository.findByUserEmail(userEmail);
 
         try {
-            userService.SaveFavorite(user.getUserNo(), favoriteRequest);
+            userService.saveFavorite(user.getUserNo(), favoriteRequest);
             return new ResponseEntity<>("Success", headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
@@ -189,7 +189,53 @@ public class UserController {
         User user = userRepository.findByUserEmail(userEmail);
 
         try {
-            userService.SaveReview(user.getUserNo(), saveReviewRequest);
+            userService.saveReview(user.getUserNo(), saveReviewRequest);
+            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+            value = "리뷰 수정",
+            notes = "해당 유저의 해당 코스 리뷰를 수정하고, 성공하면 Success를, 실패하면 Fail을 반환한다.")
+    @PutMapping("/review/update/{courseNo}")
+    public ResponseEntity<String> updateReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo, @RequestBody UpdateReviewRequest updateReviewRequest) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
+
+        try {
+            userService.updateReview(user.getUserNo(), courseNo, updateReviewRequest);
+            return new ResponseEntity<>("Success", headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+            value = "리뷰 삭제",
+            notes = "해당 유저의 해당 코스 리뷰를 삭제하고, 성공하면 Success를, 실패하면 Fail을 반환한다.")
+    @DeleteMapping("/review/delete/{courseNo}")
+    public ResponseEntity<String> deleteReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
+
+        try {
+            userService.deleteReview(user.getUserNo(), courseNo);
             return new ResponseEntity<>("Success", headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
