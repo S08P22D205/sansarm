@@ -1,12 +1,10 @@
 package com.sansam.service;
 
-import com.sansam.data.entity.Coordinate;
-import com.sansam.data.entity.Course;
-import com.sansam.data.entity.Mountain;
-import com.sansam.data.repository.CoordinateRepository;
-import com.sansam.data.repository.CourseRepository;
-import com.sansam.data.repository.MountainRepository;
+import com.sansam.data.entity.*;
+import com.sansam.data.repository.*;
 import com.sansam.dto.response.CourseResponse;
+import com.sansam.dto.response.CourseReviewListResponse;
+import com.sansam.dto.response.ReviewResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -22,6 +20,8 @@ public class CourseServiceImpl implements CourseService {
     private final MountainRepository mountainRepository;
     private final CourseRepository courseRepository;
     private final CoordinateRepository coordinateRepository;
+    private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
 
     @Override
     public List<String> createMountainList() {
@@ -46,5 +46,18 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return new CourseResponse(course.getCourseNo(), course.getCourseMtNm(), course.getCourseMtCd(), course.getCourseMtNo(), courseXCoords, courseYCoords, course.getCourseAbsDiff(), course.getCourseUptime(), course.getCourseDowntime(), course.getCourseLength(), course.getCourseLocation(), course.getCourseAddress());
+    }
+
+    @Override
+    public CourseReviewListResponse getCourseReviewList(int courseNo) {
+        List<ReviewResponse> courseReviewList = new ArrayList<>();
+        List<Review> reviews = reviewRepository.findAllByCourseNo(courseNo);
+        User user;
+        for (Review review : reviews) {
+            user = userRepository.findByUserNo(review.getUserNo());
+            courseReviewList.add(new ReviewResponse(user.getUserNicknm(), review.getReviewDate(), review.getReviewTime(), review.getReviewContent()));
+        }
+
+        return new CourseReviewListResponse(courseReviewList);
     }
 }

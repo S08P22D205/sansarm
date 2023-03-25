@@ -7,10 +7,7 @@ import com.sansam.dto.request.SaveExperienceRequest;
 import com.sansam.dto.request.FavoriteRequest;
 import com.sansam.dto.request.SaveReviewRequest;
 import com.sansam.dto.request.SignUpRequest;
-import com.sansam.dto.response.CourseResponse;
-import com.sansam.dto.response.FavoriteListResponse;
-import com.sansam.dto.response.ReviewCourseResponse;
-import com.sansam.dto.response.ReviewListResponse;
+import com.sansam.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

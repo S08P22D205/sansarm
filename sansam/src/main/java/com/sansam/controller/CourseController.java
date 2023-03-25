@@ -1,6 +1,7 @@
 package com.sansam.controller;
 
 import com.sansam.dto.response.CourseResponse;
+import com.sansam.dto.response.CourseReviewListResponse;
 import com.sansam.dto.response.MountainListResponse;
 import com.sansam.service.CourseServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -54,6 +55,26 @@ public class CourseController {
         try {
             CourseResponse courseResponse = courseService.getCourseDetails(no);
             return new ResponseEntity<>(courseResponse, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+            value = "한 코스에 대한 모든 리뷰 목록",
+            notes = "한 코스에 대한 모든 리뷰 목록을 조회하여 성공하면 목록을 반환하고, 실패하면 Fail을 반환한다.")
+    @GetMapping("/review/{courseNo}")
+    public ResponseEntity<?> getCourseReviewList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        try {
+            CourseReviewListResponse courseReviewListResponse = courseService.getCourseReviewList(courseNo);
+            return new ResponseEntity<>(courseReviewListResponse, headers, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
         }
