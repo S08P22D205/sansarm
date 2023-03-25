@@ -4,6 +4,7 @@ import com.sansam.config.jwt.JwtProvider;
 import com.sansam.data.entity.User;
 import com.sansam.data.repository.UserRepository;
 import com.sansam.dto.request.*;
+import com.sansam.dto.response.EmailResponse;
 import com.sansam.dto.response.FavoriteListResponse;
 import com.sansam.dto.response.ReviewListResponse;
 import com.sansam.dto.response.SignUpResponse;
@@ -240,5 +241,22 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", headers, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @ApiOperation(
+            value = "Flask용 토큰 인증 및 이메일 반환 API",
+            notes = "Flask에서 JWT 토큰 인증을 Spring Boot를 통해 진행하고, 진행 과정에서 accessToken의 변화를 헤더에 저장하여 반환하고, 유저의 이메일을 반환한다.")
+    @GetMapping("/user/email")
+    public ResponseEntity<EmailResponse> getEmail(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        HttpHeaders headers = new HttpHeaders();
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            headers.set("X-ACCESS-TOKEN", response.getHeader("X-ACCESS-TOKEN"));
+        } else {
+            headers.set("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        EmailResponse emailResponse = new EmailResponse(userEmail);
+        return new ResponseEntity<>(emailResponse, headers, HttpStatus.OK);
     }
 }
