@@ -6,9 +6,9 @@ function ReviewItem() {
       <StyledDiv2>
         <StyledP>김머끄</StyledP>
         <br />
-        <StyledImg src="\img\mountain.png" alt="mt" />
-        <StyledImg src="\img\mountain.png" alt="mt" />
-        <StyledImg src="\img\mountain.png" alt="mt" />
+        <StyledImg src="\img\filled_mt.png" alt="mt" />
+        <StyledImg src="\img\filled_mt.png" alt="mt" />
+        <StyledImg src="\img\filled_mt.png" alt="mt" />
       </StyledDiv2>
       <StyledDiv3>
         <StyledP2>
@@ -35,7 +35,7 @@ const StyledDiv = styled.div`
 
 const StyledDiv2 = styled.div`
   width: 25%;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-left: 10px;
   padding: 0px;
 `;
@@ -60,6 +60,8 @@ const StyledDiv3 = styled.div`
 const StyledP2 = styled.p`
   font-family: "GmarketSansLight";
   font-size: 13px;
+  margin-top: 10px;
+  margin-bottom: 3px;
 `;
 
 const StyledDiv4 = styled.div`
