@@ -63,7 +63,6 @@ function Navbar() {
 const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
-
   height: 60px;
   width: 100%;
   background-color: white;
