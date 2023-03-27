@@ -34,3 +34,8 @@
   text-align: center;
   font-family: "GmarketSansLight";
 }
+
+.Navbar {
+  position: sticky;
+  top: 0;
+}

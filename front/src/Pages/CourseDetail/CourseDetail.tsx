@@ -12,7 +12,7 @@ function CourseDetail() {
   };
   return (
     <div className="CourseDetail">
-      <Navbar />
+      {/* <Navbar /> */}
       <StyledDiv>
         <StyledTitle>등산코스명</StyledTitle>
       </StyledDiv>
