@@ -44,6 +44,7 @@ public class WebSecurityConfig {
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		configuration.setAllowedMethods(Arrays.asList("HEAD", "GET", "POST", "DELETE", "PUT", "OPTIONS"));
 		configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(Arrays.asList("X-ACCESS-TOKEN"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
