@@ -1,5 +1,8 @@
+import json
+
 from flask import Flask, request, make_response, jsonify
 from sqlalchemy import create_engine, text
+from haversine import haversine
 import requests
 
 app = Flask(__name__)
@@ -80,6 +83,68 @@ def get_course_by_age_and_gender():
             course_in_dict[item] = course[item]
 
         result['COURSE_LIST'].append(course_in_dict)
+
+    response = make_response(jsonify(result))
+    response.headers.set("X-ACCESS-TOKEN", access_token)
+
+    return response
+
+
+@app.route('/course/search/area', methods=['POST'])
+def get_course_by_area():
+    access_token = request.headers.get("X-ACCESS-TOKEN")
+    refresh_token = request.headers.get("X-REFRESH-TOKEN")
+
+    email_response = get_email_response(access_token, refresh_token)
+    access_token = email_response.headers.get("X-ACCESS-TOKEN")
+
+    course_length = {0: (0, 50), 1: (0, 1), 2: (1, 3), 3: (3, 5), 4: (5, 50)}
+    course_time = {0: (0, 50*60), 1: (0, 1*60), 2: (1*60, 2*60), 3: (2*60, 50*60)}
+
+    result = {
+        "COURSE_LIST": []
+    }
+
+    if request.get_json()['courseLocation'] == "현재 위치":
+        with database.connect() as conn:
+            courses = conn.execute(text(f"""
+                SELECT c.*, (SELECT COORD_X FROM `COORDINATE` WHERE COURSE_NO = c.COURSE_NO LIMIT 1) AS COORD_START_X,
+                (SELECT COORD_Y FROM `COORDINATE` WHERE COURSE_NO = c.COURSE_NO LIMIT 1) AS COORD_START_Y 
+                FROM `COURSE` AS c
+            """)).mappings().all()
+
+        start = (float(request.get_json()['coordX']), float(request.get_json()['coordY']))
+        for course in courses:
+            course_in_dict = {}
+            endpoint = [0, 0]
+            for item in course:
+                if item == 'COORD_START_X':
+                    endpoint[0] = course[item]
+                if item == 'COORD_START_Y':
+                    endpoint[1] = course[item]
+            end = (float(endpoint[0]), float(endpoint[1]))
+            if haversine(start, end) <= float(request.get_json()['courseRadius']):
+                for item in course:
+                    course_in_dict[item] = course[item]
+                del course_in_dict['COORD_START_X']
+                del course_in_dict['COORD_START_Y']
+                result['COURSE_LIST'].append(course_in_dict)
+
+    else:
+        with database.connect() as conn:
+            courses = conn.execute(text(f"""
+                SELECT *
+                FROM `COURSE`
+                WHERE `COURSE_LOCATION` = '{request.get_json()['courseLocation']}'
+                AND `COURSE_LENGTH` BETWEEN {course_length[int(request.get_json()['courseLengthBtNo'])][0]} AND {course_length[int(request.get_json()['courseLengthBtNo'])][1]}
+                AND `COURSE_UPTIME` + `COURSE_DOWNTIME` BETWEEN {course_time[int(request.get_json()['courseTimeBtNo'])][0]} AND {course_time[int(request.get_json()['courseTimeBtNo'])][1]}
+            """)).mappings().all()
+
+        for course in courses:
+            course_in_dict = {}
+            for item in course:
+                course_in_dict[item] = course[item]
+            result['COURSE_LIST'].append(course_in_dict)
 
     response = make_response(jsonify(result))
     response.headers.set("X-ACCESS-TOKEN", access_token)
