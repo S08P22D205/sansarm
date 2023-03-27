@@ -25,23 +25,12 @@ function ReviewItem() {
 }
 
 const StyledDiv = styled.div`
-  position: relative;
   display: flex;
-  width: 90%;
-  margin-left: 5%;
+  width: 94%;
+  margin-left: 3%;
   border-radius: 15px;
   background-color: #cfe2c8;
   margin-top: 20px;
-
-  &:after {
-    border-top: 0px solid transparent;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    border-bottom: 10px solid pink;
-    position: absolute;
-    top: -10px;
-    left: 200px;
-  }
 `;
 
 const StyledDiv2 = styled.div`
@@ -74,8 +63,9 @@ const StyledP2 = styled.p`
 `;
 
 const StyledDiv4 = styled.div`
-  display: block;
-  justify-items: end;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 2%;
 `;
 const StyledButton = styled.button`
   width: 30%;

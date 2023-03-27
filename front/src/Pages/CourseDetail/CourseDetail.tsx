@@ -13,14 +13,16 @@ function CourseDetail() {
   return (
     <div className="CourseDetail">
       <Navbar />
-      <Kakaomap />
-
       <StyledDiv>
         <StyledTitle>등산코스명</StyledTitle>
+      </StyledDiv>
+      <Kakaomap />
+
+      <StyledDiv2>
         <StyledContent>코스 길이 : </StyledContent>
         <StyledContent>하행 시간 : </StyledContent>
         <StyledContent>상행 시간 : </StyledContent>
-      </StyledDiv>
+      </StyledDiv2>
 
       <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
 
@@ -33,16 +35,20 @@ const StyledDiv = styled.div`
   margin-top: 40px;
   margin-left: 40px;
 `;
+const StyledDiv2 = styled.div`
+  margin-top: 20px;
+  margin-left: 40px;
+`;
 
 const StyledTitle = styled.p`
   font-family: "GmarketSansMedium";
   font-size: 25px;
-  margin-bottom: 10px;
+  margin: 0px;
 `;
 
 const StyledContent = styled.p`
   font-family: "GmarketSansLight";
-  margin: 5px;
+  margin: 3px;
 `;
 
 const StyledBtn = styled.button`
@@ -54,10 +60,11 @@ const StyledBtn = styled.button`
   border-radius: 10px;
   padding-top: 10px;
   padding-bottom: 12px;
-  width: 75%;
+  width: 70%;
   height: 50px;
-  margin-left: 12.5%;
+  margin-left: 15%;
   margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 export default CourseDetail;

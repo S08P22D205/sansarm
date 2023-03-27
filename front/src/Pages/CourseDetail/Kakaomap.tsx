@@ -48,7 +48,7 @@ function Kakaomap() {
 
 const StyledMap = styled.div`
   margin-left: 10%;
-  margin-top: 50px;
+  margin-top: 10px;
   width: 80%;
   height: 200px;
   border-radius: 5px;
