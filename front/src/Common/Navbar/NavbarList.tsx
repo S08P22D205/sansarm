@@ -44,6 +44,7 @@ const StyledUl = styled.ul`
   padding-bottom: 10px;
   background-color: white;
   width: 100%;
+  z-index: 999;
 `;
 
 const StyledLi = styled.li`
