@@ -37,6 +37,7 @@ public class UserController {
 
             String accessToken = jwtProvider.createAccessToken(user.getUserEmail());
             String refreshToken = jwtProvider.createRefreshToken(user.getUserEmail());
+            userService.saveRefreshToken(refreshToken, user.getUserNo());
 
             SignUpResponse signUpResponse = new SignUpResponse();
             signUpResponse.setAccessToken(accessToken);
@@ -157,6 +158,8 @@ public class UserController {
         } else {
             response.setHeader("X-ACCESS-TOKEN", accessToken);
         }
+
+        System.out.println(response.getHeader("X-ACCESS-TOKEN"));
 
         String userEmail = jwtProvider.getEmailFromToken(accessToken);
 
