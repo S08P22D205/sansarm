@@ -26,8 +26,8 @@ function ReviewItem() {
 
 const StyledDiv = styled.div`
   display: flex;
-  width: 94%;
-  margin-left: 3%;
+  width: 92%;
+  margin-left: 4%;
   border-radius: 15px;
   background-color: #cfe2c8;
   margin-top: 20px;
