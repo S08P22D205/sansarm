@@ -38,7 +38,7 @@ const StyledUl = styled.ul`
   position: absolute;
   justify-content: end;
   border-bottom: 2px solid #d9d9d9;
-  margin-top: 0px;
+  margin-top: 45px;
   padding-left: 25px;
   padding-top: 15px;
   padding-bottom: 10px;
@@ -57,7 +57,7 @@ const StyledLi = styled.li`
 
 const StyledHr = styled.hr`
   margin: 0px;
-  width: 90%;
+  width: 85%;
   border: 1px solid #e3e3e3;
 `;
 export default NavbarList;

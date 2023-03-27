@@ -35,12 +35,13 @@ function Navbar() {
 
 const StyledDiv = styled.div`
   display: flex;
-  justify-content: space-between;
-  position: sticky;
+  /* justify-content: space-between; */
+  position: fixed;
+  top: 0;
   height: 60px;
   width: 100%;
   background-color: white;
-  margin: 0;
+  margin-right: 2px;
   padding: 0;
   border-bottom: 2px solid #d9d9d9;
 `;

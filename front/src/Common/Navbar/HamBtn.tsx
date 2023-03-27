@@ -1,19 +1,23 @@
 import "./HamBtn.css";
+import styled from "styled-components";
 
 interface Props {
   onClick: React.MouseEventHandler<HTMLDivElement>;
 }
 
-function HamBtn({onClick} :Props) {
+function HamBtn({ onClick }: Props) {
   return (
-    <div onClick={onClick}>
+    <StyledDiv onClick={onClick}>
       <a className="menu-trigger" href="#">
         <span></span>
-        <span></span> 
+        <span></span>
         <span></span>
       </a>
-    </div>
+    </StyledDiv>
   );
 }
 
+const StyledDiv = styled.div`
+  margin-left: 230px;
+`;
 export default HamBtn;
