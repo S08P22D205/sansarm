@@ -82,7 +82,7 @@ def get_course_by_age_and_gender():
         result['COURSE_LIST'].append(course_in_dict)
 
     response = make_response(jsonify(result))
-    response.headers["X-ACCESS-TOKEN"] = access_token
+    response.headers.set("X-ACCESS-TOKEN", access_token)
 
     return response
 
