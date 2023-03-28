@@ -14,13 +14,15 @@ app.database = database
 
 
 def get_email_response(access_token, refresh_token):
-    url = 'https://j8d205.p.ssafy.io/api/user/email'
+    url = 'http://localhost:5000/user/email'
     headers = {'X-ACCESS-TOKEN': access_token, 'X-REFRESH-TOKEN': refresh_token}
     response = requests.get(url, headers=headers)
 
     if response.status_code == 200:
+        print(response.status_code)
         return response
     else:
+        print(response.status_code)
         return
 
 
@@ -35,6 +37,7 @@ def get_course_by_age_and_gender():
     refresh_token = request.headers.get("X-REFRESH-TOKEN")
 
     email_response = get_email_response(access_token, refresh_token)
+    print(email_response.json()['userEmail'])
     user_email = email_response.json()['userEmail']
     access_token = email_response.headers.get("X-ACCESS-TOKEN")
 
@@ -90,6 +93,8 @@ def get_course_by_age_and_gender():
 
     response = make_response(jsonify(result))
     response.headers.set("X-ACCESS-TOKEN", access_token)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Expose-Headers", "X-ACCESS-TOKEN")
 
     return response
 
@@ -152,6 +157,8 @@ def get_course_by_area():
 
     response = make_response(jsonify(result))
     response.headers.set("X-ACCESS-TOKEN", access_token)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Expose-Headers", "X-ACCESS-TOKEN")
 
     return response
 
@@ -191,6 +198,8 @@ def get_course_by_mt_name():
 
     response = make_response(body)
     response.headers["X-ACCESS-TOKEN"] = access_token
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Expose-Headers", "X-ACCESS-TOKEN")
 
     return response
 
