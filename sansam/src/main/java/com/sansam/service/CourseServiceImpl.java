@@ -45,7 +45,7 @@ public class CourseServiceImpl implements CourseService {
             courseYCoords.add(coordinate.getCoordY());
         }
 
-        return new CourseResponse(course.getCourseNo(), course.getCourseMtNm(), course.getCourseMtCd(), course.getCourseMtNo(), courseXCoords, courseYCoords, course.getCourseAbsDiff(), course.getCourseUptime(), course.getCourseDowntime(), course.getCourseLength(), course.getCourseLocation(), course.getCourseAddress());
+        return new CourseResponse(course.getCourseNo(), course.getCourseMtNm(), course.getCourseMtCd(), course.getCourseMtNo(), courseXCoords, courseYCoords, course.getCourseElevDiff(), course.getCourseUptime(), course.getCourseDowntime(), course.getCourseLength(), course.getCourseLocation(), course.getCourseAddress());
     }
 
     @Override
