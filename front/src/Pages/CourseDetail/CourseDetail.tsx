@@ -10,8 +10,8 @@ interface courseInfo {
   courseMtNm?: string;
   courseMtCd?: number;
   courseMtNo?: number;
-  courseXcoords?: number[];
-  courseYcoords?: number[];
+  courseXCoords?: number[];
+  courseYCoords?: number[];
   courseAbsDiff?: string;
   courseUptime?: number;
   courseDowntime?: number;
@@ -69,7 +69,12 @@ function CourseDetail() {
           {courseData.courseMtNo}코스
         </StyledTitle>
       </StyledDiv>
-      <Kakaomap />
+      {courseData.courseXCoords && courseData.courseYCoords ? (
+        <Kakaomap
+          courseXCoords={courseData.courseXCoords}
+          courseYCoords={courseData.courseYCoords}
+        />
+      ) : null}
 
       <StyledDiv2>
         <StyledContent>코스 길이 : {courseData.courseLength}km</StyledContent>
