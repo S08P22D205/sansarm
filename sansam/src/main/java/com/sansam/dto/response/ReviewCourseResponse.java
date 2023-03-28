@@ -20,7 +20,7 @@ public class ReviewCourseResponse {
     private int courseMtNo;
     private List<BigDecimal> courseXCoords;
     private List<BigDecimal> courseYCoords;
-    private Character courseAbsDiff;
+    private BigDecimal courseElevDiff;
     private int courseUptime;
     private int courseDowntime;
     private BigDecimal courseLength;
