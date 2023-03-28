@@ -26,7 +26,7 @@ public class Course {
     private int courseMtNo;
 
     @Column(name = "COURSE_ELEV_DIFF", nullable = false)
-    private Character courseElevDiff;
+    private BigDecimal courseElevDiff;
 
     @Column(name = "COURSE_UPTIME", nullable = false)
     private int courseUptime;
@@ -44,7 +44,7 @@ public class Course {
     private String courseAddress;
 
     @Builder
-    public Course(int courseNo, String courseMtCd, String courseMtNm, int courseMtNo, Character courseElevDiff, int courseUptime, int courseDowntime, BigDecimal courseLength, String courseLocation, String courseAddress) {
+    public Course(int courseNo, String courseMtCd, String courseMtNm, int courseMtNo, BigDecimal courseElevDiff, int courseUptime, int courseDowntime, BigDecimal courseLength, String courseLocation, String courseAddress) {
         this.courseNo = courseNo;
         this.courseMtCd = courseMtCd;
         this.courseMtNm = courseMtNm;
