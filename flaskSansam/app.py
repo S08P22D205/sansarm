@@ -48,13 +48,17 @@ def get_course_by_age_and_gender():
     user_age = user_info['USER_AGE']
     user_gender = user_info['USER_GENDER']
 
+    # 유저의 나이대로 변경(20대, 30대 등)
+    user_age = user_age // 10 * 10
+
     with database.connect() as conn:
         reviews = conn.execute(text(f"""
         SELECT * 
         FROM `REVIEW`
         WHERE `USER_NO` = (SELECT `USER_NO`
                             FROM `USER`
-                            WHERE `USER_AGE` = {user_age} AND `USER_GENDER` = '{user_gender}')
+                            WHERE `USER_AGE` BETWEEN {user_age} AND {user_age+9}
+                            AND `USER_GENDER` = '{user_gender}')
         ORDER BY REVIEW_DATE;
         """)).mappings().all()
 
@@ -64,7 +68,7 @@ def get_course_by_age_and_gender():
         courses.add(review['COURSE_NO'])
 
     result = {
-        'USER_AGE': user_age,
+        'USER_AGE_POOL': user_age,
         'USER_GENDER': user_gender,
         'COURSE_LIST': []
     }
