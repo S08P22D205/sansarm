@@ -20,7 +20,6 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
-    private final ExperienceRepository experienceRepository;
     private final FavoriteRepository favoriteRepository;
     private final ReviewRepository reviewRepository;
     private final CourseServiceImpl courseService;
@@ -55,14 +54,6 @@ public class UserServiceImpl implements UserService {
         String userEmail = jwtProvider.getEmailFromToken(refreshToken);
         Token token = tokenRepository.findByUserEmail(userEmail);
         token.updateRefreshToken(null);
-    }
-
-    @Override
-    @Transactional
-    public void saveExperience(int userNo, SaveExperienceRequest saveExperienceRequest) {
-        Experience experience = new Experience();
-        experience.createExperience(userNo, saveExperienceRequest.getExMtNm(), saveExperienceRequest.getExDiff());
-        experienceRepository.save(experience);
     }
 
     @Override

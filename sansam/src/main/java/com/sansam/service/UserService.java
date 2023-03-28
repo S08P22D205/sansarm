@@ -10,7 +10,6 @@ public interface UserService {
     void signUp(SignUpRequest signUpRequest);
     void saveRefreshToken(String refreshToken, int userNo);
     void signOut(String refreshToken);
-    void saveExperience(int userNo, SaveExperienceRequest saveExperienceRequest);
     FavoriteListResponse getFavoriteList(String userEmail);
     void saveFavorite(int userNo, FavoriteRequest favoriteRequest);
     void removeFavorite(int userNo, FavoriteRequest favoriteRequest);
