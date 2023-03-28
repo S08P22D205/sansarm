@@ -33,7 +33,7 @@ function Navbar() {
   };
 
   return (
-    <div className="Navbar">
+    <StyledTop className="Navbar">
       <StyledDiv>
         <StyledImg
           onClick={moveToMain}
@@ -56,10 +56,13 @@ function Navbar() {
           <StyledLi>로그아웃</StyledLi>
         </StyledUl>
       ) : null}
-    </div>
+    </StyledTop>
   );
 }
 
+const StyledTop = styled.div`
+  z-index: 1000;
+`;
 const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;

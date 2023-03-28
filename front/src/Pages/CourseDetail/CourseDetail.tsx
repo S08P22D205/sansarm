@@ -59,8 +59,6 @@ function CourseDetail() {
       .catch((err) => console.log(err));
   }, []);
 
-  // console.log(courseData);
-
   return (
     <div className="CourseDetail">
       <StyledDiv>

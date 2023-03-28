@@ -65,6 +65,6 @@ const StyledMap = styled.div`
   width: 80%;
   height: 200px;
   border-radius: 5px;
-  z-index: -1;
+  /* z-index: -1; */
 `;
 export default Kakaomap;
