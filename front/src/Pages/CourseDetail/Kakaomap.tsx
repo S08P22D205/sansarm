@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 declare global {
   interface Window {
@@ -16,25 +16,22 @@ const { kakao } = window;
 
 function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
   useEffect(() => {
-    console.log(courseXCoords);
-    console.log(courseYCoords);
     const length = courseXCoords.length;
 
-    const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+    var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
-    const options = {
+    var options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
-      level: 3, //지도의 레벨(확대, 축소 정도)
+      center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
+      level: 7, //지도의 레벨(확대, 축소 정도)
     };
 
-    const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
     // 선을 그릴 좌표들
-
     const drawingLines = (
-      courseXCoords: any,
-      courseYCoords: any,
+      courseXCoords: number[],
+      courseYCoords: number[],
       length: number
     ) => {
       for (let i = 0; i < length; i++) {
@@ -56,22 +53,10 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
       }
     };
 
-    // var linePath = [
-    //   new kakao.maps.LatLng(33.452344169439975, 126.56878163224233),
-    //   new kakao.maps.LatLng(33.452739313807456, 126.5709308145358),
-    //   new kakao.maps.LatLng(33.45178067090639, 126.5726886938753),
-    // ];
-
-    // 선에 대한 css
-
     drawingLines(courseXCoords, courseYCoords, length);
   }, []);
 
-  return (
-    <StyledMap id="map">
-      <h3>카카오지도</h3>
-    </StyledMap>
-  );
+  return <StyledMap id="map" />;
 }
 
 const StyledMap = styled.div`

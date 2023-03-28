@@ -75,7 +75,6 @@ function CourseDetail() {
           courseYCoords={courseData.courseYCoords}
         />
       ) : null}
-
       <StyledDiv2>
         <StyledContent>코스 길이 : {courseData.courseLength}km</StyledContent>
         {courseData.courseUptime ? (
