@@ -62,28 +62,6 @@ public class UserController {
     }
 
     @ApiOperation(
-			value = "최초 회원가입 시 산 정보 저장",
-			notes = "산 정보 저장이 성공적으로 이루어지면 Success를, 실패하면 Fail을 반환한다.")
-    @PostMapping("/experience/insert")
-    public ResponseEntity<?> saveExperience(@RequestHeader(value="X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @RequestBody SaveExperienceRequest saveExperienceRequest) {
-        if (response.getHeader("X-ACCESS-TOKEN") != null) {
-            accessToken = response.getHeader("X-ACCESS-TOKEN");
-        } else {
-            response.setHeader("X-ACCESS-TOKEN", accessToken);
-        }
-
-        String userEmail = jwtProvider.getEmailFromToken(accessToken);
-        User user = userRepository.findByUserEmail(userEmail);
-
-        try {
-            userService.saveExperience(user.getUserNo(), saveExperienceRequest);
-            return new ResponseEntity<>("Success", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @ApiOperation(
 			value = "찜 목록",
 			notes = "해당 유저의 찜 목록을 조회하고 성공하면 찜 목록을, 실패하면 Fail을 반환한다.")
     @GetMapping("/favorite")
