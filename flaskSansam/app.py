@@ -1,11 +1,11 @@
-import json
-
 from flask import Flask, request, make_response, jsonify
 from sqlalchemy import create_engine, text
 from haversine import haversine
+from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_pyfile('config.py')
 app.config['JSON_SORT_KEYS'] = False
 
@@ -14,7 +14,7 @@ app.database = database
 
 
 def get_email_response(access_token, refresh_token):
-    url = 'http://localhost:5000/user/email'
+    url = 'https://j8d205.p.ssafy.io/api/user/email'
     headers = {'X-ACCESS-TOKEN': access_token, 'X-REFRESH-TOKEN': refresh_token}
     response = requests.get(url, headers=headers)
 
@@ -192,4 +192,4 @@ def get_course_by_mt_name():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True, host="0.0.0.0", port=5001)

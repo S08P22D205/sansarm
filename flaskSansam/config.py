@@ -1,7 +1,7 @@
 DB = {
     'user': 'ssafy',
     'password': 'ssafy!234',
-    'host': 'localhost',
+    'host': '172.17.0.1',  # 로컬에서 돌릴 때는 localhost를 기재한다.
     'port': 3306,
     'database': 'sansam_db'
 }
