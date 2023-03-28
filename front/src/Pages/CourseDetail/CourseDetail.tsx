@@ -59,22 +59,33 @@ function CourseDetail() {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(courseData);
+  // console.log(courseData);
 
   return (
     <div className="CourseDetail">
       <StyledDiv>
         <StyledTitle>
-          {courseData.courseMtNm} &nbsp;
+          {courseData.courseMtNm}&nbsp;
           {courseData.courseMtNo}코스
         </StyledTitle>
       </StyledDiv>
       <Kakaomap />
 
       <StyledDiv2>
-        <StyledContent>코스 길이 : {courseData.courseDowntime}</StyledContent>
-        <StyledContent>하행 시간 : </StyledContent>
-        <StyledContent>상행 시간 : </StyledContent>
+        <StyledContent>코스 길이 : {courseData.courseLength}km</StyledContent>
+        {courseData.courseUptime ? (
+          <StyledContent>
+            상행 시간 : {Math.floor(courseData.courseUptime / 60)}시간{" "}
+            {Math.floor(courseData.courseUptime % 60)}분
+          </StyledContent>
+        ) : null}
+
+        {courseData.courseDowntime ? (
+          <StyledContent>
+            하행 시간 : {Math.floor(courseData.courseDowntime / 60)}시간{" "}
+            {Math.floor(courseData.courseDowntime % 60)}분
+          </StyledContent>
+        ) : null}
       </StyledDiv2>
 
       <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
@@ -88,6 +99,7 @@ const StyledDiv = styled.div`
   margin-top: 40px;
   margin-left: 40px;
 `;
+
 const StyledDiv2 = styled.div`
   margin-top: 20px;
   margin-left: 40px;
@@ -101,7 +113,7 @@ const StyledTitle = styled.p`
 
 const StyledContent = styled.p`
   font-family: "GmarketSansLight";
-  margin: 3px;
+  margin: 5px;
 `;
 
 const StyledBtn = styled.button`
