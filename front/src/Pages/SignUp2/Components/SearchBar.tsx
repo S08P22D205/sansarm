@@ -1,8 +1,11 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { useEffect } from "react";
 import axios from "../../../store/baseURL";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { addExp } from "../../../store/signup2Slice";
 
 import stringSimilarity from "string-similarity";
 // import { Komoran } from 'koalanlp/API';
@@ -86,9 +89,11 @@ function SearchBar() {
 
 
   // 자동완성에 뜬 산이름을 클릭할 경우 발생하는 클릭이벤트
-  function AutoSearchClick() {
-    // 이거 메인페이지에 맞게 만들면 돼 선영아
-    // usestate로 값 받아서 검색창에 넣어주면 될듯?
+  const dispatch = useAppDispatch();
+  const expmt = useAppSelector((state) => state.signup2);
+  function AutoSearchClick(mtname:string) {
+    // ()
+    dispatch(addExp({exMtNm : mtname, exDiff : ""}));
   }
 
   return (
@@ -107,11 +112,16 @@ function SearchBar() {
       </SearchBarDiv>
 
       {/* 검색 키워드가 있어야 자동완성창을 보여줌 */}
-      {keyword ? (
+      {keyword[1] ? (
         <AutoSearchDiv>
           <AutoSearchUl>
             {(keyItems.slice(1,6)).map((mtname) => (
-              <AutoSearchLi key={mtname} onClick={AutoSearchClick}>{mtname}</AutoSearchLi>
+              <AutoSearchLi
+              key={mtname}
+              // value={mtname}
+              onClick={() => AutoSearchClick(mtname)}>
+                {mtname}
+              </AutoSearchLi>
             ))}
           </AutoSearchUl>
         </AutoSearchDiv>
