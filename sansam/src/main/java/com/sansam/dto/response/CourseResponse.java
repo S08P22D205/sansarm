@@ -19,7 +19,7 @@ public class CourseResponse {
     private int courseMtNo;
     private List<BigDecimal> courseXCoords;
     private List<BigDecimal> courseYCoords;
-    private Character courseAbsDiff;
+    private BigDecimal courseAbsDiff;
     private int courseUptime;
     private int courseDowntime;
     private BigDecimal courseLength;
