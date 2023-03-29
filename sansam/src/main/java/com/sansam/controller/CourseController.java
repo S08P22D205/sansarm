@@ -3,6 +3,7 @@ package com.sansam.controller;
 import com.sansam.dto.response.CourseResponse;
 import com.sansam.dto.response.CourseReviewListResponse;
 import com.sansam.dto.response.MountainListResponse;
+import com.sansam.dto.response.TopTenCourseListResponse;
 import com.sansam.service.CourseServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -71,6 +72,25 @@ public class CourseController {
         try {
             CourseReviewListResponse courseReviewListResponse = courseService.getCourseReviewList(courseNo);
             return new ResponseEntity<>(courseReviewListResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+            value = "Top 10 코스 목록",
+            notes = "Top 10 코스 목록을 추출하고, 성공 시 코스 목록을 반환하고, 실패 시 Fail을 반환한다.")
+    @GetMapping("/top-ten")
+    public ResponseEntity<?> getTopTenCourseList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            accessToken = response.getHeader("X-ACCESS-TOKEN");
+        } else {
+            response.setHeader("X-ACCESS-TOKEN", accessToken);
+        }
+
+        try {
+            TopTenCourseListResponse topTenCourseListResponse = courseService.getTopTenCourseList();
+            return new ResponseEntity<>(topTenCourseListResponse, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
         }
