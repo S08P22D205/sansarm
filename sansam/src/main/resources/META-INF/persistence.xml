@@ -12,7 +12,7 @@
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
-<!--            properties below are mapped programmically in order to externally import secret variables.-->
+<!--            properties below are mapped programmatically in order to externally import secret variables.-->
 <!--            <property name="javax.persistence.jdbc.url" value="url" />-->
 <!--            <property name="javax.persistence.jdbc.user" value="username" />-->
 <!--            <property name="javax.persistence.jdbc.password" value="password" />-->
