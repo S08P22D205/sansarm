@@ -6,6 +6,7 @@ interface reviewInfo {
   reviewTime?: number;
   reviewContent?: string;
   reviewRelDiff?: string;
+  userNickname: string;
 }
 
 function ReviewItem({
@@ -14,6 +15,7 @@ function ReviewItem({
   reviewTime,
   reviewContent,
   reviewRelDiff,
+  userNickname,
 }: reviewInfo) {
   return (
     <StyledDiv>
@@ -42,10 +44,13 @@ function ReviewItem({
       </StyledDiv2>
       <StyledDiv3>
         <StyledP2>{reviewContent}</StyledP2>
-        <StyledDiv4>
-          <StyledButton>수정</StyledButton>
-          <StyledButton>삭제</StyledButton>
-        </StyledDiv4>
+
+        {reviewerNicknm === userNickname ? (
+          <StyledDiv4>
+            <StyledButton>수정</StyledButton>
+            <StyledButton>삭제</StyledButton>
+          </StyledDiv4>
+        ) : null}
       </StyledDiv3>
     </StyledDiv>
   );
@@ -79,6 +84,7 @@ const StyledP = styled.p`
 const StyledImg = styled.img`
   width: 23px;
   margin-right: 3px;
+  margin-bottom: 15px;
 `;
 
 const StyledDiv3 = styled.div`

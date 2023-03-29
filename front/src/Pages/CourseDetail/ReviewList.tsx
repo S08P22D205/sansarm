@@ -13,6 +13,7 @@ interface reviewInfo {
   reviewTime?: number;
   reviewContent?: string;
   reviewRelDiff?: string;
+  userNickname: string;
 }
 
 function ReviewList({ id }: idInfo) {
@@ -21,8 +22,10 @@ function ReviewList({ id }: idInfo) {
   const RefreshToken = sessionStorage.getItem("refreshToken");
 
   const [reviewList, setReviewList] = useState<reviewInfo[]>([]);
+  const [userNickname, setUserNickname] = useState<string>("");
 
   useEffect(() => {
+    // 코스에 대한 리뷰 목록 반환 axios
     axios
       .get(`http://localhost:5000/course/review/${id}`, {
         headers: {
@@ -41,6 +44,23 @@ function ReviewList({ id }: idInfo) {
       .catch((err) => {
         console.log(err);
       });
+
+    // 유저 확인 axios
+    axios
+      .get("http://localhost:5000/user/info", {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+      })
+      .then((res) => {
+        console.log("유저 정보 받아오기 :: 성공!");
+        console.log(res.data.userNicknm);
+        setUserNickname(res.data.userNicknm);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
@@ -55,6 +75,7 @@ function ReviewList({ id }: idInfo) {
             reviewTime={data.reviewTime}
             reviewContent={data.reviewContent}
             reviewRelDiff={data.reviewRelDiff}
+            userNickname={userNickname}
           />
         );
       })}
