@@ -2,13 +2,14 @@ package com.sansam.service;
 
 import com.sansam.data.entity.*;
 import com.sansam.data.repository.*;
-import com.sansam.dto.response.CourseResponse;
-import com.sansam.dto.response.CourseReviewListResponse;
-import com.sansam.dto.response.ReviewResponse;
+import com.sansam.dto.response.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,5 +60,28 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return new CourseReviewListResponse(courseReviewList);
+    }
+
+    @Override
+    public TopTenCourseListResponse getTopTenCourseList() {
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("my-persistence-unit");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        String sql = "SELECT c.COURSE_NO " +
+             "FROM COURSE c " +
+             "INNER JOIN REVIEW r ON r.COURSE_NO = c.COURSE_NO " +
+             "GROUP BY c.COURSE_NO " +
+             "ORDER BY COUNT(*) DESC " +
+             "LIMIT 10";
+        List<Integer> courseNumbers = entityManager.createNativeQuery(sql).getResultList();
+
+        List<TopTenCourseResponse> topTenCourseList = new ArrayList<>();
+
+        for (Integer courseNumber: courseNumbers) {
+            Course course = courseRepository.findCourseByCourseNo(courseNumber);
+            topTenCourseList.add(new TopTenCourseResponse(course.getCourseNo(), course.getCourseMtNm(), course.getCourseMtNo(), course.getCourseUptime(), course.getCourseDowntime(), course.getCourseLength()));
+        }
+
+        return new TopTenCourseListResponse(topTenCourseList);
     }
 }
