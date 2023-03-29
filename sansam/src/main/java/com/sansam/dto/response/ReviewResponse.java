@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ReviewResponse {
     private String reviewerNicknm;
+    private Character reviewRelDiff;
     private LocalDate reviewDate;
     private int reviewTime;
     private String reviewContent;
