@@ -18,10 +18,9 @@ import stringSimilarity from "string-similarity";
 //   mountain: string;
 // }
 
-
 function SearchBar() {
   // mtlist(axios로 받아오는 산 이름 값) useState 세팅
-  type MtList = [string] | []
+  type MtList = [string] | [];
   const [mtlist, setMtlist] = useState<MtList>([""]);
 
   // SearchBar가 랜더링되면 산목록 axios 받아서 mtlist에 저장
@@ -60,22 +59,23 @@ function SearchBar() {
   };
 
   // keyItem(알고리즘 돌린 결과값) useState 세팅
-  type SearchDatas = [string] | []
-  const initialSearchData : SearchDatas = [""]
+  type SearchDatas = [string] | [];
+  const initialSearchData: SearchDatas = [""];
   const [keyItems, setKeyItems] = useState<SearchDatas>(initialSearchData);
 
   // 자동완성을 위한 유사도 검사 알고리즘
   function AutoSearchAlgo() {
-    type MatchData = [string]
-    const matches : MatchData = [""]
+    type MatchData = [string];
+    const matches: MatchData = [""];
     mtlist.forEach((mt) => {
       const similarity = stringSimilarity.compareTwoStrings(mt, keyword);
-      if (similarity > 0.5) { // adjust this threshold value as needed
-        matches.push(mt)
+      if (similarity > 0.5) {
+        // adjust this threshold value as needed
+        matches.push(mt);
       }
-    })
+    });
     setKeyItems(matches);
-    console.log(keyItems)
+    console.log(keyItems);
   }
   // 검색창에 keyword가 입력될 때 유사도 검사 알고리즘이 작동, 자연스러운 작동위해 딜레이를 줌
   useEffect(() => {
@@ -87,13 +87,12 @@ function SearchBar() {
     };
   }, [keyword]);
 
-
   // 자동완성에 뜬 산이름을 클릭할 경우 발생하는 클릭이벤트
   const dispatch = useAppDispatch();
   const expmt = useAppSelector((state) => state.signup2);
-  function AutoSearchClick(mtname:string) {
+  function AutoSearchClick(mtname: string) {
     // ()
-    dispatch(addExp({exMtNm : mtname, exDiff : ""}));
+    dispatch(addExp({ exMtNm: mtname, exDiff: "" }));
   }
 
   return (
@@ -115,11 +114,12 @@ function SearchBar() {
       {keyword[1] ? (
         <AutoSearchDiv>
           <AutoSearchUl>
-            {(keyItems.slice(1,6)).map((mtname) => (
+            {keyItems.slice(1, 6).map((mtname) => (
               <AutoSearchLi
-              key={mtname}
-              // value={mtname}
-              onClick={() => AutoSearchClick(mtname)}>
+                key={mtname}
+                // value={mtname}
+                onClick={() => AutoSearchClick(mtname)}
+              >
                 {mtname}
               </AutoSearchLi>
             ))}
@@ -159,10 +159,6 @@ const Search = styled.input`
   font-family: "GmarketSansMedium";
   text-align: center;
   font-size: 7.5vw;
-  // margin-left : 7vw;
-  &: hover {
-    cursor: pointer;
-  }
 `;
 
 const ClickedSearch = styled.input`
@@ -187,22 +183,17 @@ const AutoSearchDiv = styled.div`
 
 const AutoSearchUl = styled.ul`
   padding-left: 0vw;
-  padding-top : 2vw;
+  padding-top: 2vw;
 `;
 
 const AutoSearchLi = styled.li`
   list-style-type: none;
   font-size: 6vw;
   font-weight: bold;
-  padding-bottom : 3vw;
+  padding-bottom: 3vw;
   height: 13vw;
   padding-top: 3vw;
   border-radius: 10px;
-  &: hover {
-    background-color: #ebebeb;
-    cursor: pointer;
-  }
-  &: ;
 `;
 
 // const SearchBtn = styled.button`
