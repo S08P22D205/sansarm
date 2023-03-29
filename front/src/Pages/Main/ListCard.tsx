@@ -41,12 +41,12 @@ function ListCard({ courseMtNm, courseMtNo, courseMtCd }: courseInfo) {
       );
       if (res.data.response.body.items) {
         setImgName(res.data.response.body.items.item[0].imgfilename);
-        // console.log(
-        //   courseMtNm,
-        //   res.data.response.body.items.item[0].imgfilename
-        // );
+        console.log(
+          courseMtNm,
+          res.data.response.body.items.item[0].imgfilename
+        );
       } else {
-        // console.log(courseMtNm, res.data.response.body);
+        console.log(courseMtNm, res.data.response.body);
       }
     };
     getImgSrc();

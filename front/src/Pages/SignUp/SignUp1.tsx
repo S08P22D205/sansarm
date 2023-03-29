@@ -51,8 +51,8 @@ function SignUp1() {
     });
   }, []);
 
-  const moveToMain = () => {
-    navigate("/main/*");
+  const moveToSignUp2 = () => {
+    navigate("/signup/2");
   };
 
   const [signUp, setSignUp] = useState({
@@ -99,14 +99,12 @@ function SignUp1() {
           if (response.data) {
             sessionStorage.setItem("accessToken", response.data.accessToken);
             sessionStorage.setItem("refreshToken", response.data.refreshToken);
-            moveToMain();
+            moveToSignUp2();
           }
         })
         .catch((error) => {
           console.log(error);
         });
-    } else {
-      alert("회원정보를 입력해주세요")
     }
   };
 

@@ -2,43 +2,33 @@ import React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 
-import { useSelector } from 'react-redux/es/exports';
-import { Exp } from '../../../store/signup2Slice';
-
 function ExperienceList() {
 
-  // const exp = useSelector<Exp>(state => state.exMtNm)
-  
   const [easy, setEasy] = useState(0)
   const [soso, setSoso] = useState(0) 
   const [hard, setHard] = useState(0)
 
   function easyToggle() {
-    // if (easy === 0) {
-    setEasy(1)
-    setSoso(0)
-    setHard(0)
-    // }
-    // redux E
+    if (easy === 0) {
+      setEasy(1)
+      setSoso(0)
+      setHard(0)
+    }
   }
   function sosoToggle() {
-    // if (soso === 0) {
-    setSoso(1)
-    setEasy(0)
-    setHard(0)
-    // }
-    // redux N
+    if (soso === 0) {
+      setSoso(1)
+      setEasy(0)
+      setHard(0)
+    }
   }
   function hardToggle() {
-    // if (hard === 0) {
-    setHard(1)
-    setSoso(0)
-    setEasy(0)
-    // }
-    // redux H
+    if (hard === 0) {
+      setHard(1)
+      setSoso(0)
+      setEasy(0)
+    }
   }
-
-  
 
   const diffcheck = [easy, soso, hard]
   // 난이도 (쉬움/보통/어려움) (체크 안됨 : 0 / 체크됨 : 1)을 정리한 리스트
@@ -52,19 +42,19 @@ function ExperienceList() {
         <DelBtn>X</DelBtn>
       </DelBtnDiv>
       <MtNameDiv>
-        <MtName>아차산</MtName>
+        <MtName>아차차산</MtName>
       </MtNameDiv>
       { easy === 0 ?
         <DiffBtn onClick={easyToggle}>쉬움</DiffBtn> :      
-        <ClickedDiffBtn>쉬움</ClickedDiffBtn>
+        <ClickedDiffBtn onClick={easyToggle}>쉬움</ClickedDiffBtn>
       }
       { soso === 0 ?
         <DiffBtn onClick={sosoToggle}>보통</DiffBtn> :      
-        <ClickedDiffBtn>보통</ClickedDiffBtn>
+        <ClickedDiffBtn onClick={sosoToggle}>보통</ClickedDiffBtn>
       }
       { hard === 0 ?
         <DiffBtn onClick={hardToggle}>어려움</DiffBtn> :      
-        <ClickedDiffBtn>어려움</ClickedDiffBtn>
+        <ClickedDiffBtn onClick={hardToggle}>어려움</ClickedDiffBtn>
       }
     </ExpListDiv>
   )
