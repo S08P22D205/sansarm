@@ -1,27 +1,93 @@
-import Navbar from "../../Common/Navbar/Navbar";
-import Kakaomap from "./Kakaomap";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router";
 import styled from "styled-components";
-import { useNavigate } from "react-router";
+import axios from "axios";
+import Kakaomap from "./Kakaomap";
 import ReviewList from "./ReviewList";
 
+interface courseInfo {
+  courseNo?: number;
+  courseMtNm?: string;
+  courseMtCd?: number;
+  courseMtNo?: number;
+  courseXCoords?: number[];
+  courseYCoords?: number[];
+  courseAbsDiff?: string;
+  courseUptime?: number;
+  courseDowntime?: number;
+  courseLength?: number;
+  courseLocation?: string;
+  courseAddress?: string;
+}
+
 function CourseDetail() {
+  const [courseData, setCourseData] = useState<courseInfo>({});
+
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const moveToHiking = () => {
     navigate("/hiking");
   };
+
+  // access token, refresh token 가져오기
+  const AccessToken = sessionStorage.getItem("accessToken");
+  const RefreshToken = sessionStorage.getItem("refreshToken");
+
+  // 코스 번호
+  const id = location.pathname.slice(14);
+
+  // axios 요청 : 코스 데이터 가져오기
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/course/search/${id}`, {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+        params: {
+          courseNo: id,
+        },
+      })
+
+      .then((res) => {
+        console.log("코스 정보 받아오기 :: 성공!");
+        setCourseData(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <div className="CourseDetail">
-      <Navbar />
       <StyledDiv>
-        <StyledTitle>등산코스명</StyledTitle>
+        <StyledTitle>
+          {courseData.courseMtNm}&nbsp;
+          {courseData.courseMtNo}코스
+        </StyledTitle>
       </StyledDiv>
-      <Kakaomap />
-
+      {courseData.courseXCoords && courseData.courseYCoords ? (
+        <Kakaomap
+          courseXCoords={courseData.courseXCoords}
+          courseYCoords={courseData.courseYCoords}
+        />
+      ) : null}
       <StyledDiv2>
-        <StyledContent>코스 길이 : </StyledContent>
-        <StyledContent>하행 시간 : </StyledContent>
-        <StyledContent>상행 시간 : </StyledContent>
+        <StyledContent>코스 길이 : {courseData.courseLength}km</StyledContent>
+        {courseData.courseUptime ? (
+          <StyledContent>
+            상행 시간 : {Math.floor(courseData.courseUptime / 60)}시간{" "}
+            {Math.floor(courseData.courseUptime % 60)}분
+          </StyledContent>
+        ) : null}
+
+        {courseData.courseDowntime ? (
+          <StyledContent>
+            하행 시간 : {Math.floor(courseData.courseDowntime / 60)}시간{" "}
+            {Math.floor(courseData.courseDowntime % 60)}분
+          </StyledContent>
+        ) : null}
       </StyledDiv2>
 
       <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
@@ -35,6 +101,7 @@ const StyledDiv = styled.div`
   margin-top: 40px;
   margin-left: 40px;
 `;
+
 const StyledDiv2 = styled.div`
   margin-top: 20px;
   margin-left: 40px;
@@ -48,7 +115,7 @@ const StyledTitle = styled.p`
 
 const StyledContent = styled.p`
   font-family: "GmarketSansLight";
-  margin: 3px;
+  margin: 5px;
 `;
 
 const StyledBtn = styled.button`
