@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 declare global {
   interface Window {
@@ -7,56 +7,43 @@ declare global {
   }
 }
 
-interface Icoords {
-  courseXCoords: number[];
-  courseYCoords: number[];
-}
-
 const { kakao } = window;
 
-function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
+function Kakaomap() {
   useEffect(() => {
-    const length = courseXCoords.length;
-
-    var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-
-    var options = {
+    const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+    const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
+      center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
       level: 7, //지도의 레벨(확대, 축소 정도)
     };
 
-    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
     // 선을 그릴 좌표들
-    const drawingLines = (
-      courseXCoords: number[],
-      courseYCoords: number[],
-      length: number
-    ) => {
-      for (let i = 0; i < length; i++) {
-        var linePath = [
-          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]),
-        ];
+    var linePath = [
+      new kakao.maps.LatLng(33.452344169439975, 126.56878163224233),
+      new kakao.maps.LatLng(33.452739313807456, 126.5709308145358),
+      new kakao.maps.LatLng(33.45178067090639, 126.5726886938753),
+    ];
 
-        console.log(linePath);
+    // 선에 대한 css
+    var polyline = new kakao.maps.Polyline({
+      path: linePath, // 선을 구성하는 좌표배열 입니다
+      strokeWeight: 5, // 선의 두께 입니다
+      strokeColor: "#e72a00", // 선의 색깔입니다
+      strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+      strokeStyle: "solid", // 선의 스타일입니다
+    });
 
-        var polyline = new kakao.maps.Polyline({
-          path: linePath, // 선을 구성하는 좌표배열
-          strokeWeight: 5, // 선의 두께
-          strokeColor: "#e72a00", // 선의 색깔
-          strokeOpacity: 0.7, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
-          strokeStyle: "solid", // 선의 스타일
-        });
-
-        polyline.setMap(map);
-      }
-    };
-
-    drawingLines(courseXCoords, courseYCoords, length);
+    polyline.setMap(map);
   }, []);
 
-  return <StyledMap id="map" />;
+  return (
+    <StyledMap id="map">
+      <h3>카카오지도</h3>
+    </StyledMap>
+  );
 }
 
 const StyledMap = styled.div`
@@ -65,6 +52,6 @@ const StyledMap = styled.div`
   width: 80%;
   height: 200px;
   border-radius: 5px;
-  /* z-index: -1; */
+  z-index: -1;
 `;
 export default Kakaomap;

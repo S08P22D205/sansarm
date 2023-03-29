@@ -53,7 +53,7 @@ function Main() {
 
   return (
     <div className="Main">
-      {/* <Navbar /> */}
+      <Navbar />
       <StyledH>어떤 산으로 떠나고 싶으신가요?</StyledH>
       <MainBtn />
       <List />
