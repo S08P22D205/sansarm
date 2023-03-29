@@ -1,20 +1,47 @@
 import styled from "styled-components";
 
-function ReviewItem() {
+interface reviewInfo {
+  reviewerNicknm?: string;
+  reviewDate?: Date;
+  reviewTime?: number;
+  reviewContent?: string;
+  reviewRelDiff?: string;
+}
+
+function ReviewItem({
+  reviewerNicknm,
+  reviewDate,
+  reviewTime,
+  reviewContent,
+  reviewRelDiff,
+}: reviewInfo) {
   return (
     <StyledDiv>
       <StyledDiv2>
-        <StyledP>김머끄</StyledP>
+        <StyledP>{reviewerNicknm}</StyledP>
         <br />
-        <StyledImg src="\img\filled_mt.png" alt="mt" />
-        <StyledImg src="\img\filled_mt.png" alt="mt" />
-        <StyledImg src="\img\filled_mt.png" alt="mt" />
+        {reviewRelDiff === "E" ? (
+          <div>
+            <StyledImg src="\img\filled_mt.png" alt="mt" />
+            <StyledImg src="\img\unfilled_mt.png" alt="mt" />
+            <StyledImg src="\img\unfilled_mt.png" alt="mt" />
+          </div>
+        ) : reviewRelDiff === "N" ? (
+          <div>
+            <StyledImg src="\img\filled_mt.png" alt="mt" />
+            <StyledImg src="\img\filled_mt.png" alt="mt" />
+            <StyledImg src="\img\unfilled_mt.png" alt="mt" />
+          </div>
+        ) : (
+          <div>
+            <StyledImg src="\img\filled_mt.png" alt="mt" />
+            <StyledImg src="\img\filled_mt.png" alt="mt" />
+            <StyledImg src="\img\filled_mt.png" alt="mt" />
+          </div>
+        )}
       </StyledDiv2>
       <StyledDiv3>
-        <StyledP2>
-          프로젝트 팀원들과 함께 다녀왔습니다! 머리끄댕이 많이 잡고왔습니다.
-          추천 기능이 좋네요^^
-        </StyledP2>
+        <StyledP2>{reviewContent}</StyledP2>
         <StyledDiv4>
           <StyledButton>수정</StyledButton>
           <StyledButton>삭제</StyledButton>
@@ -35,22 +62,23 @@ const StyledDiv = styled.div`
 
 const StyledDiv2 = styled.div`
   width: 25%;
-  margin-top: 30px;
+  margin-top: 15px;
   margin-left: 10px;
   padding: 0px;
 `;
 
 const StyledP = styled.p`
   display: inline;
+  text-align: center;
   font-family: "GmarketSansMedium";
   font-size: large;
-  margin-left: 8px;
   padding-left: 3px;
   padding-right: 0px;
 `;
 
 const StyledImg = styled.img`
-  width: 25px;
+  width: 23px;
+  margin-right: 3px;
 `;
 
 const StyledDiv3 = styled.div`
@@ -60,8 +88,9 @@ const StyledDiv3 = styled.div`
 const StyledP2 = styled.p`
   font-family: "GmarketSansLight";
   font-size: 13px;
-  margin-top: 10px;
-  margin-bottom: 3px;
+  margin-left: 5px;
+  margin-top: 15px;
+  margin-bottom: 15px;
 `;
 
 const StyledDiv4 = styled.div`
@@ -70,9 +99,10 @@ const StyledDiv4 = styled.div`
   margin-right: 2%;
 `;
 const StyledButton = styled.button`
-  width: 30%;
-  height: 30px;
+  width: 25%;
+  height: 20px;
   font-family: "GmarketSansMedium";
+  font-size: small;
   background-color: #408c25;
   color: white;
   border: 0;

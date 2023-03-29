@@ -52,9 +52,9 @@ function CourseDetail() {
       })
 
       .then((res) => {
-        console.log("코스 정보 받아오기 :: 성공!");
+        // console.log("코스 정보 받아오기 :: 성공!");
         setCourseData(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       })
       .catch((err) => console.log(err));
   }, []);

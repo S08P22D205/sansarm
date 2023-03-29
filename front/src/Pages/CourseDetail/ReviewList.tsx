@@ -12,6 +12,7 @@ interface reviewInfo {
   reviewDate?: Date;
   reviewTime?: number;
   reviewContent?: string;
+  reviewRelDiff?: string;
 }
 
 function ReviewList({ id }: idInfo) {
@@ -19,7 +20,7 @@ function ReviewList({ id }: idInfo) {
   const AccessToken = sessionStorage.getItem("accessToken");
   const RefreshToken = sessionStorage.getItem("refreshToken");
 
-  const [reviewList, setReviewList] = useState<reviewInfo>({});
+  const [reviewList, setReviewList] = useState<reviewInfo[]>([]);
 
   useEffect(() => {
     axios
@@ -34,8 +35,8 @@ function ReviewList({ id }: idInfo) {
       })
       .then((res) => {
         console.log("리뷰 정보 받아오기 :: 성공!");
-        console.log(res.data);
-        setReviewList(res.data);
+        console.log(res.data.reviewList);
+        setReviewList(res.data.reviewList);
       })
       .catch((err) => {
         console.log(err);
@@ -45,7 +46,18 @@ function ReviewList({ id }: idInfo) {
   return (
     <div>
       <StyledHr />
-      <ReviewItem />
+      {reviewList.map((data, index) => {
+        return (
+          <ReviewItem
+            key={index}
+            reviewerNicknm={data.reviewerNicknm}
+            reviewDate={data.reviewDate}
+            reviewTime={data.reviewTime}
+            reviewContent={data.reviewContent}
+            reviewRelDiff={data.reviewRelDiff}
+          />
+        );
+      })}
     </div>
   );
 }
