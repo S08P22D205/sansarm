@@ -8,24 +8,35 @@ export interface Tokens {
   "X-REFRESH-TOKEN": string;
 }
 
-const api = axios.create({
+const flaskApi = axios.create({
   // baseURL: "https://j8d205.p.ssafy.io/",
   baseURL: "http://localhost:5001/",
+});
+
+const springApi = axios.create({
+  baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {};
 
 export const courseApi = {
-  ageGender: (accessToken: string | null, refreshToken: string | null) =>
-    api.get("course/main/age-gender", {
+  searchBar: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("course/mtlist", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  easy: () => api.get("course/main/easy"),
-  normal: () => api.get("course/main/normal"),
-  hard: () => api.get("course/main/hard"),
+  ageGender: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/age-gender", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  easy: () => flaskApi.get("course/main/easy"),
+  normal: () => flaskApi.get("course/main/normal"),
+  hard: () => flaskApi.get("course/main/hard"),
 };
 
-export default api;
+export default flaskApi;

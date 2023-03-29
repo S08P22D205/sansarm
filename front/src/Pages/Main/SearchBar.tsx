@@ -4,46 +4,34 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import stringSimilarity from "string-similarity";
+import { courseApi } from "../../api";
 
 function SearchBar() {
-  // mtlist(axios로 받아오는 산 이름 값) useState 세팅
-  type MtList = [string] | [];
-  const [mtlist, setMtlist] = useState<MtList>([""]);
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
+  const [mtList, setMtList] = useState<Array<string>>([""]);
 
   // SearchBar가 랜더링되면 산목록 axios 받아서 mtlist에 저장
-  function getMtList() {
-    const AccessToken = sessionStorage.getItem("accessToken");
-    const RefreshToken = sessionStorage.getItem("refreshToken");
-    console.log(AccessToken, RefreshToken);
-
-    axios
-      .get("http://localhost:5000/course/mtlist", {
-        headers: {
-          "X-ACCESS-TOKEN": AccessToken,
-          "X-REFRESH-TOKEN": RefreshToken,
-        },
-      })
-
-      .then(res => {
-        console.log("산목록 받기 성공");
-        console.log(res.data);
-        setMtlist(res.data.mountainList);
-        console.log(mtlist);
-      })
-      .catch(err => console.log("errror"));
-  }
   useEffect(() => {
+    const getMtList = async () => {
+      const res = await courseApi.searchBar(accessToken, refreshToken);
+      setMtList(res.data.mountainList);
+    };
     getMtList();
   }, []);
 
   // keyword(검색창에 입력하는 값) useState 세팅
   const [keyword, setKeyword] = useState<string>("");
 
-  // 검색창 입력값 변할 때마다 입력하는 값을 keyword useState에 저장
+  // 검색창 입력값 변할 때마다 입력하는 값을 keyword에 저장
   const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value.trim());
-    console.log(keyword);
   };
+
+  console.log("keyword", keyword);
 
   // keyItem(알고리즘 돌린 결과값) useState 세팅
   type SearchDatas = [string] | [];
@@ -54,7 +42,7 @@ function SearchBar() {
   function AutoSearchAlgo() {
     type MatchData = [string];
     const matches: MatchData = [""];
-    mtlist.forEach(mt => {
+    mtList.forEach(mt => {
       const similarity = stringSimilarity.compareTwoStrings(mt, keyword);
       if (similarity > 0.5) {
         // adjust this threshold value as needed
@@ -115,7 +103,6 @@ export default SearchBar;
 const SearchBarDiv = styled.div`
   width: 100vw;
   height: 7vh;
-  margin-top: 7vh;
   margin-bottom: 0.7vh;
   display: flex;
   align-items: center;

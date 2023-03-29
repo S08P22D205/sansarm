@@ -33,7 +33,7 @@ function List() {
   );
   const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
 
-  console.log("store", ageGender);
+  // console.log("store", ageGender);
 
   return (
     <StyledDiv className="List">

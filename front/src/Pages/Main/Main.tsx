@@ -25,11 +25,14 @@ const StyledH = styled.p`
   font-family: "GmarketSansLight";
   font-weight: bold;
   font-size: 5.2vw;
+  margin-bottom: 12px;
 `;
 
 function Main() {
   // dispatch 사용하기 위해 정의해주기
   const dispatch = useAppDispatch();
+
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
@@ -59,27 +62,12 @@ function Main() {
     const getageGender = async () => {
       const res = await courseApi.ageGender(accessToken, refreshToken);
       dispatch(changeAgeGender(res.data));
-      // console.log(res.data);
     };
-    // axios 모듈화 안되어있는 코드
-    // const test = async () => {
-    //   const res = await axios.get(
-    //     "http://localhost:5001/course/main/age-gender",
-    //     {
-    //       headers: {
-    //         "X-ACCESS-TOKEN": accessToken,
-    //         "X-REFRESH-TOKEN": refreshToken,
-    //       },
-    //     }
-    //   );
-    //   console.log(res);
-    // };
     getGenderAge();
     getEasyCourse();
     getNormalCourse();
     getHardCourse();
     getageGender();
-    // test();
   }, []);
 
   return (
