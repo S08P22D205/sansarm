@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
 
+interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  timeState?: number;
+  lengthState?: number;
+  index?: number;
+}
+
 function FilterMt() {
   const time: string[] = ["전체", "1미만", "1-2", "2초과"];
   const [onTime, setOnTime] = useState<number>(0);
@@ -36,7 +42,7 @@ function FilterMt() {
                 handleMt(index, "courseTimeBtNo");
                 setOnTime(index);
               }}
-              onTime={onTime}
+              timeState={onTime}
               index={index}
             >
               {data}
@@ -57,7 +63,7 @@ function FilterMt() {
                 handleMt(index, "courseLengthBtNo");
                 setOnLength(index);
               }}
-              onLength={onLength}
+              lengthState={onLength}
               index={index}
             >
               {data}
@@ -103,28 +109,30 @@ const StyledHr = styled.hr`
   border: 1px solid #e3e3e3;
 `;
 
-const StyledBtn = styled.button<{ onTime: number; index: number }>`
+const StyledBtn = styled.button<ButtonInfo>`
   width: 20vw;
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) => (props.index === props.onTime ? "#238C47" : "#818181")};
+  color: ${(props) =>
+    props.index === props.timeState ? "#238C47" : "#818181"};
   border: 2px solid
-    ${(props) => (props.index === props.onTime ? "#238C47" : "#818181")};
+    ${(props) => (props.index === props.timeState ? "#238C47" : "#818181")};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
   margin: 5px;
 `;
 
-const StyledBtn1 = styled.button<{ onLength: number; index: number }>`
+const StyledBtn1 = styled.button<ButtonInfo>`
   width: 16.5vw;
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) => (props.index === props.onLength ? "#238C47" : "#818181")};
+  color: ${(props) =>
+    props.index === props.lengthState ? "#238C47" : "#818181"};
   border: 2px solid
-    ${(props) => (props.index === props.onLength ? "#238C47" : "#818181")};
+    ${(props) => (props.index === props.lengthState ? "#238C47" : "#818181")};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
