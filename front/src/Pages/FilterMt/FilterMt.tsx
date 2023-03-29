@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Navbar from "../../Common/Navbar/Navbar";
 import ResultList from "../../Common/Result/ResultList";
 
 function FilterMt() {
@@ -26,8 +25,6 @@ function FilterMt() {
   console.log(searchMt);
   return (
     <div className="FilterMt">
-      <Navbar />
-
       {/* 산행 시간 */}
       <StyledP>산행 시간</StyledP>
       <StyledDiff>
@@ -89,6 +86,7 @@ function FilterMt() {
 
 const StyledP = styled.p`
   color: black;
+  margin-top: 30px;
   margin-left: 20px;
   margin-bottom: 8px;
   font-size: large;
