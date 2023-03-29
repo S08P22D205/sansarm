@@ -4,10 +4,7 @@ import com.sansam.config.jwt.JwtProvider;
 import com.sansam.data.entity.User;
 import com.sansam.data.repository.UserRepository;
 import com.sansam.dto.request.*;
-import com.sansam.dto.response.EmailResponse;
-import com.sansam.dto.response.FavoriteListResponse;
-import com.sansam.dto.response.ReviewListResponse;
-import com.sansam.dto.response.SignUpResponse;
+import com.sansam.dto.response.*;
 import com.sansam.service.UserServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -229,5 +226,26 @@ public class UserController {
         String userEmail = jwtProvider.getEmailFromToken(accessToken);
         EmailResponse emailResponse = new EmailResponse(userEmail);
         return new ResponseEntity<>(emailResponse, HttpStatus.OK);
+    }
+
+    @ApiOperation(
+            value = "유저 정보 반환",
+            notes = "접속 중인 유저의 정보를 조회하고, 성공 시 유저 정보를 반환하고, 실패 시 Fail을 반환한다.")
+    @GetMapping("/info")
+    public ResponseEntity<?> getUserInfo(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            accessToken = response.getHeader("X-ACCESS-TOKEN");
+        } else {
+            response.setHeader("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+
+        try {
+            UserInfoResponse userInfoResponse = userService.getUserInfo(userEmail);
+            return new ResponseEntity<>(userInfoResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -117,4 +117,11 @@ public class UserServiceImpl implements UserService {
         Review review = reviewRepository.findByUserNoAndCourseNo(userNo, courseNo);
         reviewRepository.delete(review);
     }
+
+    @Override
+    public UserInfoResponse getUserInfo(String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail);
+
+        return new UserInfoResponse(user.getUserEmail(), user.getUserNicknm(), user.getUserAge(), user.getUserGender(), user.getUserLocation());
+    }
 }
