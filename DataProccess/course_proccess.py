@@ -110,6 +110,8 @@ for dir in dir_list:
 
     # MANAGE_SP2 가 시종점 인 것들만 쿼리 하기
     start_points_df = start_df[start_df.MANAGE_SP2 == "시종점"]
+    # x, y 가 NaN인 경우 row 삭제
+    start_points_df = start_points_df.drop(start_points_df[(start_points_df.x == "NaN") & (start_points_df.y == "NaN")].index)
     start_points = start_points_df[["x", "y"]].astype(int).values.tolist()
     # print(f"시종점 좌표 : {start_points}")
 
