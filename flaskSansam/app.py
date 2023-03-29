@@ -14,7 +14,7 @@ app.database = database
 
 
 def get_email_response(access_token, refresh_token):
-    url = 'http://localhost:5000/user/email'
+    url = 'https://j8d205.p.ssafy.io/api/user/email'
     headers = {'X-ACCESS-TOKEN': access_token, 'X-REFRESH-TOKEN': refresh_token}
     response = requests.get(url, headers=headers)
 
