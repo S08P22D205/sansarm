@@ -3,7 +3,8 @@ package com.sansam.service;
 import com.sansam.data.entity.*;
 import com.sansam.data.repository.*;
 import com.sansam.dto.response.*;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,12 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService {
 
     private final MountainRepository mountainRepository;
@@ -23,6 +26,15 @@ public class CourseServiceImpl implements CourseService {
     private final CoordinateRepository coordinateRepository;
     private final ReviewRepository reviewRepository;
     private final UserRepository userRepository;
+
+    @Value("${mariadb-url}")
+    private String jdbcUrl;
+
+    @Value("${mariadb-username}")
+    private String jdbcUsername;
+
+    @Value("${mariadb-password}")
+    private String jdbcPassword;
 
     @Override
     public List<String> createMountainList() {
@@ -64,7 +76,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public TopTenCourseListResponse getTopTenCourseList() {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("my-persistence-unit");
+        Map<String, String> properties = new HashMap<>();
+        properties.put("javax.persistence.jdbc.url", jdbcUrl);
+        properties.put("javax.persistence.jdbc.user", jdbcUsername);
+        properties.put("javax.persistence.jdbc.password", jdbcPassword);
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("my-persistence-unit", properties);
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         String sql = "SELECT c.COURSE_NO " +
@@ -73,12 +90,13 @@ public class CourseServiceImpl implements CourseService {
              "GROUP BY c.COURSE_NO " +
              "ORDER BY COUNT(*) DESC " +
              "LIMIT 10";
-        List<Integer> courseNumbers = entityManager.createNativeQuery(sql).getResultList();
+
+        List<?> courseNumbers = entityManager.createNativeQuery(sql).getResultList();
 
         List<TopTenCourseResponse> topTenCourseList = new ArrayList<>();
 
-        for (Integer courseNumber: courseNumbers) {
-            Course course = courseRepository.findCourseByCourseNo(courseNumber);
+        for (Object courseNumber: courseNumbers) {
+            Course course = courseRepository.findCourseByCourseNo((int) courseNumber);
             topTenCourseList.add(new TopTenCourseResponse(course.getCourseNo(), course.getCourseMtNm(), course.getCourseMtNo(), course.getCourseUptime(), course.getCourseDowntime(), course.getCourseLength()));
         }
 

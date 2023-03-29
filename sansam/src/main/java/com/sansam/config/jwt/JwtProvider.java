@@ -2,6 +2,7 @@ package com.sansam.config.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,16 +16,21 @@ public class JwtProvider {
     // 랜덤 키 생성
 //    private final Key key = secretKeyFor(SignatureAlgorithm.HS512);
 
-    String secretKeyword = "sansamsecretkeyasdfsadfbsdiafasdfbsuaidfbdsauifbsadfuibdsafsdafadsfsdafasd";
+    @Value("${secret-keyword}")
+    private String secretKeyword;
 
-    Key key = Keys.hmacShaKeyFor(secretKeyword.getBytes());
+    @Value("${access-expiration}")
+    private Long accessTokenExpirationPeriod;
+    @Value("${refresh-expiration}")
+    private int refreshTokenExpirationPeriod;
 
     // access token 생성
     public String createAccessToken(String userEmail) {
+        Key key = Keys.hmacShaKeyFor(secretKeyword.getBytes());
         Claims claims = Jwts.claims()
                 .setSubject("AccessToken")
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1800000));
+                .setExpiration(new Date(System.currentTimeMillis() +accessTokenExpirationPeriod));
 
         claims.put("userEmail", userEmail);
 
@@ -38,8 +44,9 @@ public class JwtProvider {
 
     // refresh token 생성
     public String createRefreshToken(String userEmail) {
+        Key key = Keys.hmacShaKeyFor(secretKeyword.getBytes());
         Calendar expiredDate = Calendar.getInstance();
-        expiredDate.add(Calendar.DAY_OF_MONTH, 14);
+        expiredDate.add(Calendar.DAY_OF_MONTH, refreshTokenExpirationPeriod);
 
         Claims claims = Jwts.claims()
                 .setSubject("RefreshToken")
@@ -73,6 +80,7 @@ public class JwtProvider {
     토큰 자체가 잘못되었을 경우 JwtException을 던진다.
     */
     public String validateToken(String token) throws ExpiredJwtException, JwtException {
+        Key key = Keys.hmacShaKeyFor(secretKeyword.getBytes());
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -83,6 +91,7 @@ public class JwtProvider {
     }
 
     public String getEmailFromToken(String token) {
+        Key key = Keys.hmacShaKeyFor(secretKeyword.getBytes());
         Jws<Claims> jwsClaims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()

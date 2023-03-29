@@ -6,15 +6,16 @@
 
     <persistence-unit name="my-persistence-unit">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.sansam.data.entity.Course</class> <!-- replace with your entity classes -->
         <class>com.sansam.data.entity.User</class>
+        <class>com.sansam.data.entity.Course</class>
         <class>com.sansam.data.entity.Review</class>
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
-            <property name="javax.persistence.jdbc.url" value="jdbc:mariadb://localhost:3306/sansam_db?characterEncoding=UTF-8&amp;serverTimezone=UTC" />
-            <property name="javax.persistence.jdbc.user" value="ssafy" />
-            <property name="javax.persistence.jdbc.password" value="ssafy!234" />
+<!--            properties below are mapped programmically in order to externally import secret variables.-->
+<!--            <property name="javax.persistence.jdbc.url" value="url" />-->
+<!--            <property name="javax.persistence.jdbc.user" value="username" />-->
+<!--            <property name="javax.persistence.jdbc.password" value="password" />-->
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.MariaDBDialect" />
             <property name="hibernate.hbm2ddl.auto" value="update" />
