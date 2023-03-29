@@ -18,6 +18,7 @@ import {
   changeHardCourses,
 } from "../../store/RecommendSlice";
 import { courseApi } from "../../api";
+import SearchBar from "./SearchBar";
 
 const StyledH = styled.p`
   text-align: center;
@@ -85,6 +86,7 @@ function Main() {
     <div className="Main">
       <Navbar />
       <StyledH>어떤 산으로 떠나고 싶으신가요?</StyledH>
+      <SearchBar />
       <MainBtn />
       <List />
     </div>
