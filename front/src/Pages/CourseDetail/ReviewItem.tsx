@@ -17,6 +17,12 @@ function ReviewItem({
   reviewRelDiff,
   userNickname,
 }: reviewInfo) {
+  const changeData = () => {
+    console.log("데이터 바꾸자!");
+  };
+  const deleteData = () => {
+    console.log("데이터 삭제하자");
+  };
   return (
     <StyledDiv>
       <StyledDiv2>
@@ -47,8 +53,8 @@ function ReviewItem({
 
         {reviewerNicknm === userNickname ? (
           <StyledDiv4>
-            <StyledButton>수정</StyledButton>
-            <StyledButton>삭제</StyledButton>
+            <StyledButton onClick={changeData}>수정</StyledButton>
+            <StyledButton onClick={deleteData}>삭제</StyledButton>
           </StyledDiv4>
         ) : null}
       </StyledDiv3>
