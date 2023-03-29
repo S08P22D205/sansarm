@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
-import stringSimilarity from "string-similarity";
 import { courseApi } from "../../api";
 
 function SearchBar() {
@@ -31,36 +29,29 @@ function SearchBar() {
     setKeyword(e.currentTarget.value.trim());
   };
 
-  console.log(keyword);
+  console.log("keyword", keyword);
 
-  // keyItem(알고리즘 돌린 결과값) useState 세팅
-  type SearchDatas = [string] | [];
-  const initialSearchData: SearchDatas = [""];
-  const [keyItems, setKeyItems] = useState<SearchDatas>(initialSearchData);
+  // 자동완성 결과값 useState 세팅
+  const [resultData, setResultData] = useState<Array<string>>([""]);
 
-  // 자동완성을 위한 유사도 검사 알고리즘
-  function AutoSearchAlgo() {
-    type MatchData = [string];
-    const matches: MatchData = [""];
-    mtList.forEach(mt => {
-      const similarity = stringSimilarity.compareTwoStrings(mt, keyword);
-      if (similarity > 0.3) {
-        // adjust this threshold value as needed
-        matches.push(mt);
-      }
-    });
-    setKeyItems(matches);
-    // console.log(keyItems);
-  }
-  // 검색창에 keyword가 입력될 때 유사도 검사 알고리즘이 작동, 자연스러운 작동위해 딜레이를 줌
+  // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
   useEffect(() => {
-    const debounce = setTimeout(() => {
-      if (keyword) AutoSearchAlgo();
-    }, 100);
-    return () => {
-      clearTimeout(debounce);
-    };
+    setResultData(
+      mtList.filter(mountain => {
+        if (mountain.includes(keyword) && keyword.length !== 0) {
+          return mountain.includes(keyword);
+        }
+        return false;
+      })
+    );
   }, [keyword]);
+
+  // 검색창 focus 상태 useState 세팅
+  const [isFocus, setIsFocus] = useState(false);
+
+  // 검색창에서 아래/위 버튼 누르면 불 들어오게 해주면 좋을거같은데 일단 보류...
+
+  console.log("resultData", resultData);
 
   // 자동완성에 뜬 산이름을 클릭할 경우 발생하는 클릭이벤트
   function AutoSearchClick() {
@@ -69,41 +60,47 @@ function SearchBar() {
   }
 
   return (
-    <div>
-      <SearchBarDiv>
+    <SearchBarDiv>
+      <InputDiv>
         <Search
           placeholder="산이름을 입력해주세요"
           value={keyword}
           onChange={onChangeData}
+          onFocus={() => {
+            setIsFocus(true);
+          }}
+          onBlur={() => {
+            setIsFocus(false);
+          }}
         />
         {/* <SearchBtn>검 색</SearchBtn> */}
 
         {/* 이거 돋보기 버튼이야 선영아 */}
         {/* <img src="/dotbogi.png" alt="dotbogi" /> */}
-        {/* styled div 안에 img로 css 수정할 수 있음 */}
-      </SearchBarDiv>
-
-      {/* 검색 키워드가 있어야 자동완성창을 보여줌 */}
-      {keyword ? (
-        <AutoSearchDiv>
-          <AutoSearchUl>
-            {keyItems.slice(1, 6).map(mtname => (
-              <AutoSearchLi key={mtname} onClick={AutoSearchClick}>
-                {mtname}
-              </AutoSearchLi>
-            ))}
-          </AutoSearchUl>
-        </AutoSearchDiv>
+      </InputDiv>
+      {isFocus ? (
+        <ResultDiv>
+          <ResultUl>
+            {resultData.length > 0 && keyword !== "" ? (
+              resultData.map(result => <Resultli>{result}</Resultli>)
+            ) : (
+              <Resultli2>검색결과가 없습니다.</Resultli2>
+            )}
+          </ResultUl>
+        </ResultDiv>
       ) : null}
-    </div>
+    </SearchBarDiv>
   );
 }
 export default SearchBar;
 
 const SearchBarDiv = styled.div`
-  width: 100vw;
-  height: 7vh;
-  margin-bottom: 0.7vh;
+  padding-left: 7vw;
+  padding-right: 7vw;
+  margin-bottom: 2vw;
+`;
+
+const InputDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -116,52 +113,83 @@ const SearchBarDiv = styled.div`
 `;
 
 const Search = styled.input`
-  width: 85vw;
-  height: 40px;
+  width: 100%;
+  height: 11vw;
   border: 1px solid gray;
-  border-radius: 10px;
+  border-radius: 10px 10px;
   font-family: "GmarketSansLight";
   text-align: left;
   font-size: 5vw;
-  padding-top: 2px;
+  padding-top: 3px;
   padding-left: 8px;
-  // margin-left : 7vw;
 `;
 
-const ClickedSearch = styled.input`
-  width: 80vw;
-  height: 18vw;
-  border-radius: 20px;
-  font-family: "GmarketSansMedium";
-  font-size: 7vw;
-  margin-left: 7vw;
-  border: solid #238c47 1.5vw;
+const ResultDiv = styled.div`
+  border: 1px solid gray;
+  border-radius: 0px 0px 10px 10px;
+  padding-left: 3vw;
+  padding-bottom: 2vw;
+  padding-top: 1vw;
 `;
 
-const AutoSearchDiv = styled.div`
-  width: 85vw;
-  height: 50vw;
-  background-color: #ffffff;
-  border: solid black 0.4vw;
-  position: absolute;
-  margin-left: 7vw;
-  border-radius: 10px;
+const ResultUl = styled.ul`
+  margin: 0px;
+  padding-left: 0px;
 `;
 
-const AutoSearchUl = styled.ul`
-  padding-left: 0vw;
-  padding-top: 2vw;
-`;
-
-const AutoSearchLi = styled.li`
+const Resultli = styled.li`
+  height: 5vw;
   list-style-type: none;
-  font-size: 6vw;
-  font-weight: bold;
-  padding-bottom: 3vw;
-  height: 13vw;
-  padding-top: 3vw;
-  border-radius: 10px;
+  font-family: "GmarketSansLight";
+  font-size: 5vw;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
 `;
+
+const Resultli2 = styled.li`
+  height: 5vw;
+  list-style-type: none;
+  font-family: "GmarketSansLight";
+  font-size: 5vw;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
+  line-height: 25px;
+`;
+
+// const ClickedSearch = styled.input`
+//   width: 80vw;
+//   height: 18vw;
+//   border-radius: 20px;
+//   font-family: "GmarketSansMedium";
+//   font-size: 7vw;
+//   margin-left: 7vw;
+//   border: solid #238c47 1.5vw;
+// `;
+
+// const AutoSearchDiv = styled.div`
+//   width: 85vw;
+//   height: 50vw;
+//   background-color: #ffffff;
+//   border: solid black 0.4vw;
+//   position: absolute;
+//   margin-left: 7vw;
+//   border-radius: 10px;
+// `;
+
+// const AutoSearchUl = styled.ul`
+//   padding-left: 0vw;
+//   padding-top: 2vw;
+// `;
+
+// const AutoSearchLi = styled.li`
+//   list-style-type: none;
+//   font-size: 6vw;
+//   font-weight: bold;
+//   padding-bottom: 3vw;
+//   height: 13vw;
+//   padding-top: 3vw;
+//   border-radius: 10px;
+// `;
 
 // const SearchBtn = styled.button`
 //   width: 20vw;
