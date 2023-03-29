@@ -98,8 +98,8 @@ for dir in dir_list:
     file_path=dir_path+dir
     file_list=os.listdir(file_path)
     # 디렉토리 내 데이터셋 파일 경로 설정
-    PMNTN_DIR_SPOT = file_path + '/' + file_list[0] if len(file_list) <= 3 else file_path + '/' + file_list[1]
-    PMNTN_DIR = file_path + '/' + file_list[1] if len(file_list) <= 3 else file_path + '/' + file_list[2]
+    PMNTN_DIR_SPOT = file_path + '/' + file_list[0] if file_list[0].startswith("PMNTN_SPOT") else file_path + '/' + file_list[1]
+    PMNTN_DIR = file_path + '/' + file_list[1] if PMNTN_DIR_SPOT == file_path + '/' + file_list[0] else file_path + '/' + file_list[0]
 
     # 공공 데이터셋 정보를 dataframe 으로 받아서 시종점(feature) 좌표 추출
     start_dict = json.load(open(PMNTN_DIR_SPOT, 'rt', encoding='UTF8'))
