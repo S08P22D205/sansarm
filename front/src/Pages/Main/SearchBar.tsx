@@ -31,7 +31,7 @@ function SearchBar() {
     setKeyword(e.currentTarget.value.trim());
   };
 
-  console.log("keyword", keyword);
+  console.log(keyword);
 
   // keyItem(알고리즘 돌린 결과값) useState 세팅
   type SearchDatas = [string] | [];
@@ -44,13 +44,13 @@ function SearchBar() {
     const matches: MatchData = [""];
     mtList.forEach(mt => {
       const similarity = stringSimilarity.compareTwoStrings(mt, keyword);
-      if (similarity > 0.5) {
+      if (similarity > 0.3) {
         // adjust this threshold value as needed
         matches.push(mt);
       }
     });
     setKeyItems(matches);
-    console.log(keyItems);
+    // console.log(keyItems);
   }
   // 검색창에 keyword가 입력될 때 유사도 검사 알고리즘이 작동, 자연스러운 작동위해 딜레이를 줌
   useEffect(() => {
