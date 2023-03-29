@@ -92,7 +92,7 @@ function CourseDetail() {
 
       <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
 
-      <ReviewList />
+      <ReviewList id={id} />
     </div>
   );
 }

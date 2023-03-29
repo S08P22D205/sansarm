@@ -100,7 +100,7 @@ function MyPage() {
 
   return (
     <div className="MyPage">
-      <Navbar />
+      {/* <Navbar /> */}
       {/* <h1>MyPage</h1> */}
       <StyledDiv>
         <div>

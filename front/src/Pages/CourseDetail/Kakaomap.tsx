@@ -39,7 +39,7 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
           new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]),
         ];
 
-        console.log(linePath);
+        // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
           path: linePath, // 선을 구성하는 좌표배열
