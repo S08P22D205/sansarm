@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { courseApi } from "../../api";
 import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
+import axios from "../../store/baseURL";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
@@ -58,7 +59,7 @@ function FilterMt() {
   const length: string[] = ["전체", "1미만", "1-3", "3-5", "5초과"];
   const [onLength, setOnLength] = useState<number>(0);
 
-  const [searchMt, setSearchMt] = useState<object>({
+  const [searchMt, setSearchMt] = useState<object | any>({
     courseMtNm: "",
     courseTimeBtNo: 0,
     courseLengthBtNo: 0,
@@ -71,16 +72,6 @@ function FilterMt() {
     });
   };
 
-  const initializeTime = () => {
-    handleMt(0, "courseTimeBtNo");
-  };
-  const initializeMtnm = () => {
-    handleMt("", "courseMtNm");
-  };
-  const initializeLength = () => {
-    handleMt(0, "courseLengthBtNo");
-  };
-
   const initializeData = () => {
     setSearchMt({
       courseMtNm: "",
@@ -89,6 +80,22 @@ function FilterMt() {
     });
   };
 
+  // const searchData = () => {
+  //   axios.post(
+  //     `/course/search/mt`,
+  //     {
+  //       courseMtNm: searchMt.courseMtNm,
+  //       courseTimeBtNo: searchMt.courseTimeBtNo,
+  //       courseLengthBtNo: searchMt.courseLengthBtNo,
+  //     },
+  //     {
+  //       headers: {
+  //         "X-ACCESS-TOKEN": accessToken,
+  //         "X-REFRESH-TOKEN": refreshToken,
+  //       },
+  //     }
+  //   );
+  // };
   console.log(searchMt);
   return (
     <FilterMtDiv className="FilterMt">
@@ -184,7 +191,13 @@ function FilterMt() {
       <StyledHr />
 
       <StyledDiv>
-        <StyledBtn2>검색</StyledBtn2>
+        <StyledBtn2
+          onClick={() => {
+            // searchData();
+          }}
+        >
+          검색
+        </StyledBtn2>
         <StyledBtn3
           onClick={() => {
             setOnTime(0);
