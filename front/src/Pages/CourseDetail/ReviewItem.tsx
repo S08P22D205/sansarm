@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import axios from "axios";
+import axios from "../../store/baseURL";
 
 interface reviewInfo {
   reviewerNicknm?: string;
@@ -24,13 +24,16 @@ function ReviewItem({
   // 수정 여부 flag
   const [revised, setRevised] = useState<boolean>(false);
 
+  // 수정된 리뷰 내용
+  const [newData, setNewData] = useState<string | undefined>(reviewContent);
+
+  // 수정 버튼 클릭
   const changeData = () => {
     console.log("데이터 바꾸자!");
     setRevised(!revised);
   };
-  const deleteData = () => {
-    console.log("데이터 삭제하자");
-  };
+
+  // 수정하기 => 수정 취소 버튼 클릭
   const notRevised = () => {
     console.log("데이터 수정 취소!");
     setRevised(!revised);
@@ -40,18 +43,47 @@ function ReviewItem({
   const AccessToken = sessionStorage.getItem("accessToken");
   const RefreshToken = sessionStorage.getItem("refreshToken");
 
-  const changeReview = () => {
-    axios
-      .put(`http://localhost:5000/user/review/update/${id}`, {
+  // 수정하기 => 수정하기 버튼 클릭
+  const changeReview = (event: any) => {
+    console.log(event.target.value);
+    setNewData(event.target.value);
+  };
+
+  const sendData = () => {
+    console.log(id);
+    console.log(reviewRelDiff);
+    console.log(newData);
+
+    axios.put(
+      `/user/review/update/${id}`,
+      {
+        reviewRelDiff: reviewRelDiff,
+        reviewContent: newData,
+      },
+      {
         headers: {
           "X-ACCESS-TOKEN": AccessToken,
           "X-REFRESH-TOKEN": RefreshToken,
         },
-        params: {},
-      })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+      }
+    );
+    setRevised(!revised);
   };
+
+  // 삭제 버튼 클릭
+  const deleteData = () => {
+    console.log("데이터 삭제하자");
+    axios.delete(`/user/review/delete/${id}`, {
+      headers: {
+        "X-ACCESS-TOKEN": AccessToken,
+        "X-REFRESH-TOKEN": RefreshToken,
+      },
+      data: {
+        courseNo: id,
+      },
+    });
+  };
+
   return (
     <StyledDiv>
       <StyledDiv2>
@@ -80,21 +112,33 @@ function ReviewItem({
 
       {reviewerNicknm === userNickname ? (
         revised ? (
-          <div>
-            <input type="text" defaultValue={reviewContent} />
-            <button onClick={changeReview}>확인</button>
-            <button onClick={notRevised}>취소</button>
-          </div>
+          <StyledDiv3>
+            <StyledInputDiv>
+              <StyledInput
+                type="text"
+                value={newData}
+                onChange={changeReview}
+              />
+            </StyledInputDiv>
+            <div>
+              <StyledButton onClick={sendData}>확인</StyledButton>
+              <StyledButton onClick={notRevised}>취소</StyledButton>
+            </div>
+          </StyledDiv3>
         ) : (
           <StyledDiv3>
-            <StyledP2>{reviewContent}</StyledP2>
+            <StyledP2>{newData}</StyledP2>
             <StyledDiv4>
-              <StyledButton onClick={changeData}>수정</StyledButton>
-              <StyledButton onClick={deleteData}>삭제</StyledButton>
+              <RevisedImg src="\img\revise.png" alt="" onClick={changeData} />
+              <RevisedImg src="\img\delete.png" alt="" onClick={deleteData} />
             </StyledDiv4>
           </StyledDiv3>
         )
-      ) : null}
+      ) : (
+        <StyledDiv3>
+          <StyledP2>{reviewContent}</StyledP2>
+        </StyledDiv3>
+      )}
     </StyledDiv>
   );
 }
@@ -160,4 +204,24 @@ const StyledButton = styled.button`
   margin-bottom: 10px;
 `;
 
+const StyledInput = styled.input`
+  padding-left: 5px;
+  font-family: "GmarketSansLight";
+  font-size: 13px;
+  width: 95%;
+  border-radius: 5px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+`;
+
+const StyledInputDiv = styled.div`
+  margin-left: 10px;
+`;
+
+const RevisedImg = styled.img`
+  width: 20px;
+  height: 20px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+`;
 export default ReviewItem;
