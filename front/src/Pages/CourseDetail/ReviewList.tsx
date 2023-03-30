@@ -76,6 +76,7 @@ function ReviewList({ id }: idInfo) {
             reviewContent={data.reviewContent}
             reviewRelDiff={data.reviewRelDiff}
             userNickname={userNickname}
+            id={id}
           />
         );
       })}

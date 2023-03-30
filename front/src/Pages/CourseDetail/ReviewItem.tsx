@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { useState } from "react";
+import axios from "axios";
 
 interface reviewInfo {
   reviewerNicknm?: string;
@@ -7,6 +9,7 @@ interface reviewInfo {
   reviewContent?: string;
   reviewRelDiff?: string;
   userNickname: string;
+  id: string;
 }
 
 function ReviewItem({
@@ -16,12 +19,38 @@ function ReviewItem({
   reviewContent,
   reviewRelDiff,
   userNickname,
+  id,
 }: reviewInfo) {
+  // 수정 여부 flag
+  const [revised, setRevised] = useState<boolean>(false);
+
   const changeData = () => {
     console.log("데이터 바꾸자!");
+    setRevised(!revised);
   };
   const deleteData = () => {
     console.log("데이터 삭제하자");
+  };
+  const notRevised = () => {
+    console.log("데이터 수정 취소!");
+    setRevised(!revised);
+  };
+
+  // access token, refresh token 가져오기
+  const AccessToken = sessionStorage.getItem("accessToken");
+  const RefreshToken = sessionStorage.getItem("refreshToken");
+
+  const changeReview = () => {
+    axios
+      .put(`http://localhost:5000/user/review/update/${id}`, {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+        params: {},
+      })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
   };
   return (
     <StyledDiv>
@@ -48,16 +77,24 @@ function ReviewItem({
           </div>
         )}
       </StyledDiv2>
-      <StyledDiv3>
-        <StyledP2>{reviewContent}</StyledP2>
 
-        {reviewerNicknm === userNickname ? (
-          <StyledDiv4>
-            <StyledButton onClick={changeData}>수정</StyledButton>
-            <StyledButton onClick={deleteData}>삭제</StyledButton>
-          </StyledDiv4>
-        ) : null}
-      </StyledDiv3>
+      {reviewerNicknm === userNickname ? (
+        revised ? (
+          <div>
+            <input type="text" defaultValue={reviewContent} />
+            <button onClick={changeReview}>확인</button>
+            <button onClick={notRevised}>취소</button>
+          </div>
+        ) : (
+          <StyledDiv3>
+            <StyledP2>{reviewContent}</StyledP2>
+            <StyledDiv4>
+              <StyledButton onClick={changeData}>수정</StyledButton>
+              <StyledButton onClick={deleteData}>삭제</StyledButton>
+            </StyledDiv4>
+          </StyledDiv3>
+        )
+      ) : null}
     </StyledDiv>
   );
 }
