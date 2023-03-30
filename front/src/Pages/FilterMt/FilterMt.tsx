@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { courseApi } from "../../api";
 import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
-import axios from "../../store/baseURL";
+// import axios from "../../store/baseURL";
+import axios from "axios";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
@@ -80,23 +81,28 @@ function FilterMt() {
     });
   };
 
-  // const searchData = () => {
-  //   axios.post(
-  //     `/course/search/mt`,
-  //     {
-  //       courseMtNm: searchMt.courseMtNm,
-  //       courseTimeBtNo: searchMt.courseTimeBtNo,
-  //       courseLengthBtNo: searchMt.courseLengthBtNo,
-  //     },
-  //     {
-  //       headers: {
-  //         "X-ACCESS-TOKEN": accessToken,
-  //         "X-REFRESH-TOKEN": refreshToken,
-  //       },
-  //     }
-  //   );
-  // };
+  const searchData = () => {
+    axios
+      .post(
+        "http://localhost:5001/course/search/mt",
+        {
+          courseMtNm: searchMt.courseMtNm,
+          courseTimeBtNo: searchMt.courseTimeBtNo,
+          courseLengthBtNo: searchMt.courseLengthBtNo,
+        },
+        {
+          headers: {
+            "X-ACCESS-TOKEN": accessToken,
+            "X-REFRESH-TOKEN": refreshToken,
+          },
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   console.log(searchMt);
+
   return (
     <FilterMtDiv className="FilterMt">
       <StyledP2>원하는 등산코스 조건을 선택해주세요</StyledP2>
@@ -193,7 +199,7 @@ function FilterMt() {
       <StyledDiv>
         <StyledBtn2
           onClick={() => {
-            // searchData();
+            searchData();
           }}
         >
           검색
