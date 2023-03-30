@@ -45,7 +45,7 @@ function ReviewItem({
 
   // 수정하기 => 수정하기 버튼 클릭
   const changeReview = (event: any) => {
-    console.log(event.target.value);
+    // console.log(event.target.value);
     setNewData(event.target.value);
   };
 
