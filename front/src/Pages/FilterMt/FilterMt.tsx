@@ -71,6 +71,24 @@ function FilterMt() {
     });
   };
 
+  const initializeTime = () => {
+    handleMt(0, "courseTimeBtNo");
+  };
+  const initializeMtnm = () => {
+    handleMt("", "courseMtNm");
+  };
+  const initializeLength = () => {
+    handleMt(0, "courseLengthBtNo");
+  };
+
+  const initializeData = () => {
+    setSearchMt({
+      courseMtNm: "",
+      courseTimeBtNo: 0,
+      courseLengthBtNo: 0,
+    });
+  };
+
   console.log(searchMt);
   return (
     <FilterMtDiv className="FilterMt">
@@ -171,7 +189,7 @@ function FilterMt() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
-            handleMt(0, "courseTimeBtNo");
+            initializeData();
           }}
         >
           초기화
