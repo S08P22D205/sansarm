@@ -14,6 +14,7 @@ import Photo from "./Pages/Photo/Photo";
 import MyPage from "./Pages/MyPage/MyPage";
 import NotFound from "./Pages/Exception/NotFound";
 import Navbar from "./Common/Navbar/Navbar";
+import Stopwatch from "./Pages/Hiking/Stopwatch";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/filterrg/*" element={<FilterRg />} />
         <Route path="/coursedetail/*" element={<CourseDetail />} />
         <Route path="/hiking/*" element={<Hiking />} />
+        <Route path="/stopwatch/*" element={<Stopwatch />} />
         <Route path="/review/*" element={<Review />} />
         <Route path="/photo/*" element={<Photo />} />
         <Route path="/mypage/*" element={<MyPage />} />
