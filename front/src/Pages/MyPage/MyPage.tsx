@@ -3,8 +3,8 @@ import axios from "../../store/baseURL.js";
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
-  padding-left: 20vw;
-  padding-right: 12vw;
+  padding-left: 25vw;
+  padding-right: 15vw;
   margin-top: 5vw;
   font-family: "GmarketSansLight";
 `;
@@ -12,6 +12,7 @@ const StyledDiv = styled.div`
 const StyledH3 = styled.h3`
   margin-top: 4vw;
   margin-bottom: 3vw;
+  font-weight: bold;
   ::before {
     content: "";
     position: absolute;
@@ -45,10 +46,15 @@ const StyledP1 = styled.p`
   margin-bottom: 8px;
 `;
 
+const StyledSpan = styled.span`
+  font-weight: bold;
+`;
+
 const ReviewCard = styled.div`
   border: 1px solid #d4d3d3;
   border-radius: 8px;
   padding-left: 18px;
+  padding-right: 18px;
   padding-bottom: 7px;
   margin-bottom: 5vw;
   position: relative;
@@ -105,9 +111,8 @@ function MyPage() {
         <div>
           {reviewCourses.map((review, idx) => (
             <ReviewCard key={idx}>
-              <StyledH3>{review.reviewDate?.toString()}</StyledH3>
-              <StyledHr />
-              <StyledP>
+              <StyledH3>
+                {" "}
                 {review.courseMtNm} {review.courseMtNo}코스{" "}
                 {review.courseAbsDiff === "H" ? (
                   <span>⭐⭐⭐</span>
@@ -116,9 +121,14 @@ function MyPage() {
                 ) : (
                   <span>⭐</span>
                 )}
+              </StyledH3>
+              <StyledHr />
+              <StyledP>
+                <StyledSpan>방문일 </StyledSpan>
+                {review.reviewDate?.toString()}
               </StyledP>
               <StyledP1>
-                소요시간{" "}
+                <StyledSpan>소요시간 </StyledSpan>
                 {review.reviewTime ? (
                   <span>
                     {Math.floor(review.reviewTime / 60)}시간{" "}
