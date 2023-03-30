@@ -1,24 +1,31 @@
+import styled from "styled-components";
+import { Login_URI } from "../../store/baseURL";
+
+const StyledDiv = styled.div`
+  text-align: center;
+  line-height: 70vh;
+`;
+
 const Start = () => {
-  const KAKAO_AUTH_URL = "http://localhost:5000/oauth2/authorization/kakao";
+  const KAKAO_AUTH_URL = `${Login_URI}/oauth2/authorization/kakao`;
 
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
   };
 
   return (
-    <div className="Start">
-      <h1>Start입니다</h1>
+    <StyledDiv className="Start">
       <img
         src="img/kakao_login_medium_narrow.png"
         alt="login"
         onClick={handleLogin}
       />
-      <img
+      {/* <img
         src="img/kakao_login_medium_wide.png"
         alt="login_2"
         onClick={handleLogin}
-      />
-    </div>
+      /> */}
+    </StyledDiv>
   );
 };
 

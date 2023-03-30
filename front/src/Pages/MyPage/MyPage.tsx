@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "../../store/baseURL.js";
 import styled from "styled-components";
 
 const StyledDiv = styled.div`
@@ -88,7 +88,7 @@ function MyPage() {
 
   useEffect(() => {
     const getReviewCourse = async () => {
-      const res = await axios.get("http://localhost:5000/user/review", {
+      const res = await axios.get("/user/review", {
         headers: {
           "X-ACCESS-TOKEN": accessToken,
           "X-REFRESH-TOKEN": refreshToken,

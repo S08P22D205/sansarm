@@ -1,20 +1,18 @@
 import axios from "axios";
 
-// const accessToken = sessionStorage.getItem("accessToken");
-// const refreshToken = sessionStorage.getItem("refreshToken");
-
 export interface Tokens {
   "X-ACCESS-TOKEN": string;
   "X-REFRESH-TOKEN": string;
 }
 
 const flaskApi = axios.create({
-  // baseURL: "https://j8d205.p.ssafy.io/",
-  baseURL: "http://localhost:5001/",
+  baseURL: "https://j8d205.p.ssafy.io/flask-api",
+  // baseURL: "http://localhost:5001/",
 });
 
 const springApi = axios.create({
-  baseURL: "http://localhost:5000/",
+  baseURL: "https://j8d205.p.ssafy.io/api",
+  // baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {};

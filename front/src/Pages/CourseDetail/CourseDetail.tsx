@@ -41,7 +41,7 @@ function CourseDetail() {
   // axios 요청 : 코스 데이터 가져오기
   useEffect(() => {
     axios
-      .get(`http://localhost:5000/course/search/${id}`, {
+      .get(`/course/search/${id}`, {
         headers: {
           "X-ACCESS-TOKEN": AccessToken,
           "X-REFRESH-TOKEN": RefreshToken,
@@ -51,12 +51,12 @@ function CourseDetail() {
         },
       })
 
-      .then((res) => {
+      .then(res => {
         console.log("코스 정보 받아오기 :: 성공!");
         setCourseData(res.data);
         console.log(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }, []);
 
   return (
