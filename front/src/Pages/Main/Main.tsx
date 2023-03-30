@@ -16,7 +16,7 @@ import {
   changeNormalCourses,
   changeHardCourses,
 } from "../../store/RecommendSlice";
-import { courseApi } from "../../api";
+import { courseApi, userApi } from "../../api";
 import SearchBar from "./SearchBar";
 
 const StyledDiv = styled.div`
