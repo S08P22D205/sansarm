@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useEffect } from "react";
 import { courseApi } from "../../api";
+import { useNavigate } from "react-router-dom";
 
 function SearchBar() {
   // accessToken, refreshToken 세션스토리지에서 가져와주기
@@ -21,7 +22,7 @@ function SearchBar() {
     getMtList();
   }, []);
 
-  // keyword(검색창에 입력하는 값) useState 세팅
+  // keyword(검색창에 입력하는 값) State 세팅
   const [keyword, setKeyword] = useState<string>("");
 
   // 검색창 입력값 변할 때마다 입력하는 값을 keyword에 저장
@@ -29,9 +30,7 @@ function SearchBar() {
     setKeyword(e.currentTarget.value.trim());
   };
 
-  console.log("keyword", keyword);
-
-  // 자동완성 결과값 useState 세팅
+  // 자동완성 결과값 State 세팅
   const [resultData, setResultData] = useState<Array<string>>([""]);
 
   // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
@@ -51,13 +50,12 @@ function SearchBar() {
 
   // 검색창에서 아래/위 버튼 누르면 불 들어오게 해주면 좋을거같은데 일단 보류...
 
-  console.log("resultData", resultData);
+  // 산이름 클릭 시 해당 산 이름 저장해 줄 state 세팅
+  const [clickedMt, setClickedMt] = useState("");
+  const navigate = useNavigate();
 
   // 자동완성에 뜬 산이름을 클릭할 경우 발생하는 클릭이벤트
-  function AutoSearchClick() {
-    // 이거 메인페이지에 맞게 만들면 돼 선영아
-    // usestate로 값 받아서 검색창에 넣어주면 될듯?
-  }
+  function ClickMt() {}
 
   return (
     <SearchBarDiv>
@@ -72,17 +70,26 @@ function SearchBar() {
           onBlur={() => {
             setIsFocus(false);
           }}
+          isFocus={isFocus}
         />
-        {/* <SearchBtn>검 색</SearchBtn> */}
-
-        {/* 이거 돋보기 버튼이야 선영아 */}
-        {/* <img src="/dotbogi.png" alt="dotbogi" /> */}
       </InputDiv>
       {isFocus ? (
         <ResultDiv>
           <ResultUl>
             {resultData.length > 0 && keyword !== "" ? (
-              resultData.map(result => <Resultli>{result}</Resultli>)
+              resultData.map(result => (
+                <Resultli
+                  onMouseDown={e => {
+                    e.preventDefault();
+                  }}
+                  onClick={() => {
+                    console.log(result);
+                    navigate(`/filtermt/${result}`);
+                  }}
+                >
+                  {result}
+                </Resultli>
+              ))
             ) : (
               <Resultli2>검색결과가 없습니다.</Resultli2>
             )}
@@ -94,6 +101,11 @@ function SearchBar() {
 }
 export default SearchBar;
 
+// styled-component 내에서 변수 사용하기 위해 타입 지정
+interface SearchProps extends React.ButtonHTMLAttributes<HTMLInputElement> {
+  isFocus?: boolean;
+}
+
 const SearchBarDiv = styled.div`
   padding-left: 7vw;
   padding-right: 7vw;
@@ -101,6 +113,7 @@ const SearchBarDiv = styled.div`
 `;
 
 const InputDiv = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,24 +125,35 @@ const InputDiv = styled.div`
   }
 `;
 
-const Search = styled.input`
+const Search = styled.input<SearchProps>`
   width: 100%;
   height: 11vw;
   border: 1px solid gray;
-  border-radius: 10px 10px;
+  border-radius: ${props =>
+    props.isFocus ? "10px 10px 0px 0px" : "10px 10px"};
   font-family: "GmarketSansLight";
   text-align: left;
   font-size: 5vw;
   padding-top: 3px;
   padding-left: 8px;
+  :focus {
+    outline: 2px solid #238c47;
+  }
 `;
 
 const ResultDiv = styled.div`
+  margin-top: 2px;
+  position: absolute;
+  z-index: 999;
+  background-color: white;
+  width: 82.7%;
   border: 1px solid gray;
+  border-top: none;
   border-radius: 0px 0px 10px 10px;
   padding-left: 3vw;
   padding-bottom: 2vw;
   padding-top: 1vw;
+  /* box-shadow: 0 0 10px #ddd; */
 `;
 
 const ResultUl = styled.ul`
@@ -155,48 +179,3 @@ const Resultli2 = styled.li`
   padding-bottom: 2vw;
   line-height: 25px;
 `;
-
-// const ClickedSearch = styled.input`
-//   width: 80vw;
-//   height: 18vw;
-//   border-radius: 20px;
-//   font-family: "GmarketSansMedium";
-//   font-size: 7vw;
-//   margin-left: 7vw;
-//   border: solid #238c47 1.5vw;
-// `;
-
-// const AutoSearchDiv = styled.div`
-//   width: 85vw;
-//   height: 50vw;
-//   background-color: #ffffff;
-//   border: solid black 0.4vw;
-//   position: absolute;
-//   margin-left: 7vw;
-//   border-radius: 10px;
-// `;
-
-// const AutoSearchUl = styled.ul`
-//   padding-left: 0vw;
-//   padding-top: 2vw;
-// `;
-
-// const AutoSearchLi = styled.li`
-//   list-style-type: none;
-//   font-size: 6vw;
-//   font-weight: bold;
-//   padding-bottom: 3vw;
-//   height: 13vw;
-//   padding-top: 3vw;
-//   border-radius: 10px;
-// `;
-
-// const SearchBtn = styled.button`
-//   width: 20vw;
-//   height: 11vw;
-//   font-size: 5vw;
-//   border-radius: 5%;
-//   background-color: #238C47;
-//   color : white;
-//   font-family: "GmarketSansMedium";
-// `
