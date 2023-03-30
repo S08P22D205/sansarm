@@ -7,7 +7,7 @@ const StyledDiv = styled.div`
 `;
 
 const Start = () => {
-  const KAKAO_AUTH_URL = `${Login_URI}/login/oauth2/authorization/kakao`;
+  const KAKAO_AUTH_URL = `${Login_URI}/oauth2/authorization/kakao`;
 
   const handleLogin = () => {
     window.location.href = KAKAO_AUTH_URL;
