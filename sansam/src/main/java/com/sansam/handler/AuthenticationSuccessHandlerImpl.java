@@ -22,7 +22,6 @@ import java.io.IOException;
 public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHandler {
     private final JwtProvider jwtProvider;
     private final UserRepository userRepository;
-
     private final UserServiceImpl userService;
 
     @Transactional
@@ -35,9 +34,9 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                 String accessToken = jwtProvider.createAccessToken(user.getUserEmail());
                 String refreshToken = jwtProvider.createRefreshToken(user.getUserEmail());
                 userService.saveRefreshToken(refreshToken, user.getUserNo());
-                response.sendRedirect("http://localhost:3000/login?"+accessToken+"?"+refreshToken);
+                response.sendRedirect("https://j8d205.p.ssafy.io/login?"+accessToken+"?"+refreshToken);
             } else {
-                response.sendRedirect("http://localhost:3000/signup/1?no="+user.getUserNo());
+                response.sendRedirect("https://j8d205.p.ssafy.io/signup/1?no="+user.getUserNo());
             }
         } catch (Exception e) {
             System.out.println(e);
