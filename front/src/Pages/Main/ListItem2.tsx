@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { ItemInfo } from "../../store/mainSlice";
+import { RecInfo } from "../../store/RecommendSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper";
 import "swiper/css";
@@ -11,7 +11,7 @@ const StyledH = styled.p`
   font-weight: bold;
   font-size: 4vw;
   text-align: left;
-  margin-bottom: 1vw;
+  margin-bottom: 5px;
 `;
 
 const StyledSlide = styled(SwiperSlide)`
@@ -20,16 +20,20 @@ const StyledSlide = styled(SwiperSlide)`
   background-color: #f0f5ee;
   border: none;
   border-radius: 5px;
-  margin-bottom: 2vw;
 `;
 
-function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
+function ListItem2({
+  courseName,
+  USER_AGE_POOL,
+  USER_GENDER,
+  COURSE_LIST,
+}: RecInfo) {
   return (
     <div className="ListItem">
-      {userAge && userGender ? (
+      {USER_AGE_POOL && USER_GENDER ? (
         <StyledH>
-          {userAge}대{" "}
-          {userGender === "F" ? <span>여성</span> : <span>남성</span>}분들이
+          {USER_AGE_POOL}대{" "}
+          {USER_GENDER === "F" ? <span>여성</span> : <span>남성</span>}분들이
           선호하는 코스
         </StyledH>
       ) : (
@@ -42,12 +46,12 @@ function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
         loop={true}
         freeMode={true}
       >
-        {courseList.map(course => (
-          <StyledSlide key={course.courseNo}>
+        {COURSE_LIST.map(course => (
+          <StyledSlide key={course.COURSE_NO}>
             <ListCard
-              courseMtNm={course.courseMtNm}
-              courseMtNo={course.courseMtNo}
-              courseMtCd={course.courseMtCd}
+              courseMtNm={course.COURSE_MT_NM}
+              courseMtNo={course.COURSE_MT_NO}
+              courseMtCd={course.COURSE_MT_CD}
             />
           </StyledSlide>
         ))}
@@ -56,4 +60,4 @@ function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
   );
 }
 
-export default ListItem;
+export default ListItem2;

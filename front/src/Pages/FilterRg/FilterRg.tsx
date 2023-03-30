@@ -1,5 +1,3 @@
-import Navbar from "../../Common/Navbar/Navbar";
-
 function FilterRg() {
   return (
     <div className="FilterRg">

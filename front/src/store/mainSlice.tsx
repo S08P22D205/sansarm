@@ -1,6 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface courseInfo {
+  // COURSE_NO?: number;
+  // COURSE_MT_CD?: string;
+  // COURSE_MT_NM?: string;
+  // COURSE_MT_NO?: number;
+  // COURSE_ELEV_DIFF?: number;
+  // COURSE_UPTIME?: number;
+  // COURSE_DOWNTIME?: number;
+  // COURSE_LENGTH?: number;
+  // COURSE_LOCATION?: string;
+  // COURSE_ADDRESS?: string;
   courseNo?: number;
   courseMtNm?: string;
   courseMtCd?: number;
@@ -15,6 +25,9 @@ export interface courseInfo {
 }
 
 export interface ItemInfo {
+  // USER_AGE_POOL?: number;
+  // USER_GENDER?: string;
+  // COURSE_LIST: courseInfo[];
   courseName?: string;
   userAge?: number;
   userGender?: string;
@@ -31,6 +44,9 @@ interface MainState {
 const initialState: MainState = {
   genderAge: [
     {
+      // USER_AGE_POOL: 0,
+      // USER_GENDER: "",
+      // COURSE_LIST: [],
       userAge: 0,
       userGender: "",
       courseList: [],
@@ -38,16 +54,19 @@ const initialState: MainState = {
   ],
   easyCourse: [
     {
+      // COURSE_LIST: [],
       courseList: [],
     },
   ],
   normalCourse: [
     {
+      // COURSE_LIST: [],
       courseList: [],
     },
   ],
   hardCourse: [
     {
+      // COURSE_LIST: [],
       courseList: [],
     },
   ],

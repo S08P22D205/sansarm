@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Navbar from "../../Common/Navbar/Navbar";
 import ResultList from "../../Common/Result/ResultList";
 
 function FilterMt() {
@@ -26,8 +25,6 @@ function FilterMt() {
   console.log(searchMt);
   return (
     <div className="FilterMt">
-      <Navbar />
-
       {/* 산행 시간 */}
       <StyledP>산행 시간</StyledP>
       <StyledDiff>
@@ -110,9 +107,9 @@ const StyledBtn = styled.button<{ onTime: number; index: number }>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) => (props.index === props.onTime ? "#238C47" : "#818181")};
+  color: ${props => (props.index === props.onTime ? "#238C47" : "#818181")};
   border: 2px solid
-    ${(props) => (props.index === props.onTime ? "#238C47" : "#818181")};
+    ${props => (props.index === props.onTime ? "#238C47" : "#818181")};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
@@ -124,9 +121,9 @@ const StyledBtn1 = styled.button<{ onLength: number; index: number }>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) => (props.index === props.onLength ? "#238C47" : "#818181")};
+  color: ${props => (props.index === props.onLength ? "#238C47" : "#818181")};
   border: 2px solid
-    ${(props) => (props.index === props.onLength ? "#238C47" : "#818181")};
+    ${props => (props.index === props.onLength ? "#238C47" : "#818181")};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;

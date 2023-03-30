@@ -6,6 +6,7 @@ const RecommendBtn = styled.div`
   display: flex;
   padding-left: 5px;
   padding-right: 5px;
+  margin-bottom: 3vw;
 `;
 
 function MainBtn() {

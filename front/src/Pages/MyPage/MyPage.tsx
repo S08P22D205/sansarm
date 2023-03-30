@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../Common/Navbar/Navbar";
 import axios from "axios";
 import styled from "styled-components";
 
@@ -11,15 +10,16 @@ const StyledDiv = styled.div`
 `;
 
 const StyledH3 = styled.h3`
-  margin-bottom: 2vw;
+  margin-top: 4vw;
+  margin-bottom: 3vw;
   ::before {
     content: "";
     position: absolute;
     left: -48px;
     top: 50%;
     transform: translateY(-50%);
-    width: 3vw;
-    height: 3vw;
+    width: 5vw;
+    height: 5vw;
     border: 4px solid #238c47;
     border-radius: 100%;
     background-color: white;
@@ -27,6 +27,7 @@ const StyledH3 = styled.h3`
 `;
 
 const StyledHr = styled.hr`
+  margin-top: 0px;
   margin-left: -5vw;
   color: #d4d3d3;
   background-color: #d4d3d3;
@@ -100,8 +101,6 @@ function MyPage() {
 
   return (
     <div className="MyPage">
-      <Navbar />
-      {/* <h1>MyPage</h1> */}
       <StyledDiv>
         <div>
           {reviewCourses.map((review, idx) => (

@@ -1,13 +1,42 @@
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/",
+// const accessToken = sessionStorage.getItem("accessToken");
+// const refreshToken = sessionStorage.getItem("refreshToken");
+
+export interface Tokens {
+  "X-ACCESS-TOKEN": string;
+  "X-REFRESH-TOKEN": string;
+}
+
+const flaskApi = axios.create({
+  // baseURL: "https://j8d205.p.ssafy.io/",
+  baseURL: "http://localhost:5001/",
+});
+
+const springApi = axios.create({
+  baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {};
 
 export const courseApi = {
-  main: () => api.get("course/main"),
+  searchBar: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("course/mtlist", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  ageGender: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/age-gender", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  easy: () => flaskApi.get("course/main/easy"),
+  normal: () => flaskApi.get("course/main/normal"),
+  hard: () => flaskApi.get("course/main/hard"),
 };
 
-export default api;
+export default flaskApi;

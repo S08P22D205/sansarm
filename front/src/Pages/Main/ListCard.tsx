@@ -9,7 +9,7 @@ const StyledH = styled.p`
   font-size: small;
   text-align: center;
   margin: 3px;
-  margin-top: -8px;
+  margin-top: 0px;
 `;
 
 const StyledImg = styled.img`
