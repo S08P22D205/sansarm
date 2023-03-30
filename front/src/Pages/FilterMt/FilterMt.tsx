@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { courseApi } from "../../api";
-import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
 
@@ -53,9 +52,6 @@ function FilterMt() {
   // 검색창 focus 상태 useState 세팅
   const [isFocus, setIsFocus] = useState(false);
 
-  // 산 이름 클릭 시 페이지 이동해주기위해 navigate 선언
-  const navigate = useNavigate();
-
   const time: string[] = ["전체", "1미만", "1-2", "2초과"];
   const [onTime, setOnTime] = useState<number>(0);
 
@@ -64,8 +60,8 @@ function FilterMt() {
 
   const [searchMt, setSearchMt] = useState<object>({
     courseMtNm: "",
-    courseLengthBtNo: 0,
     courseTimeBtNo: 0,
+    courseLengthBtNo: 0,
   });
 
   const handleMt = (data: string | number, type: string) => {
@@ -77,46 +73,55 @@ function FilterMt() {
 
   console.log(searchMt);
   return (
-    <div className="FilterMt">
-      <SearchBarDiv>
-        <InputDiv>
-          <Search
-            placeholder="산이름을 입력해주세요"
-            value={keyword}
-            onChange={onChangeData}
-            onFocus={() => {
-              setIsFocus(true);
-            }}
-            onBlur={() => {
-              setIsFocus(false);
-            }}
-            isFocus={isFocus}
-          />
-        </InputDiv>
-        {isFocus ? (
-          <ResultDiv>
-            <ResultUl>
-              {resultData.length > 0 && keyword !== "" ? (
-                resultData.map((result) => (
-                  <Resultli
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                    }}
-                    onClick={() => {
-                      console.log(result);
-                      navigate(`/filtermt/${result}`);
-                    }}
-                  >
-                    {result}
-                  </Resultli>
-                ))
-              ) : (
-                <Resultli2>검색결과가 없습니다.</Resultli2>
-              )}
-            </ResultUl>
-          </ResultDiv>
-        ) : null}
-      </SearchBarDiv>
+    <FilterMtDiv className="FilterMt">
+      <StyledP2>원하는 등산코스 조건을 선택해주세요</StyledP2>
+      <FlexDiv>
+        <StyledP3>산이름</StyledP3>
+        <SearchBarDiv>
+          <InputDiv>
+            <Search
+              placeholder="산이름을 입력해주세요"
+              value={keyword}
+              onChange={onChangeData}
+              onFocus={() => {
+                setIsFocus(true);
+              }}
+              onBlur={() => {
+                setIsFocus(false);
+              }}
+              isFocus={isFocus}
+            />
+          </InputDiv>
+
+          {isFocus ? (
+            <ResultDiv>
+              <ResultUl>
+                {resultData.length > 0 && keyword !== "" ? (
+                  resultData.map((result, index) => (
+                    <Resultli
+                      key={index}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                      }}
+                      onClick={() => {
+                        console.log(result);
+                        setKeyword(result);
+                        handleMt(result, "courseMtNm");
+                        setIsFocus(false);
+                      }}
+                    >
+                      {result}
+                    </Resultli>
+                  ))
+                ) : (
+                  <Resultli2>검색결과가 없습니다.</Resultli2>
+                )}
+              </ResultUl>
+            </ResultDiv>
+          ) : null}
+        </SearchBarDiv>
+      </FlexDiv>
+      <StyledHr />
 
       {/* 산행 시간 */}
       <StyledP>산행 시간</StyledP>
@@ -166,6 +171,7 @@ function FilterMt() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
+            handleMt(0, "courseTimeBtNo");
           }}
         >
           초기화
@@ -173,17 +179,42 @@ function FilterMt() {
       </StyledDiv>
 
       <ResultList />
-    </div>
+    </FilterMtDiv>
   );
 }
 
+const FilterMtDiv = styled.div`
+  margin-top: 40px;
+`;
+
+const FlexDiv = styled.div`
+  display: flex;
+`;
+
 const StyledP = styled.p`
   color: black;
-  margin-top: 30px;
+  margin-top: 20px;
   margin-left: 20px;
   margin-bottom: 8px;
-  font-size: large;
+  font-size: 17px;
   font-family: "GmarketSansMedium";
+`;
+
+const StyledP2 = styled.p`
+  color: black;
+  margin-top: 30px;
+  margin-left: 25px;
+  margin-bottom: 15px;
+  font-size: 19px;
+  font-family: "GmarketSansMedium";
+`;
+
+const StyledP3 = styled.p`
+  font-size: 17px;
+  font-family: "GmarketSansMedium";
+  margin-left: 23px;
+  margin-right: 20px;
+  margin-top: 8px;
 `;
 
 const StyledDiff = styled.div`
@@ -263,9 +294,10 @@ interface SearchProps extends React.ButtonHTMLAttributes<HTMLInputElement> {
 }
 
 const SearchBarDiv = styled.div`
-  padding-left: 7vw;
+  width: 73%;
+  padding-left: 2vw;
   padding-right: 7vw;
-  margin-bottom: 2vw;
+  /* margin-bottom: 2vw; */
 `;
 
 const InputDiv = styled.div`
@@ -302,7 +334,7 @@ const ResultDiv = styled.div`
   position: absolute;
   z-index: 999;
   background-color: white;
-  width: 82.7%;
+  width: 64%;
   border: 1px solid gray;
   border-top: none;
   border-radius: 0px 0px 10px 10px;
@@ -323,7 +355,7 @@ const Resultli = styled.li`
   font-family: "GmarketSansLight";
   font-size: 5vw;
   padding-top: 2vw;
-  padding-bottom: 2vw;
+  padding-bottom: 10px;
 `;
 
 const Resultli2 = styled.li`
