@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { courseApi } from "../../api";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
 
@@ -9,6 +11,51 @@ interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function FilterMt() {
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
+  const [mtList, setMtList] = useState<Array<string>>([""]);
+
+  // SearchBar가 랜더링되면 산목록 axios 받아서 mtlist에 저장
+  useEffect(() => {
+    const getMtList = async () => {
+      const res = await courseApi.searchBar(accessToken, refreshToken);
+      setMtList(res.data.mountainList);
+    };
+    getMtList();
+  }, []);
+
+  // keyword(검색창에 입력하는 값) State 세팅
+  const [keyword, setKeyword] = useState<string>("");
+
+  // 검색창 입력값 변할 때마다 입력하는 값을 keyword에 저장
+  const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
+    setKeyword(e.currentTarget.value.trim());
+  };
+
+  // 자동완성 결과값 State 세팅
+  const [resultData, setResultData] = useState<Array<string>>([""]);
+
+  // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
+  useEffect(() => {
+    setResultData(
+      mtList.filter((mountain) => {
+        if (mountain.includes(keyword) && keyword.length !== 0) {
+          return mountain.includes(keyword);
+        }
+        return false;
+      })
+    );
+  }, [keyword]);
+
+  // 검색창 focus 상태 useState 세팅
+  const [isFocus, setIsFocus] = useState(false);
+
+  // 산 이름 클릭 시 페이지 이동해주기위해 navigate 선언
+  const navigate = useNavigate();
+
   const time: string[] = ["전체", "1미만", "1-2", "2초과"];
   const [onTime, setOnTime] = useState<number>(0);
 
@@ -31,6 +78,46 @@ function FilterMt() {
   console.log(searchMt);
   return (
     <div className="FilterMt">
+      <SearchBarDiv>
+        <InputDiv>
+          <Search
+            placeholder="산이름을 입력해주세요"
+            value={keyword}
+            onChange={onChangeData}
+            onFocus={() => {
+              setIsFocus(true);
+            }}
+            onBlur={() => {
+              setIsFocus(false);
+            }}
+            isFocus={isFocus}
+          />
+        </InputDiv>
+        {isFocus ? (
+          <ResultDiv>
+            <ResultUl>
+              {resultData.length > 0 && keyword !== "" ? (
+                resultData.map((result) => (
+                  <Resultli
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                    }}
+                    onClick={() => {
+                      console.log(result);
+                      navigate(`/filtermt/${result}`);
+                    }}
+                  >
+                    {result}
+                  </Resultli>
+                ))
+              ) : (
+                <Resultli2>검색결과가 없습니다.</Resultli2>
+              )}
+            </ResultUl>
+          </ResultDiv>
+        ) : null}
+      </SearchBarDiv>
+
       {/* 산행 시간 */}
       <StyledP>산행 시간</StyledP>
       <StyledDiff>
@@ -169,4 +256,84 @@ const StyledBtn3 = styled.button`
   padding-top: 8px;
   padding-bottom: 5px;
 `;
+
+// styled-component 내에서 변수 사용하기 위해 타입 지정
+interface SearchProps extends React.ButtonHTMLAttributes<HTMLInputElement> {
+  isFocus?: boolean;
+}
+
+const SearchBarDiv = styled.div`
+  padding-left: 7vw;
+  padding-right: 7vw;
+  margin-bottom: 2vw;
+`;
+
+const InputDiv = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    width: 8vw;
+    height: 8vw;
+    position: relative;
+    right: 11vw;
+  }
+`;
+
+const Search = styled.input<SearchProps>`
+  width: 100%;
+  height: 11vw;
+  border: 1px solid gray;
+  border-radius: ${(props) =>
+    props.isFocus ? "10px 10px 0px 0px" : "10px 10px"};
+  font-family: "GmarketSansLight";
+  text-align: left;
+  font-size: 5vw;
+  padding-top: 3px;
+  padding-left: 8px;
+  :focus {
+    outline: 2px solid #238c47;
+  }
+`;
+
+const ResultDiv = styled.div`
+  margin-top: 2px;
+  position: absolute;
+  z-index: 999;
+  background-color: white;
+  width: 82.7%;
+  border: 1px solid gray;
+  border-top: none;
+  border-radius: 0px 0px 10px 10px;
+  padding-left: 3vw;
+  padding-bottom: 2vw;
+  padding-top: 1vw;
+  /* box-shadow: 0 0 10px #ddd; */
+`;
+
+const ResultUl = styled.ul`
+  margin: 0px;
+  padding-left: 0px;
+`;
+
+const Resultli = styled.li`
+  height: 5vw;
+  list-style-type: none;
+  font-family: "GmarketSansLight";
+  font-size: 5vw;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
+`;
+
+const Resultli2 = styled.li`
+  height: 5vw;
+  list-style-type: none;
+  font-family: "GmarketSansLight";
+  font-size: 5vw;
+  padding-top: 2vw;
+  padding-bottom: 2vw;
+  line-height: 25px;
+`;
+
 export default FilterMt;
