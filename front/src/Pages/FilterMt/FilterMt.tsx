@@ -202,6 +202,7 @@ function FilterMt() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
+            setKeyword("");
             initializeData();
           }}
         >
