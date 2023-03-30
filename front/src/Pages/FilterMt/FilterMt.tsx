@@ -209,6 +209,7 @@ function FilterMt() {
             setOnTime(0);
             setOnLength(0);
             initializeData();
+            setKeyword("");
           }}
         >
           초기화
