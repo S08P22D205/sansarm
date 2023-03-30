@@ -50,7 +50,8 @@ const ResultDiv = styled.div`
   position: absolute;
   z-index: 999;
   background-color: white;
-  width: 82.7%;
+  width: 86%;
+  height: 11vw;
   border: 1px solid gray;
   border-top: none;
   border-radius: 0px 0px 10px 10px;
