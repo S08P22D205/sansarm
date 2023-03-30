@@ -1,6 +1,6 @@
 function Hiking() {
   return (
-    <div className="FilterRg">
+    <div className="Hiking">
       <h1>Hiking</h1>
     </div>
   );

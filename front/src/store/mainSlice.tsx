@@ -78,5 +78,4 @@ export const {
   changeNormalCourse,
   changeHardCourse,
 } = mainSlice.actions;
-
 export default mainSlice.reducer;
