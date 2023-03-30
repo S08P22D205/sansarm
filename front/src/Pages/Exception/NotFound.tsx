@@ -13,7 +13,7 @@ function NotFound() {
     <div>
       <Navbar />
       <StyledP>검색 결과가 없습니다.</StyledP>
-      <StyledImg src="img\tthan_san.png" alt="tthan_san" />
+      <StyledImg src="\img\tthan_san.png" alt="tthan_san" />
 
       <StyledDiv>
         <StyledImg2 src="\img\crying.png" alt="crying" />
