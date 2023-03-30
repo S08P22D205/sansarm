@@ -38,7 +38,7 @@ public class WebSecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://j8d205.p.ssafy.io", "http://j8d205.p.ssafy.io"));
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "https://j8d205.p.ssafy.io", "http://j8d205.p.ssafy.io", "http://localhost:5001", "https://j8d205.p.ssafy.io/flask-api"));
 
 		configuration.setAllowedOriginPatterns(Arrays.asList("*"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
