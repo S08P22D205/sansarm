@@ -60,9 +60,8 @@ function ListCard({ courseMtNm, courseMtNo, courseMtCd }: courseInfo) {
         <StyledImg src="https://san.chosun.com/news/photo/202205/15750_66157_37.jpg" />
       )}
       {/* <StyledImg src={imgUrl} alt={imgName} /> */}
-      <StyledH>
-        {courseMtNm} {courseMtNo}코스
-      </StyledH>
+      <StyledH>{courseMtNm}</StyledH>
+      <StyledH>{courseMtNo}코스</StyledH>
     </div>
   );
 }

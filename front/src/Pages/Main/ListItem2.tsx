@@ -16,10 +16,10 @@ const StyledH = styled.p`
 
 const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
-  /* height: 30vw; */
   background-color: #f0f5ee;
   border: none;
   border-radius: 5px;
+  margin-bottom: 3vw;
 `;
 
 function ListItem2({

@@ -17,7 +17,7 @@ function MainBtn() {
         <RecBtn
           children="산으로     추천받기"
           className="MtBtn"
-          imgsrc="img/mountain.png"
+          imgsrc={process.env.PUBLIC_URL + "img/mountain.png"}
           imgalt="mountain"
           onClick={() => {
             navigate("/filtermt");
@@ -26,7 +26,7 @@ function MainBtn() {
         <RecBtn
           children="지역으로 추천받기"
           className="RgBtn"
-          imgsrc="img/map.png"
+          imgsrc={process.env.PUBLIC_URL + "img/map.png"}
           imgalt="map"
           onClick={() => {
             navigate("/filterrg");
