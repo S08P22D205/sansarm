@@ -111,7 +111,7 @@ function Review() {
             },
           }
         )
-        .then(response => {
+        .then((response) => {
           console.log("success");
           if (response.data) {
             sessionStorage.setItem("accessToken", response.data.accessToken);
@@ -119,7 +119,7 @@ function Review() {
             moveToPhotoPage();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
@@ -142,7 +142,7 @@ function Review() {
         rows={10}
         placeholder="등산 후기를 자유롭게 입력해주세요"
         value={review.reviewContent}
-        onChange={event => {
+        onChange={(event) => {
           changeReview(event, "reviewContent");
         }}
       ></StyledTextBox>
