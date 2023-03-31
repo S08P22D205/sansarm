@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void removeFavorite(int userNo, FavoriteRequest favoriteRequest) {
+    public void deleteFavorite(int userNo, FavoriteRequest favoriteRequest) {
         favoriteRepository.deleteByUserNoAndCourseNo(userNo, favoriteRequest.getCourseNo());
     }
 
