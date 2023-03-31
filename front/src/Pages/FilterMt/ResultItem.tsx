@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface ResultInfo {
@@ -29,6 +30,12 @@ function ResultItem({
   COURSE_ADDRESS,
   pressSearch,
 }: ResultInfo) {
+  const navigate = useNavigate();
+
+  const moveToDetail = () => {
+    console.log("클릭!");
+    navigate(`/coursedetail/${COURSE_NO}`);
+  };
   const [imgName, setImgName] = useState<string>("");
   const imgUrl =
     "https://www.forest.go.kr/images/data/down/mountain/" + imgName;
@@ -80,7 +87,7 @@ function ResultItem({
 
   console.log(imgUrl);
   return (
-    <StyledDiv>
+    <StyledDiv onClick={moveToDetail}>
       {imgName ? (
         <StyledImg src={imgUrl} alt={imgName} />
       ) : (

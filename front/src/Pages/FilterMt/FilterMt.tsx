@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { courseApi } from "../../api";
 import styled from "styled-components";
-import ResultList from "../../Common/Result/ResultList";
+import ResultList from "./ResultList";
 // import axios from "../../store/baseURL";
 import flaskApi from "../../api";
 
