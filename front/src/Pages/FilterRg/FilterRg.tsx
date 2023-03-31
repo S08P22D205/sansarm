@@ -1,3 +1,5 @@
+/// <reference types="@types/geojson" />
+
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 // import axios from "../../store/baseURL";
@@ -12,26 +14,123 @@ interface Option {
   label: string;
 }
 
+interface UserLocation {
+  latitude: number | null,
+  longitude: number | null,
+  error: string | null 
+}
 
-
+// 위치정보 받아오기 관련 레거시 코드2
+// interface IPosition {
+//   latitude: number;
+//   longitude: number;
+// }
 
 function FilterRg() {
 
+// 위치정보 받아오기 관련 레거시 코드2
+//   function getLocation(): Promise<IPosition> {
+//     return new Promise((resolve, reject) => {
+//       navigator.geolocation.getCurrentPosition(
+//         position => {
+//           const { latitude, longitude } = position.coords;
+//           resolve({ latitude, longitude });
+//           console.log(latitude, longitude)
+//         },
+//         error => reject(error)
+//       );
+//     });
+//   }
+
+  // 탭 버튼으로 지역/위치 선택
   const [rgBtn, setRgBtn] = useState(1)
   const [locBtn, setLocBtn] = useState(0)
+  
+  // 유저 위치정보
+  const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
 
+  function addX() {
+    handleMt(location.latitude, "coordX");
+  }
+  useEffect(() => {
+    addX()
+  }, [location])
+  
+  function addY() {
+    handleMt(location.longitude, "coordY");
+  }
+  useEffect(() => {
+    addY()
+  }, [location])
+  
   function ChangeTab(){
+
+    // 유저 위치정보 받아오기
+    const Geo = () => {
+      if (!navigator.geolocation) {
+        setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
+        return;
+      }
+      
+      const success = (position:any) => {
+        setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+      };
+  
+      const error = () => {
+        setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
+      };
+  
+      navigator.geolocation.getCurrentPosition(success, error);
+    }
+
+
+    
+    // 위치정보 받아오기 관련 레거시 코드1
+    // function Geo(): UserLocation {
+    //   // const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
+    
+    //   useEffect(() => {
+    //     if (!navigator.geolocation) {
+    //       setLocation({ latitude: null, longitude: null, error: "Geolocation is not supported by your browser" });
+    //       return;
+    //     }
+    
+    //     const success = (position: any) => {
+    //       setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+    //     };
+    
+    //     const error = () => {
+    //       setLocation({ latitude: null, longitude: null, error: "Unable to retrieve your location" });
+    //     };
+    
+    //     navigator.geolocation.getCurrentPosition(success, error);
+    //   }, []);
+    
+    //   return location;
+    // }
+    
+
+    // 지역 -> 위치 : 탭 변경하며 유저 위치와 반경 정보 받아오기
     if (rgBtn === 1) {
-      setRgBtn(0)
-      setLocBtn(1)
+      setRgBtn(0);
+      setLocBtn(1);
+      handleMt("", "courseLocation")
+      Geo();
+      // 볼륨바0
+
+    // 위치 -> 지역 : 탭 변경하며 유저 위치와 반경 null
     } else if (locBtn === 1) {
       setRgBtn(1)
       setLocBtn(0)
+      setLocation({ latitude: null, longitude: null, error: null });
     }
+
+    // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
   };
 
-  const locations: Option[] = [
-    { value: "", label: "지역을 선택해주세요" },
+  // 지역기반 드랍박스 목록
+  const regions: Option[] = [
+    { value: "미선택", label: "지역을 선택해주세요" },
     { value: "서울시", label: "서울시" },
     { value: "부산시", label: "부산시" },
     { value: "대구시", label: "대구시" },
@@ -51,8 +150,43 @@ function FilterRg() {
     { value: "제주도", label: "제주도" },
   ];
 
-  const [volumePercent, setVolumePercent] = useState(0);
+  
+  // 지역명 갱신
+  const SelectRegion = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    type: string,
+  ) => {
+    handleMt(event.target.value, type)
+  };
 
+    // 유저 위치정보 받아오기 레거시코드 3
+  //   function Geo() {
+
+  //   if (!navigator.geolocation) {
+  //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
+  //     return;
+  //   }
+    
+  //   const success = (position:any) => {
+  //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+  //   };
+
+  //   const error = () => {
+  //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
+  //   };
+
+  //   navigator.geolocation.getCurrentPosition(success, error);
+
+  // }
+  // useEffect(() => {
+  //   handleMt(location.latitude, "coordX");
+  //   handleMt(location.longitude, "coordY");
+  //   console.log('위치넣기', location.latitude, location.longitude)
+  // }, [location])
+
+  // 반경정보 받아오기
+  const [volumePercent, setVolumePercent] = useState(0);
+  
   const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
     const bar = e.currentTarget;
     const clickX = e.nativeEvent.offsetX;
@@ -61,52 +195,64 @@ function FilterRg() {
     setVolumePercent(volumePercent);
     // Call a function to handle the volume change here
   };
-
-  const [filter, setFilter] = useState({
-    userNo: 0,
-    userNicknm: "",
-    userAge: "",
-    userGender: "",
-    userLocation: "",
-  });
   
   
-  const handleSelect = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-    type: any
-  ) => {
-    setFilter({
-      ...filter,
-      [type]: event.target.value,
-    });
-  };
-
-  // ----------------------------------------------
-
+  // 지역/위치 이하---------------------------------------
+  
   const time: string[] = ["전체", "1미만", "1-2", "2초과"];
   const [onTime, setOnTime] = useState<number>(0);
-
+  
   const length: string[] = ["전체", "1미만", "1-3", "3-5", "5초과"];
   const [onLength, setOnLength] = useState<number>(0);
-
+  
   const [searchRg, setSearchRg] = useState<object>({
     courseLocation: "",
-    coordX: 0,
-    coordY: 0,
+    coordX: null,
+    coordY: null,
     courseRadius: 0,
     courseLengthBtNo: 0,
     courseTimeBtNo: 0,
   });
-
-  const handleMt = (data: string | number, type: string) => {
+  
+  const handleMt = (data: string | number | null, type: string) => {
     setSearchRg({
       ...searchRg,
       [type]: data,
     });
+    // console.log('handleMt에서 콘솔')
+    // console.log(searchRg)
   };
 
-  console.log(searchRg);
+  function initializer() {
+    setSearchRg({
+      courseLocation: "",
+      coordX: null,
+      coordY: null,
+      courseRadius: 0,
+      courseLengthBtNo: 0,
+      courseTimeBtNo: 0,
+    })
+  }
+  
+  
+  function searchSinal(){
+    // # 현재위치 정보 searchRg에 넣기
+    // handleMt(location.latitude, "coordX");
+    // handleMt(location.longitude, "coordY");
 
+
+    console.log(location.latitude, location.longitude)
+    // async await 후 axios
+    // 로딩처리
+    console.log('검색 시작')
+    console.log(searchRg)
+
+  }
+
+  function getLocation(){
+    console.log(searchRg)
+  }
+  
   return (
     <div>
       {/* <Navbar /> */}
@@ -124,26 +270,33 @@ function FilterRg() {
         {
           (locBtn === 1)?
           <Tab2>현재위치</Tab2>:
-          <UnTab2 onClick={ChangeTab}>현재위치</UnTab2>
+          <UnTab2 onClick={
+            ChangeTab
+            // Geo();}
+          }>현재위치</UnTab2>
         }      
       <Tabcontent>
         {
           (rgBtn === 1)?
           <StyledDiv2>
-            <StyledSelect onChange={(event) => handleSelect(event, "userLocation")}>
-              {locations.map((location) => (
-                <StyledOption value={location.value} key={location.value} placeholder="지역을 선택해주세요">
-                  {location.label}
+            <StyledSelect onChange={(event) => SelectRegion(event, "courseLocation")}>
+              {regions.map((region) => (
+                <StyledOption
+                 value={region.value}
+                  key={region.value}
+                  // onClick={() => handleMt(region.value, 'courseLocation')}
+                >
+                  {region.label}
                 </StyledOption>
               ))}
             </StyledSelect>
           </StyledDiv2>:
-          <div>
+          <VolBarDiv>
             <p>반경</p>
-            <VolBarDiv onClick={handleVolumeChange}>
-              <VolBar percent={volumePercent} />
-            </VolBarDiv>
-          </div>
+            <VolBar onClick={handleVolumeChange}>
+              <VolBarFill percent={volumePercent} />
+            </VolBar>
+          </VolBarDiv>
         }
       </Tabcontent>
       </TabDiv>
@@ -193,15 +346,17 @@ function FilterRg() {
       <StyledHr />
 
       <StyledDiv>
-        <StyledBtn2>검색</StyledBtn2>
+        <StyledBtn2 onClick={searchSinal}>검색</StyledBtn2>
         <StyledBtn3
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
+            initializer()
           }}
         >
           초기화
         </StyledBtn3>
+        <button onClick={getLocation}>실험</button>
       </StyledDiv>
 
       <ResultList />      
@@ -320,17 +475,25 @@ const StyledOption = styled.option`
 `;
 
 const VolBarDiv = styled.div`
-  width: 50vw;
-  height: 5vw;
+  width: 80vw;
   font-size: 7vw;
-  background-color: #ccc;
+  display : flex;
+  align-items: center;
+  justify-content: space-between;
+`
+
+const VolBar = styled.div`
+  width: 60vw;
+  height: 4vw;
+  font-size: 7vw;
+  background-color: #D8D8D8;
   border: 1px solid #999;
 `
 
-const VolBar = styled.div<{ percent: number }>`
+const VolBarFill = styled.div<{ percent: number }>`
   height: 100%;
-  background-color: #00c853;
-  transition: width 0.2s ease-in-out;
+  background-color: #238C47;
+  transition: width 0.3s ease-in-out;
   width: ${props => props.percent * 100}%;
 `
 
