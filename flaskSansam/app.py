@@ -14,7 +14,7 @@ app.database = database
 
 
 def get_email_response(access_token, refresh_token):
-    url = 'http://localhost:5000/user/email'
+    url = 'http://172.17.0.1:5000/user/email'
     headers = {'X-ACCESS-TOKEN': access_token, 'X-REFRESH-TOKEN': refresh_token}
     response = requests.get(url, headers=headers)
 
@@ -205,4 +205,4 @@ def get_course_by_mt_name():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=False, host="0.0.0.0", port=5001)
