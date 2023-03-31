@@ -11,7 +11,7 @@ const StyledH = styled.p`
   font-weight: bold;
   font-size: 4vw;
   text-align: left;
-  margin-bottom: 1vw;
+  margin-bottom: 5px;
 `;
 
 const StyledSlide = styled(SwiperSlide)`
@@ -47,6 +47,7 @@ function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
               courseMtNm={course.courseMtNm}
               courseMtNo={course.courseMtNo}
               courseMtCd={course.courseMtCd}
+              courseNo={course.courseNo}
             />
           </StyledSlide>
         ))}

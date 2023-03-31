@@ -52,6 +52,7 @@ function ListItem2({
               courseMtNm={course.COURSE_MT_NM}
               courseMtNo={course.COURSE_MT_NO}
               courseMtCd={course.COURSE_MT_CD}
+              courseNo={course.COURSE_NO}
             />
           </StyledSlide>
         ))}
