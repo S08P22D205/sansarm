@@ -42,10 +42,10 @@ public class UserServiceImpl implements UserService {
             token = new Token();
             token.createToken(userNo, user.getUserEmail(), refreshToken);
             tokenRepository.save(token);
+        } else {
+            token.updateRefreshToken(refreshToken);
+            tokenRepository.save(token);
         }
-
-        token.updateRefreshToken(refreshToken);
-        tokenRepository.save(token);
     }
 
     @Override
