@@ -50,14 +50,26 @@ const ResultDiv = styled.div`
   position: absolute;
   z-index: 999;
   background-color: white;
-  width: 82.7%;
+  width: 86%;
+  max-height: 43vh;
+  /* height: 11vw; */
   border: 1px solid gray;
   border-top: none;
   border-radius: 0px 0px 10px 10px;
   padding-left: 3vw;
+  padding-right: 3vw;
   padding-bottom: 2vw;
   padding-top: 1vw;
   /* box-shadow: 0 0 10px #ddd; */
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    height: 20%;
+    background: #ddd;
+    border-radius: 20px;
+  }
 `;
 
 const ResultUl = styled.ul`
@@ -70,8 +82,10 @@ const Resultli = styled.li`
   list-style-type: none;
   font-family: "GmarketSansLight";
   font-size: 5vw;
-  padding-top: 2vw;
-  padding-bottom: 2vw;
+  /* padding-top: 1vw;
+  padding-bottom: 1vw; */
+  margin-top: 3vw;
+  margin-bottom: 3vw;
 `;
 
 const Resultli2 = styled.li`
@@ -80,8 +94,8 @@ const Resultli2 = styled.li`
   font-family: "GmarketSansLight";
   font-size: 5vw;
   padding-top: 2vw;
-  padding-bottom: 2vw;
   line-height: 25px;
+  margin-bottom: 4vw;
 `;
 
 function SearchBar() {
@@ -157,17 +171,20 @@ function SearchBar() {
           <ResultUl>
             {resultData.length > 0 && keyword !== "" ? (
               resultData.map(result => (
-                <Resultli
-                  onMouseDown={e => {
-                    e.preventDefault();
-                  }}
-                  onClick={() => {
-                    console.log(result);
-                    navigate(`/filtermt/${result}`);
-                  }}
-                >
-                  {result}
-                </Resultli>
+                <div>
+                  <Resultli
+                    onMouseDown={e => {
+                      e.preventDefault();
+                    }}
+                    onClick={() => {
+                      console.log(result);
+                      navigate(`/filtermt/${result}`);
+                    }}
+                  >
+                    {result}
+                  </Resultli>
+                  <hr />
+                </div>
               ))
             ) : (
               <Resultli2>검색결과가 없습니다.</Resultli2>

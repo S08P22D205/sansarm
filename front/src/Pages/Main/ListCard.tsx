@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { courseInfo } from "../../store/mainSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
@@ -20,7 +21,14 @@ const StyledImg = styled.img`
   margin: 5px;
 `;
 
-function ListCard({ courseMtNm, courseMtNo, courseMtCd }: courseInfo) {
+function ListCard({
+  courseMtNm,
+  courseMtNo,
+  courseMtCd,
+  courseNo,
+}: courseInfo) {
+  const navigate = useNavigate();
+
   const [imgName, setImgName] = useState("");
   const imgUrl =
     "https://www.forest.go.kr/images/data/down/mountain/" + imgName;
@@ -41,28 +49,23 @@ function ListCard({ courseMtNm, courseMtNo, courseMtCd }: courseInfo) {
       );
       if (res.data.response.body.items) {
         setImgName(res.data.response.body.items.item[0].imgfilename);
-        // console.log(
-        //   courseMtNm,
-        //   res.data.response.body.items.item[0].imgfilename
-        // );
-      } else {
-        // console.log(courseMtNm, res.data.response.body);
       }
     };
     getImgSrc();
   }, []);
 
   return (
-    <div className="ListCard">
+    <div
+      className="ListCard"
+      onClick={() => navigate(`/coursedetail/${courseNo}`)}
+    >
       {imgName ? (
         <StyledImg src={imgUrl} alt={imgName} />
       ) : (
         <StyledImg src="https://san.chosun.com/news/photo/202205/15750_66157_37.jpg" />
       )}
-      {/* <StyledImg src={imgUrl} alt={imgName} /> */}
-      <StyledH>
-        {courseMtNm} {courseMtNo}코스
-      </StyledH>
+      <StyledH>{courseMtNm}</StyledH>
+      <StyledH>{courseMtNo}코스</StyledH>
     </div>
   );
 }

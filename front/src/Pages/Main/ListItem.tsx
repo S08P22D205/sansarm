@@ -11,16 +11,15 @@ const StyledH = styled.p`
   font-weight: bold;
   font-size: 4vw;
   text-align: left;
-  margin-bottom: 1vw;
+  margin-bottom: 5px;
 `;
 
 const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
-  /* height: 30vw; */
   background-color: #f0f5ee;
   border: none;
   border-radius: 5px;
-  margin-bottom: 2vw;
+  margin-bottom: 3vw;
 `;
 
 function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
@@ -48,6 +47,7 @@ function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
               courseMtNm={course.courseMtNm}
               courseMtNo={course.courseMtNo}
               courseMtCd={course.courseMtCd}
+              courseNo={course.courseNo}
             />
           </StyledSlide>
         ))}

@@ -4,8 +4,8 @@ import RecBtn from "./RecBtn";
 
 const RecommendBtn = styled.div`
   display: flex;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
   margin-bottom: 3vw;
 `;
 
@@ -15,18 +15,18 @@ function MainBtn() {
     <div>
       <RecommendBtn>
         <RecBtn
-          children="산으로     추천받기"
+          children="산으로            추천받기"
           className="MtBtn"
-          imgsrc="img/mountain.png"
+          imgsrc={process.env.PUBLIC_URL + "img/mountain.png"}
           imgalt="mountain"
           onClick={() => {
             navigate("/filtermt");
           }}
         />
         <RecBtn
-          children="지역으로 추천받기"
+          children="지역으로    추천받기"
           className="RgBtn"
-          imgsrc="img/map.png"
+          imgsrc={process.env.PUBLIC_URL + "img/map.png"}
           imgalt="map"
           onClick={() => {
             navigate("/filterrg");

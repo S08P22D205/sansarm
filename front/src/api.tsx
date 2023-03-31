@@ -15,7 +15,15 @@ const springApi = axios.create({
   baseURL: "http://localhost:5000/",
 });
 
-export const userApi = {};
+export const userApi = {
+  userInfo: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("user/info", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+};
 
 export const courseApi = {
   searchBar: (accessToken: string | null, refreshToken: string | null) =>

@@ -4,6 +4,8 @@ import { useAppSelector } from "../../store/hooks";
 import { ItemInfo } from "../../store/mainSlice";
 import { RecInfo } from "../../store/RecommendSlice";
 import ListItem2 from "./ListItem2";
+import { userApi } from "../../api";
+import { useEffect, useState } from "react";
 
 const StyledDiv = styled.div`
   padding-left: 20px;
@@ -34,11 +36,26 @@ function List() {
   );
   const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
 
-  // console.log("store", ageGender);
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  // 유저이름 state에 담아서 사용해주기 -> 나중에 시간 남으면 store에 유저정보 저장해주면 좋을듯
+  const [userName, setUserName] = useState<string>("");
+
+  // 처음 마운트 됐을 때
+  useEffect(() => {
+    // 현재 로그인한 유저정보 받아오는 코드
+    const getUserInfo = async () => {
+      const res = await userApi.userInfo(accessToken, refreshToken);
+      setUserName(res.data.userNicknm);
+    };
+    getUserInfo();
+  }, []);
 
   return (
     <StyledDiv className="List">
-      <StyledH>김머끄님을 위한 추천코스</StyledH>
+      <StyledH>{userName}님을 위한 추천코스</StyledH>
       <ListItem2
         USER_AGE_POOL={ageGender.USER_AGE_POOL}
         USER_GENDER={ageGender.USER_GENDER}

@@ -16,10 +16,10 @@ const StyledH = styled.p`
 
 const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
-  /* height: 30vw; */
   background-color: #f0f5ee;
   border: none;
   border-radius: 5px;
+  margin-bottom: 3vw;
 `;
 
 function ListItem2({
@@ -52,6 +52,7 @@ function ListItem2({
               courseMtNm={course.COURSE_MT_NM}
               courseMtNo={course.COURSE_MT_NO}
               courseMtCd={course.COURSE_MT_CD}
+              courseNo={course.COURSE_NO}
             />
           </StyledSlide>
         ))}
