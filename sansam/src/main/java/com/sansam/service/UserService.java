@@ -13,7 +13,7 @@ public interface UserService {
     void signOut(String refreshToken);
     FavoriteListResponse getFavoriteList(String userEmail);
     void saveFavorite(int userNo, FavoriteRequest favoriteRequest);
-    void removeFavorite(int userNo, FavoriteRequest favoriteRequest);
+    void deleteFavorite(int userNo, FavoriteRequest favoriteRequest);
     ReviewListResponse getReviewList(String userEmail);
     void saveReview(int userNo, SaveReviewRequest saveReviewRequest);
     void updateReview(int userNo, int courseNo, UpdateReviewRequest updateReviewRequest);

@@ -21,7 +21,7 @@ public class CourseController {
     private final CourseServiceImpl courseService;
     @ApiOperation(
 			value = "산 목록",
-			notes = "산 목록을 조회하여 성공 시 배열에 담아 반환하고, 실패 시 Fail을 반환한다.")
+			notes = "산 목록을 조회하여 성공 시 배열에 담아 반환하고, 실패 시 Fail message를 반환한다.")
     @GetMapping("/mtlist")
     public ResponseEntity<?> getMountainList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
@@ -35,13 +35,13 @@ public class CourseController {
             mountainListResponse.setMountainList(courseService.createMountainList());
             return new ResponseEntity<>(mountainListResponse, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed getting mountain list.", HttpStatus.BAD_REQUEST);
         }
     }
 
      @ApiOperation(
 			value = "코스 세부 정보 반환",
-			notes = "해당 {no}의 코스 세부 정보를 조회하고, 성공 시 코스 세부 정보를 반환하고 실패 시 Fail을 반환한다.")
+			notes = "해당 {no}의 코스 세부 정보를 조회하고, 성공 시 코스 세부 정보를 반환하고 실패 시 Fail message를 반환한다.")
     @GetMapping("/search/{no}")
     public ResponseEntity<?> getCourseDetailsByCourseNo(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int no) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
@@ -54,13 +54,13 @@ public class CourseController {
             CourseResponse courseResponse = courseService.getCourseDetails(no);
             return new ResponseEntity<>(courseResponse, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed getting course details by course no.", HttpStatus.BAD_REQUEST);
         }
     }
 
     @ApiOperation(
             value = "한 코스에 대한 모든 리뷰 목록",
-            notes = "한 코스에 대한 모든 리뷰 목록을 조회하여 성공하면 목록을 반환하고, 실패하면 Fail을 반환한다.")
+            notes = "한 코스에 대한 모든 리뷰 목록을 조회하여 성공하면 목록을 반환하고, 실패하면 Fail message를 반환한다.")
     @GetMapping("/review/{courseNo}")
     public ResponseEntity<?> getCourseReviewList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
@@ -73,13 +73,13 @@ public class CourseController {
             CourseReviewListResponse courseReviewListResponse = courseService.getCourseReviewList(courseNo);
             return new ResponseEntity<>(courseReviewListResponse, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed getting review list of the course.", HttpStatus.BAD_REQUEST);
         }
     }
 
     @ApiOperation(
             value = "Top 10 코스 목록",
-            notes = "Top 10 코스 목록을 추출하고, 성공 시 코스 목록을 반환하고, 실패 시 Fail을 반환한다.")
+            notes = "Top 10 코스 목록을 추출하고, 성공 시 코스 목록을 반환하고, 실패 시 Fail message를 반환한다.")
     @GetMapping("/top-ten")
     public ResponseEntity<?> getTopTenCourseList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
@@ -92,7 +92,7 @@ public class CourseController {
             TopTenCourseListResponse topTenCourseListResponse = courseService.getTopTenCourseList();
             return new ResponseEntity<>(topTenCourseListResponse, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Fail", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed getting top10 course list.", HttpStatus.BAD_REQUEST);
         }
     }
 }
