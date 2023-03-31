@@ -124,4 +124,16 @@ public class UserServiceImpl implements UserService {
 
         return new UserInfoResponse(user.getUserEmail(), user.getUserNicknm(), user.getUserAge(), user.getUserGender(), user.getUserLocation());
     }
+
+    @Override
+    public Boolean isCourseInFavorite(String userEmail, int courseNo) {
+        User user = userRepository.findByUserEmail(userEmail);
+        Favorite favorite = favoriteRepository.findByUserNoAndCourseNo(user.getUserNo(), courseNo);
+
+        if (favorite != null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

@@ -19,4 +19,5 @@ public interface UserService {
     void updateReview(int userNo, int courseNo, UpdateReviewRequest updateReviewRequest);
     void deleteReview(int userNo, int courseNo);
     UserInfoResponse getUserInfo(String userEmail);
+    Boolean isCourseInFavorite(String userEmail, int courseNo);
 }
