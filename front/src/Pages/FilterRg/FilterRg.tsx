@@ -46,60 +46,45 @@ function FilterRg() {
   const [rgBtn, setRgBtn] = useState(1)
   const [locBtn, setLocBtn] = useState(0)
   
-  // 유저 위치정보
-  const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
-
-  function addX() {
-    handleMt(location.latitude, "coordX");
-  }
-  useEffect(() => {
-    addX()
-  }, [location])
-  
-  function addY() {
-    handleMt(location.longitude, "coordY");
-  }
-  useEffect(() => {
-    addY()
-  }, [location])
   
   function ChangeTab(){
-
-    // 유저 위치정보 받아오기
-    const Geo = () => {
-      if (!navigator.geolocation) {
-        setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
-        return;
-      }
+    
+    // 유저 위치정보 받아오기 레거시코드 4
+    // const Geo = () => {
+      //   if (!navigator.geolocation) {
+        //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
+        //     return;
+        //   }
+        
+    //   const success = (position:any) => {
+      //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+      //   };
       
-      const success = (position:any) => {
-        setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-      };
-  
-      const error = () => {
-        setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
-      };
-  
-      navigator.geolocation.getCurrentPosition(success, error);
-    }
-
-
-    
-    // 위치정보 받아오기 관련 레거시 코드1
-    // function Geo(): UserLocation {
-    //   // const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
-    
-    //   useEffect(() => {
-    //     if (!navigator.geolocation) {
-    //       setLocation({ latitude: null, longitude: null, error: "Geolocation is not supported by your browser" });
-    //       return;
-    //     }
-    
-    //     const success = (position: any) => {
-    //       setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-    //     };
-    
-    //     const error = () => {
+      //   const error = () => {
+        //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
+        //   };
+        
+        //   navigator.geolocation.getCurrentPosition(success, error);
+        //   console.log('위치 받아옴')
+        // }
+        
+        
+        
+        // 위치정보 받아오기 관련 레거시 코드1
+        // function Geo(): UserLocation {
+          //   // const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
+          
+          //   useEffect(() => {
+            //     if (!navigator.geolocation) {
+              //       setLocation({ latitude: null, longitude: null, error: "Geolocation is not supported by your browser" });
+              //       return;
+              //     }
+              
+              //     const success = (position: any) => {
+                //       setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+                //     };
+                
+                //     const error = () => {
     //       setLocation({ latitude: null, longitude: null, error: "Unable to retrieve your location" });
     //     };
     
@@ -109,25 +94,25 @@ function FilterRg() {
     //   return location;
     // }
     
-
+    
     // 지역 -> 위치 : 탭 변경하며 유저 위치와 반경 정보 받아오기
     if (rgBtn === 1) {
       setRgBtn(0);
       setLocBtn(1);
       handleMt("", "courseLocation")
-      Geo();
+      // Geo();
       // 볼륨바0
-
-    // 위치 -> 지역 : 탭 변경하며 유저 위치와 반경 null
+      
+      // 위치 -> 지역 : 탭 변경하며 유저 위치와 반경 null
     } else if (locBtn === 1) {
       setRgBtn(1)
       setLocBtn(0)
       setLocation({ latitude: null, longitude: null, error: null });
     }
-
+    
     // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
   };
-
+  
   // 지역기반 드랍박스 목록
   const regions: Option[] = [
     { value: "미선택", label: "지역을 선택해주세요" },
@@ -149,41 +134,41 @@ function FilterRg() {
     { value: "경상남도", label: "경상남도" },
     { value: "제주도", label: "제주도" },
   ];
-
+  
   
   // 지역명 갱신
   const SelectRegion = (
     event: React.ChangeEvent<HTMLSelectElement>,
     type: string,
-  ) => {
-    handleMt(event.target.value, type)
-  };
-
-    // 유저 위치정보 받아오기 레거시코드 3
-  //   function Geo() {
-
-  //   if (!navigator.geolocation) {
-  //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
-  //     return;
-  //   }
+    ) => {
+      handleMt(event.target.value, type)
+    };
     
-  //   const success = (position:any) => {
-  //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-  //   };
-
+    // 유저 위치정보 받아오기 레거시코드 3
+    //   function Geo() {
+      
+      //   if (!navigator.geolocation) {
+        //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
+        //     return;
+        //   }
+        
+        //   const success = (position:any) => {
+          //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+          //   };
+          
   //   const error = () => {
-  //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
-  //   };
-
-  //   navigator.geolocation.getCurrentPosition(success, error);
-
-  // }
-  // useEffect(() => {
-  //   handleMt(location.latitude, "coordX");
-  //   handleMt(location.longitude, "coordY");
-  //   console.log('위치넣기', location.latitude, location.longitude)
-  // }, [location])
-
+    //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
+    //   };
+    
+    //   navigator.geolocation.getCurrentPosition(success, error);
+    
+    // }
+    // useEffect(() => {
+      //   handleMt(location.latitude, "coordX");
+      //   handleMt(location.longitude, "coordY");
+      //   console.log('위치넣기', location.latitude, location.longitude)
+      // }, [location])
+      
   // 반경정보 받아오기
   const [volumePercent, setVolumePercent] = useState(0);
   
@@ -195,8 +180,8 @@ function FilterRg() {
     setVolumePercent(volumePercent);
     // Call a function to handle the volume change here
   };
-  
-  
+      
+      
   // 지역/위치 이하---------------------------------------
   
   const time: string[] = ["전체", "1미만", "1-2", "2초과"];
@@ -222,7 +207,7 @@ function FilterRg() {
     // console.log('handleMt에서 콘솔')
     // console.log(searchRg)
   };
-
+  
   function initializer() {
     setSearchRg({
       courseLocation: "",
@@ -232,22 +217,60 @@ function FilterRg() {
       courseLengthBtNo: 0,
       courseTimeBtNo: 0,
     })
+    setRgBtn(1)
+    ChangeTab()
   }
+      
+  const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
   
-  
-  function searchSinal(){
+  const SearchSinal = () => {
     // # 현재위치 정보 searchRg에 넣기
-    // handleMt(location.latitude, "coordX");
-    // handleMt(location.longitude, "coordY");
+    
+    const GetGeo = () => {
+      if (!navigator.geolocation) {
+        setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
+        return;
+      }
+      
+        const success = (position:any) => {
+          setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
+        };
+    
+        const error = () => {
+          setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
+        };
+    
+        navigator.geolocation.getCurrentPosition(success, error);
+        console.log('위치 받아옴')
+    };
 
+    const GetGeoCehck = () => {
+      console.log('위치 들어옴')
+      console.log(location.latitude, location.longitude)
+    };
 
-    console.log(location.latitude, location.longitude)
-    // async await 후 axios
-    // 로딩처리
-    console.log('검색 시작')
-    console.log(searchRg)
+    const AddGeoX = () => {
+      handleMt(location.latitude, "coordX");
+    };
 
-  }
+    const AddGeoY = () => {
+      handleMt(location.longitude, "coordY");
+    };
+
+    const AddGeoCheck = () => {
+      console.log('리스트에 들어감')
+      console.log(searchRg)
+    };
+    
+    const Activate = async () => {
+      await GetGeo();
+      await GetGeoCehck();
+      await AddGeoY();
+      await AddGeoX();
+      await AddGeoCheck();
+    };
+    Activate();
+  };
 
   function getLocation(){
     console.log(searchRg)
@@ -346,7 +369,7 @@ function FilterRg() {
       <StyledHr />
 
       <StyledDiv>
-        <StyledBtn2 onClick={searchSinal}>검색</StyledBtn2>
+        <StyledBtn2 onClick={SearchSinal}>검색</StyledBtn2>
         <StyledBtn3
           onClick={() => {
             setOnTime(0);
