@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="45076b46-a243-421b-a43f-25f618da403f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/dataset/mountain.zip" beforeDir="false" afterPath="$PROJECT_DIR$/dataset/mountain.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_proccess.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_proccess.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,7 +28,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/특화PJT/dataPreprocess",
+    "last_opened_file_path": "C:/특화PJT/S08P22D205/DataProccess",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -45,6 +45,7 @@
       <option name="presentableId" value="Default" />
       <updated>1680070200851</updated>
       <workItem from="1680070201941" duration="837000" />
+      <workItem from="1680237590209" duration="65000" />
     </task>
     <servers />
   </component>
