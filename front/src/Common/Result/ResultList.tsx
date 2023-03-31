@@ -1,11 +1,19 @@
 import ResultItem from "./ResultItem";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 interface courseInfo {
   courseList: any[];
+  pressSearch: boolean;
 }
-function ResultList({ courseList }: courseInfo) {
+
+function ResultList({ courseList, pressSearch }: courseInfo) {
   console.log(courseList);
+
+  useEffect(() => {
+    console.log("재렌더링");
+  }, [pressSearch]);
+
   return (
     <StyledDiv>
       {courseList.map((data, index) => {
@@ -22,6 +30,7 @@ function ResultList({ courseList }: courseInfo) {
             COURSE_LENGTH={data.COURSE_LENGTH}
             COURSE_LOCATION={data.COURSE_LOCATION}
             COURSE_ADDRESS={data.COURSE_ADDRESS}
+            pressSearch={pressSearch}
           />
         );
       })}

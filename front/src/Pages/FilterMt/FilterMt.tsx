@@ -3,7 +3,6 @@ import { courseApi } from "../../api";
 import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
 // import axios from "../../store/baseURL";
-import axios from "axios";
 import flaskApi from "../../api";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -74,6 +73,7 @@ function FilterMt() {
     });
   };
 
+  // 데이터 초기화
   const initializeData = () => {
     setSearchMt({
       courseMtNm: "",
@@ -82,8 +82,12 @@ function FilterMt() {
     });
   };
 
-  const [courseList, setCourseList] = useState<[]>([]);
+  const [courseList, setCourseList] = useState<any[]>([]);
 
+  // 검색 버튼을 눌렀다는 flag
+  const [pressSearch, setPressSearch] = useState<boolean>(false);
+
+  // 검색 눌렀을 때 axios요청
   const searchData = () => {
     flaskApi
       .post(
@@ -108,7 +112,8 @@ function FilterMt() {
   };
 
   // console.log(searchMt);
-  console.log(courseList);
+  // console.log(courseList);
+  console.log(pressSearch);
 
   return (
     <FilterMtDiv className="FilterMt">
@@ -207,6 +212,7 @@ function FilterMt() {
         <StyledBtn2
           onClick={() => {
             searchData();
+            setPressSearch(!pressSearch);
           }}
         >
           검색
@@ -223,7 +229,7 @@ function FilterMt() {
         </StyledBtn3>
       </StyledDiv>
 
-      <ResultList courseList={courseList} />
+      <ResultList courseList={courseList} pressSearch={pressSearch} />
     </FilterMtDiv>
   );
 }
@@ -380,6 +386,7 @@ const ResultDiv = styled.div`
   z-index: 999;
   background-color: white;
   width: 64%;
+  max-height: 43vh;
   border: 1px solid gray;
   border-top: none;
   border-radius: 0px 0px 10px 10px;
@@ -387,6 +394,15 @@ const ResultDiv = styled.div`
   padding-bottom: 2vw;
   padding-top: 1vw;
   /* box-shadow: 0 0 10px #ddd; */
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-thumb {
+    height: 20%;
+    background: #ddd;
+    border-radius: 20px;
+  }
 `;
 
 const ResultUl = styled.ul`
@@ -399,8 +415,8 @@ const Resultli = styled.li`
   list-style-type: none;
   font-family: "GmarketSansLight";
   font-size: 5vw;
-  padding-top: 2vw;
-  padding-bottom: 10px;
+  margin-top: 3vw;
+  margin-bottom: 3vw;
 `;
 
 const Resultli2 = styled.li`
@@ -409,8 +425,8 @@ const Resultli2 = styled.li`
   font-family: "GmarketSansLight";
   font-size: 5vw;
   padding-top: 2vw;
-  padding-bottom: 2vw;
   line-height: 25px;
+  margin-bottom: 4vw;
 `;
 
 export default FilterMt;
