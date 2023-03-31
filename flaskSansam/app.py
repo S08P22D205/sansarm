@@ -58,7 +58,7 @@ def get_course_by_age_and_gender():
         reviews = conn.execute(text(f"""
         SELECT * 
         FROM `REVIEW`
-        WHERE `USER_NO` = (SELECT `USER_NO`
+        WHERE `USER_NO` IN (SELECT `USER_NO`
                             FROM `USER`
                             WHERE `USER_AGE` BETWEEN {user_age} AND {user_age+9}
                             AND `USER_GENDER` = '{user_gender}')
