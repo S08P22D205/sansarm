@@ -35,6 +35,13 @@ export const courseApi = {
   easy: () => flaskApi.get("course/main/easy"),
   normal: () => flaskApi.get("course/main/normal"),
   hard: () => flaskApi.get("course/main/hard"),
+  // filterMt: (accessToken: string | null, refreshToken: string | null) =>
+  //   flaskApi.post("course/search/mt", {
+  //     headers: {
+  //       "X-ACCESS-TOKEN": accessToken,
+  //       "X-REFRESH-TOKEN": refreshToken,
+  //     },
+  //   }),
 };
 
 export default flaskApi;

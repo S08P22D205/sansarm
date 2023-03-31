@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ResultList from "../../Common/Result/ResultList";
 // import axios from "../../store/baseURL";
 import axios from "axios";
+import flaskApi from "../../api";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
@@ -81,8 +82,10 @@ function FilterMt() {
     });
   };
 
+  const [courseList, setCourseList] = useState<[]>([]);
+
   const searchData = () => {
-    axios
+    flaskApi
       .post(
         "http://localhost:5001/course/search/mt",
         {
@@ -97,11 +100,15 @@ function FilterMt() {
           },
         }
       )
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res.data.course_list);
+        setCourseList(res.data.course_list);
+      })
       .catch((err) => console.log(err));
   };
 
-  console.log(searchMt);
+  // console.log(searchMt);
+  console.log(courseList);
 
   return (
     <FilterMtDiv className="FilterMt">
@@ -216,7 +223,7 @@ function FilterMt() {
         </StyledBtn3>
       </StyledDiv>
 
-      <ResultList />
+      <ResultList courseList={courseList} />
     </FilterMtDiv>
   );
 }
