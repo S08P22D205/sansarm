@@ -4,8 +4,8 @@ import RecBtn from "./RecBtn";
 
 const RecommendBtn = styled.div`
   display: flex;
-  padding-left: 5px;
-  padding-right: 5px;
+  padding-left: 8px;
+  padding-right: 8px;
   margin-bottom: 3vw;
 `;
 
@@ -24,7 +24,7 @@ function MainBtn() {
           }}
         />
         <RecBtn
-          children="지역으로 추천받기"
+          children="지역으로    추천받기"
           className="RgBtn"
           imgsrc="img/map.png"
           imgalt="map"

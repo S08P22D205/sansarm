@@ -16,6 +16,7 @@ const StyledH = styled.p`
 
 const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
+  margin-bottom: 15px;
   /* height: 30vw; */
   background-color: #f0f5ee;
   border: none;
@@ -52,6 +53,7 @@ function ListItem2({
               courseMtNm={course.COURSE_MT_NM}
               courseMtNo={course.COURSE_MT_NO}
               courseMtCd={course.COURSE_MT_CD}
+              courseNo={course.COURSE_NO}
             />
           </StyledSlide>
         ))}
