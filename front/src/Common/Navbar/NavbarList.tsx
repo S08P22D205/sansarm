@@ -2,25 +2,24 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 
 function NavbarList() {
-
   const navigate = useNavigate();
 
   const moveToMain = () => {
-    navigate("/main")
-  }
+    navigate("/main");
+  };
 
   const moveToFilterMt = () => {
-    navigate("/filtermt")
-  }
+    navigate("/filtermt");
+  };
 
   const moveToFilterRg = () => {
-    navigate("/filterrg")
-  }
+    navigate("/filterrg");
+  };
 
   const moveToMypage = () => {
-    navigate("/mypage")
-  }
-  return(
+    navigate("/mypage");
+  };
+  return (
     <StyledUl>
       <StyledLi onClick={moveToMain}>홈으로</StyledLi>
       <StyledHr />
@@ -32,20 +31,21 @@ function NavbarList() {
       <StyledHr />
       <StyledLi>로그아웃</StyledLi>
     </StyledUl>
-  )
+  );
 }
 
 const StyledUl = styled.ul`
   position: absolute;
   justify-content: end;
-  border-bottom: 2px solid #D9D9D9;
+  border-bottom: 2px solid #d9d9d9;
   margin-top: 0px;
   padding-left: 25px;
   padding-top: 15px;
   padding-bottom: 10px;
   background-color: white;
   width: 100%;
-`
+  z-index: 999;
+`;
 
 const StyledLi = styled.li`
   font-family: "GmarketSansMedium";
@@ -53,12 +53,11 @@ const StyledLi = styled.li`
   list-style: none;
   margin-top: 15px;
   margin-bottom: 15px;
-`
+`;
 
 const StyledHr = styled.hr`
   margin: 0px;
   width: 90%;
-  border: 1px solid #E3E3E3;
-`
-
+  border: 1px solid #e3e3e3;
+`;
 export default NavbarList;
