@@ -80,6 +80,31 @@ public class UserController {
     }
 
     @ApiOperation(
+            value = "해당 코스 찜 여부 반환",
+            notes = "해당 유저가 해당 코스를 찜 했는지 여부를 조회하고, 찜을 했으면 True를, 찜을 하지 않았으면 False를 반환한다.")
+    @GetMapping("/favorite/is-enrolled/{courseNo}")
+    public ResponseEntity<?> isCourseInFavorite(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo) {
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            accessToken = response.getHeader("X-ACCESS-TOKEN");
+        } else {
+            response.setHeader("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+
+        try {
+            Boolean isCourseInFavorite = userService.isCourseInFavorite(userEmail, courseNo);
+            if (isCourseInFavorite) {
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(false, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed checking favorite list enrollment.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
             value = "찜 추가",
             notes = "해당 유저의 찜 목록에 코스를 추가하고, 성공하면 Success를, 실패하면 Fail message를 반환한다.")
     @PostMapping("/favorite/insert")
