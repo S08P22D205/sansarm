@@ -1,19 +1,36 @@
 import ResultItem from "./ResultItem";
 import styled from "styled-components";
-import dummy from "../../dummy.json";
+import { useEffect } from "react";
 
-function ResultList() {
+interface courseInfo {
+  courseList: any[];
+  pressSearch: boolean;
+}
+
+function ResultList({ courseList, pressSearch }: courseInfo) {
+  console.log(courseList);
+
+  useEffect(() => {
+    console.log("재렌더링");
+  }, [pressSearch]);
+
   return (
     <StyledDiv>
-      {dummy.data.map((data) => {
+      {courseList.map((data, index) => {
         return (
           <ResultItem
-            key={data.id}
-            id={data.id}
-            mt_nm={data.mt_nm}
-            course_diff={data.course_diff}
-            course_length={data.course_length}
-            course_time={data.course_time}
+            key={index}
+            COURSE_NO={data.COURSE_NO}
+            COURSE_MT_CD={data.COURSE_MT_CD}
+            COURSE_MT_NM={data.COURSE_MT_NM}
+            COURSE_MT_NO={data.COURSE_MT_NO}
+            COURSE_ELEV_DIFF={data.COURSE_ELEV_DIFF}
+            COURSE_UPTIME={data.COURSE_UPTIME}
+            COURSE_DOWNTIME={data.COURSE_DOWNTIME}
+            COURSE_LENGTH={data.COURSE_LENGTH}
+            COURSE_LOCATION={data.COURSE_LOCATION}
+            COURSE_ADDRESS={data.COURSE_ADDRESS}
+            pressSearch={pressSearch}
           />
         );
       })}

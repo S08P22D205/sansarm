@@ -64,9 +64,8 @@ function ListCard({
       ) : (
         <StyledImg src="https://san.chosun.com/news/photo/202205/15750_66157_37.jpg" />
       )}
-      <StyledH>
-        {courseMtNm} {courseMtNo}코스
-      </StyledH>
+      <StyledH>{courseMtNm}</StyledH>
+      <StyledH>{courseMtNo}코스</StyledH>
     </div>
   );
 }

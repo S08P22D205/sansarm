@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Navbar from "../../Common/Navbar/Navbar";
 
 function NotFound() {
   const navigate = useNavigate();
@@ -11,7 +10,6 @@ function NotFound() {
 
   return (
     <div>
-      <Navbar />
       <StyledP>검색 결과가 없습니다.</StyledP>
       <StyledImg src="\img\tthan_san.png" alt="tthan_san" />
 
