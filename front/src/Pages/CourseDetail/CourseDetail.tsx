@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router";
 import styled from "styled-components";
-import axios from "axios";
+import axios from "../../store/baseURL.js";
 import Kakaomap from "./Kakaomap";
 import ReviewList from "./ReviewList";
 
@@ -22,13 +22,43 @@ interface courseInfo {
 
 function CourseDetail() {
   const [courseData, setCourseData] = useState<courseInfo>({});
-
+  const [idClicked, setIsClicked] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const location = useLocation();
 
   const moveToHiking = () => {
     navigate("/hiking");
+  };
+
+  // 하트 클릭 시 찜 axios 요청 & isClicked 상태 변경
+  const clickHeart = async () => {
+    const res = await axios.post(
+      "/user/favorite/insert",
+      {
+        courseNo: id,
+      },
+      {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+      }
+    );
+    setIsClicked(!idClicked);
+  };
+
+  const unClickedHeart = async () => {
+    const res = await axios.delete("user/favorite/delete", {
+      headers: {
+        "X-ACCESS-TOKEN": AccessToken,
+        "X-REFRESH-TOKEN": RefreshToken,
+      },
+      data: {
+        courseNo: id,
+      },
+    });
+    setIsClicked(!idClicked);
   };
 
   // access token, refresh token 가져오기
@@ -51,12 +81,11 @@ function CourseDetail() {
         },
       })
 
-      .then((res) => {
+      .then(res => {
         // console.log("코스 정보 받아오기 :: 성공!");
         setCourseData(res.data);
-        // console.log(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   }, []);
 
   return (
@@ -65,6 +94,19 @@ function CourseDetail() {
         <StyledTitle>
           {courseData.courseMtNm}&nbsp;
           {courseData.courseMtNo}코스
+          {idClicked ? (
+            <StyledIcon
+              src="/img/heart_pink.png"
+              alt="하트"
+              onClick={unClickedHeart}
+            />
+          ) : (
+            <StyledIcon
+              src="/img/heart_black.png"
+              alt="하트"
+              onClick={clickHeart}
+            />
+          )}
         </StyledTitle>
       </StyledDiv>
       {courseData.courseXCoords && courseData.courseYCoords ? (
@@ -111,6 +153,11 @@ const StyledTitle = styled.p`
   font-family: "GmarketSansMedium";
   font-size: 25px;
   margin: 0px;
+`;
+
+const StyledIcon = styled.img`
+  margin-left: 6px;
+  width: 40px;
 `;
 
 const StyledContent = styled.p`

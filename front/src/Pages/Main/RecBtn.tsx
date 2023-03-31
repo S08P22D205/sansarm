@@ -30,7 +30,7 @@ const StyledIcon = styled.img`
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   children: string;
-  imgsrc: string;
+  imgsrc?: string;
   imgalt: string;
   onClick: () => void;
 }
