@@ -15,7 +15,7 @@ function MainBtn() {
     <div>
       <RecommendBtn>
         <RecBtn
-          children="산으로     추천받기"
+          children="산으로            추천받기"
           className="MtBtn"
           imgsrc={process.env.PUBLIC_URL + "img/mountain.png"}
           imgalt="mountain"
