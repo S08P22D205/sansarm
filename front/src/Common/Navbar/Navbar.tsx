@@ -8,7 +8,7 @@ function Navbar() {
 
   const moveToMain = () => {
     navigate("/main");
-    setToggleOn(!toggleOn);
+    setToggleOn(false);
   };
 
   const moveToFilterMt = () => {
