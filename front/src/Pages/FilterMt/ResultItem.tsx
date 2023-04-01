@@ -34,16 +34,12 @@ function ResultItem({
 
   // 결과목록에서 코스디테일 페이지로 이동
   const moveToDetail = () => {
-    // console.log("클릭!");
     navigate(`/coursedetail/${COURSE_NO}`);
   };
 
   const [imgName, setImgName] = useState<string>("");
   const imgUrl =
     "https://www.forest.go.kr/images/data/down/mountain/" + imgName;
-
-  console.log("새로운 이미지 입미다 ---");
-  console.log(imgName);
 
   useEffect(() => {
     axios
@@ -68,14 +64,12 @@ function ResultItem({
       .catch((err) => {
         console.log(err);
       });
-
-    // console.log(imgName);
   }, []);
 
   useEffect(() => {
     setImgName("");
   }, [pressSearch]);
-  // console.log(imgUrl);
+
   return (
     <StyledDiv onClick={moveToDetail}>
       {imgName ? (

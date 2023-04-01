@@ -110,7 +110,6 @@ function FilterMt() {
         }
       )
       .then((res) => {
-        // console.log(res.data.course_list);
         setCourseList(res.data.course_list);
       })
       .catch((err) => console.log(err));
@@ -212,7 +211,6 @@ function FilterMt() {
                           e.preventDefault();
                         }}
                         onClick={() => {
-                          // console.log(result);
                           setKeyword(result);
                           handleMt(result, "courseMtNm");
                           setIsFocus(false);
@@ -414,7 +412,6 @@ const SearchBarDiv = styled.div`
   width: 73%;
   padding-left: 2vw;
   padding-right: 7vw;
-  /* margin-bottom: 2vw; */
 `;
 
 const InputDiv = styled.div`
@@ -459,7 +456,6 @@ const ResultDiv = styled.div`
   padding-left: 3vw;
   padding-bottom: 2vw;
   padding-top: 1vw;
-  /* box-shadow: 0 0 10px #ddd; */
   overflow-y: scroll;
   ::-webkit-scrollbar {
     width: 10px;
