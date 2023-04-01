@@ -49,6 +49,8 @@ function ListCard({
       );
       if (res.data.response.body.items) {
         setImgName(res.data.response.body.items.item[0].imgfilename);
+      } else {
+        // console.log("사진없음");
       }
     };
     getImgSrc();

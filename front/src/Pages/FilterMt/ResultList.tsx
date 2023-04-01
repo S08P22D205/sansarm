@@ -1,6 +1,5 @@
 import ResultItem from "./ResultItem";
 import styled from "styled-components";
-import { useEffect } from "react";
 
 interface courseInfo {
   courseList: any[];
@@ -8,12 +7,6 @@ interface courseInfo {
 }
 
 function ResultList({ courseList, pressSearch }: courseInfo) {
-  console.log(courseList);
-
-  useEffect(() => {
-    console.log("재렌더링");
-  }, [pressSearch]);
-
   return (
     <StyledDiv>
       {courseList.map((data, index) => {

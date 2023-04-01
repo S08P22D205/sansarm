@@ -22,18 +22,26 @@ interface courseInfo {
 
 function CourseDetail() {
   const [courseData, setCourseData] = useState<courseInfo>({});
-  const [idClicked, setIsClicked] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [isClicked, setIsClicked] = useState<boolean>(false);
 
+  // navigate, location 사용
+  const navigate = useNavigate();
   const location = useLocation();
+
+  // access token, refresh token 가져오기
+  const AccessToken = sessionStorage.getItem("accessToken");
+  const RefreshToken = sessionStorage.getItem("refreshToken");
+
+  // 코스 번호
+  const id = location.pathname.slice(14);
 
   const moveToHiking = () => {
     navigate("/hiking", { state: courseData });
   };
 
-  // 하트 클릭 시 찜 axios 요청 & isClicked 상태 변경
+  // 빈 하트 클릭 시 찜 axios 요청 & isClicked 상태 변경
   const clickHeart = async () => {
-    const res = await axios.post(
+    await axios.post(
       "/user/favorite/insert",
       {
         courseNo: id,
@@ -45,11 +53,12 @@ function CourseDetail() {
         },
       }
     );
-    setIsClicked(!idClicked);
+    setIsClicked(!isClicked);
   };
 
+  // 꽉 찬 하트 클릭 시 찜 해제 axios 요청 & isClicked 상태 변경
   const unClickedHeart = async () => {
-    const res = await axios.delete("user/favorite/delete", {
+    await axios.delete("user/favorite/delete", {
       headers: {
         "X-ACCESS-TOKEN": AccessToken,
         "X-REFRESH-TOKEN": RefreshToken,
@@ -58,15 +67,8 @@ function CourseDetail() {
         courseNo: id,
       },
     });
-    setIsClicked(!idClicked);
+    setIsClicked(!isClicked);
   };
-
-  // access token, refresh token 가져오기
-  const AccessToken = sessionStorage.getItem("accessToken");
-  const RefreshToken = sessionStorage.getItem("refreshToken");
-
-  // 코스 번호
-  const id = location.pathname.slice(14);
 
   // axios 요청 : 코스 데이터 가져오기
   useEffect(() => {
@@ -80,13 +82,26 @@ function CourseDetail() {
           courseNo: id,
         },
       })
-
       .then((res) => {
-        // console.log("코스 정보 받아오기 :: 성공!" + res.data);
+        // console.log("코스 정보 받아오기 :: 성공!");
         setCourseData(res.data);
       })
       .catch((err) => console.log(err));
   }, []);
+
+  // isClicked 변경될때마다 찜 여부 받아와 state에 반영
+  useEffect(() => {
+    const getIsEnrolled = async () => {
+      const res = await axios.get(`/user/favorite/is-enrolled/${id}`, {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+      });
+      setIsClicked(res.data);
+    };
+    getIsEnrolled();
+  }, [isClicked]);
 
   return (
     <div className="CourseDetail">
@@ -94,7 +109,7 @@ function CourseDetail() {
         <StyledTitle>
           {courseData.courseMtNm}&nbsp;
           {courseData.courseMtNo}코스
-          {idClicked ? (
+          {isClicked ? (
             <StyledIcon
               src="/img/heart_pink.png"
               alt="하트"

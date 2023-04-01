@@ -37,8 +37,8 @@ function ReviewList({ id }: idInfo) {
         },
       })
       .then((res) => {
-        console.log("리뷰 정보 받아오기 :: 성공!");
-        console.log(res.data.reviewList);
+        // console.log("리뷰 정보 받아오기 :: 성공!");
+        // console.log(res.data.reviewList);
         setReviewList(res.data.reviewList);
       })
       .catch((err) => {
@@ -54,8 +54,8 @@ function ReviewList({ id }: idInfo) {
         },
       })
       .then((res) => {
-        console.log("유저 정보 받아오기 :: 성공!");
-        console.log(res.data.userNicknm);
+        // console.log("유저 정보 받아오기 :: 성공!");
+        // console.log(res.data.userNicknm);
         setUserNickname(res.data.userNicknm);
       })
       .catch((err) => {
