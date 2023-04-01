@@ -1,18 +1,41 @@
 import { useEffect, useState } from "react";
 import axios from "../../store/baseURL.js";
 import styled from "styled-components";
+import { Route, Routes, Link, Outlet } from "react-router-dom";
+import MyHeart from "./MyHeart";
 
 const StyledDiv = styled.div`
-  padding-left: 25vw;
+  padding-left: 23vw;
   padding-right: 15vw;
   margin-top: 5vw;
   font-family: "GmarketSansLight";
+`;
+
+const StyledTab = styled.div`
+  padding-top: 3vw;
+  padding-bottom: 3vw;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-around;
+`;
+
+const StyledIcon = styled.img`
+  width: 10vw;
+`;
+
+const StyledIcon2 = styled.img`
+  width: 9vw;
+`;
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
 `;
 
 const StyledH3 = styled.h3`
   margin-top: 4vw;
   margin-bottom: 3vw;
   font-weight: bold;
+  font-size: 5vw;
   ::before {
     content: "";
     position: absolute;
@@ -39,11 +62,13 @@ const StyledHr = styled.hr`
 const StyledP = styled.p`
   margin-top: 0px;
   margin-bottom: 5px;
+  font-size: 4vw;
 `;
 
 const StyledP1 = styled.p`
   margin-top: 0px;
   margin-bottom: 8px;
+  font-size: 4vw;
 `;
 
 const StyledSpan = styled.span`
@@ -84,6 +109,7 @@ interface courseInfo {
   courseLocation?: string;
   reviewDate?: Date;
   reviewTime?: number;
+  reviewRelDiff?: string;
   reviewContent?: string;
 }
 
@@ -101,51 +127,61 @@ function MyPage() {
         },
       });
       setReviewCourses(res.data.reviewCourses);
+      console.log(res.data.reviewCourses);
     };
     getReviewCourse();
   }, []);
 
   return (
     <div className="MyPage">
+      <StyledTab>
+        <StyledLink to="/myheart">
+          <StyledIcon src="/img/heart_black.png" />
+        </StyledLink>
+        <StyledLink to="/mypage">
+          <StyledIcon2 src="/img/flag_black.png" />
+        </StyledLink>
+      </StyledTab>
+      {/* <Routes>
+        <Route path="/myheart" element={<MyHeart />} />
+      </Routes> */}
       <StyledDiv>
-        <div>
-          {reviewCourses.map((review, idx) => (
-            <ReviewCard key={idx}>
-              <StyledH3>
-                {" "}
-                {review.courseMtNm} {review.courseMtNo}코스{" "}
-                {review.courseAbsDiff === "H" ? (
-                  <span>⭐⭐⭐</span>
-                ) : review.courseAbsDiff === "N" ? (
-                  <span>⭐⭐</span>
-                ) : (
-                  <span>⭐</span>
-                )}
-              </StyledH3>
-              <StyledHr />
-              <StyledP>
-                <StyledSpan>방문일 </StyledSpan>
-                {review.reviewDate?.toString()}
-              </StyledP>
-              <StyledP1>
-                <StyledSpan>소요시간 </StyledSpan>
-                {review.reviewTime ? (
-                  <span>
-                    {Math.floor(review.reviewTime / 60)}시간{" "}
-                    {review.reviewTime % 60 ? (
-                      <span>{review.reviewTime % 60}분</span>
-                    ) : (
-                      <span></span>
-                    )}
-                  </span>
-                ) : (
-                  <span></span>
-                )}
-              </StyledP1>
-              <StyledP1>{review.reviewContent}</StyledP1>
-            </ReviewCard>
-          ))}
-        </div>
+        {reviewCourses.map((review, idx) => (
+          <ReviewCard key={idx}>
+            <StyledH3>
+              {" "}
+              {review.courseMtNm} {review.courseMtNo}코스{" "}
+              {review.reviewRelDiff === "H" ? (
+                <span>⭐⭐⭐</span>
+              ) : review.reviewRelDiff === "N" ? (
+                <span>⭐⭐</span>
+              ) : (
+                <span>⭐</span>
+              )}
+            </StyledH3>
+            <StyledHr />
+            <StyledP>
+              <StyledSpan>방문일 </StyledSpan>
+              {review.reviewDate?.toString()}
+            </StyledP>
+            <StyledP1>
+              <StyledSpan>소요시간 </StyledSpan>
+              {review.reviewTime ? (
+                <span>
+                  {Math.floor(review.reviewTime / 60)}시간{" "}
+                  {review.reviewTime % 60 ? (
+                    <span>{review.reviewTime % 60}분</span>
+                  ) : (
+                    <span></span>
+                  )}
+                </span>
+              ) : (
+                <span></span>
+              )}
+            </StyledP1>
+            <StyledP1>{review.reviewContent}</StyledP1>
+          </ReviewCard>
+        ))}
       </StyledDiv>
     </div>
   );
