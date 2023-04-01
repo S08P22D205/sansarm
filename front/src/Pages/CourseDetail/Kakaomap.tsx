@@ -34,11 +34,9 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
       courseYCoords: number[],
       length: number
     ) => {
+      var linePath = [];
       for (let i = 0; i < length; i++) {
-        var linePath = [
-          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]),
-        ];
-
+        linePath.push(new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]));
         // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
