@@ -44,7 +44,7 @@ function ResultItem({
   useEffect(() => {
     axios
       .get(
-        "http://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoImgOpenAPI2",
+        "https://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoImgOpenAPI2",
         {
           params: {
             mntiListNo: COURSE_MT_CD,
