@@ -28,5 +28,6 @@ public class ReviewCourseResponse {
     private String courseAddress;
     private LocalDate reviewDate;
     private int reviewTime;
+    private Character reviewRelDiff;
     private String  reviewContent;
 }
