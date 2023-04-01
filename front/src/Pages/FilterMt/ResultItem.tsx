@@ -70,8 +70,11 @@ function ResultItem({
       });
 
     // console.log(imgName);
-  }, [pressSearch]);
+  }, []);
 
+  useEffect(() => {
+    setImgName("");
+  }, [pressSearch]);
   // console.log(imgUrl);
   return (
     <StyledDiv onClick={moveToDetail}>
