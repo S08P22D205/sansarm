@@ -3,7 +3,7 @@ import ListItem from "./ListItem";
 import { useAppSelector } from "../../store/hooks";
 import { ItemInfo } from "../../store/mainSlice";
 import { RecInfo } from "../../store/RecommendSlice";
-import ListItem2 from "./ListItem2";
+// import ListItem2 from "./ListItem2";
 import { userApi } from "../../api";
 import { useEffect, useState } from "react";
 
@@ -34,7 +34,7 @@ function List() {
   const hardCourse: Array<ItemInfo> = useAppSelector(
     state => state.main.hardCourse
   );
-  const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
+  // const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
 
   // accessToken, refreshToken 세션스토리지에서 가져와주기
   const accessToken = sessionStorage.getItem("accessToken");
@@ -56,11 +56,11 @@ function List() {
   return (
     <StyledDiv className="List">
       <StyledH>{userName}님을 위한 추천코스</StyledH>
-      <ListItem2
-        USER_AGE_POOL={ageGender.USER_AGE_POOL}
-        USER_GENDER={ageGender.USER_GENDER}
+      {/* <ListItem2
+       USER_AGE_POOL={ageGender.USER_AGE_POOL}
+       USER_GENDER={ageGender.USER_GENDER}
         COURSE_LIST={ageGender.COURSE_LIST}
-      />
+       /> */}
       <ListItem
         userAge={genderAge[0].userAge}
         userGender={genderAge[0].userGender}

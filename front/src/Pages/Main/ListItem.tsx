@@ -28,7 +28,7 @@ function ListItem({ courseName, userAge, userGender, courseList }: ItemInfo) {
       {userAge && userGender ? (
         <StyledH>
           {userAge}대{" "}
-          {userGender === "F" ? <span>여성</span> : <span>남성</span>}분들이
+          {userGender === "F" ? <span>여성</span> : <span>남성</span>}들이
           선호하는 코스
         </StyledH>
       ) : (
