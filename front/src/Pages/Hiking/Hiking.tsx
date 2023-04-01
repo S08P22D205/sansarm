@@ -94,6 +94,8 @@ function Hiking() {
       setLoc({ latitude: null, longitude: null, error: "Unable to retrieve your location" });
     };
     
+    navigator.geolocation.getCurrentPosition(success, error);
+
     const intervalId = setInterval(() => {
       navigator.geolocation.getCurrentPosition(success, error);
     }, 10000);
