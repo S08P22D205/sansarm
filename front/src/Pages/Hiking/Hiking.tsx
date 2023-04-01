@@ -15,7 +15,7 @@ function Hiking() {
 
   const moveToPhotoPage = () => {
     if (window.confirm("사진을 찍을까요?")) {
-      navigate("/photo/");
+      navigate("/photo/", {});
     }
   };
 

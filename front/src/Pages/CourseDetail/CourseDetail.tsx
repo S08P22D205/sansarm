@@ -82,7 +82,7 @@ function CourseDetail() {
       })
 
       .then((res) => {
-        // console.log("코스 정보 받아오기 :: 성공!" + res.data.m);
+        // console.log("코스 정보 받아오기 :: 성공!" + res.data);
         setCourseData(res.data);
       })
       .catch((err) => console.log(err));
