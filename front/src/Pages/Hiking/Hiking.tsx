@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import Kakaomap from "../CourseDetail/Kakaomap";
 
 function Hiking() {
   const [isRunning, setIsRunning] = useState(false);
@@ -8,6 +9,9 @@ function Hiking() {
   const intervalRef = useRef<number | null>(null);
 
   const navigate = useNavigate();
+
+  // props로 넘긴 courseData의 state를 location이라는 변수에 담는다.
+  const location = useLocation();
 
   const moveToPhotoPage = () => {
     if (window.confirm("사진을 찍을까요?")) {
@@ -17,10 +21,14 @@ function Hiking() {
 
   const moveToReviewPage = () => {
     // navigate("/review/", { state: props });                   // (1)
-    navigate("/review/");
+    navigate("/review/", {
+      state: { courseData: location.state, time: elapsedTime },
+    });
   };
 
   useEffect(() => {
+    //
+    console.log("=> " + location.state.courseMtNm);
     handleStart();
   }, []);
 
@@ -40,11 +48,11 @@ function Hiking() {
     }
   }
 
-  const handleReset = () => {
-    window.clearInterval(intervalRef.current!);
-    setIsRunning(false);
-    setElapsedTime(0);
-  };
+  // const handleReset = () => {
+  //   window.clearInterval(intervalRef.current!);
+  //   setIsRunning(false);
+  //   setElapsedTime(0);
+  // };
 
   const formatElapsedTime = (time: number) => {
     const hours = Math.floor(time / 3600000);
@@ -57,7 +65,18 @@ function Hiking() {
 
   return (
     <StyledDiv>
-      <StyledH1> 앞산 둘레길 1길 </StyledH1>
+      <StyledMap>
+        {location.state.courseXCoords && location.state.courseYCoords ? (
+          <Kakaomap
+            courseXCoords={location.state.courseXCoords}
+            courseYCoords={location.state.courseYCoords}
+          />
+        ) : null}
+      </StyledMap>
+      <StyledH1>
+        {location.state.courseMtNm}&nbsp;
+        {location.state.courseMtNo}코스
+      </StyledH1>
       <StyledH2> 소요 시간 </StyledH2>
 
       <StyledStopwatch>{formatElapsedTime(elapsedTime)}</StyledStopwatch>
@@ -75,12 +94,17 @@ function Hiking() {
 }
 
 const StyledDiv = styled.div`
-  padding-top: 40%;
+  padding-top: 10%;
   font-family: "GmarketSansLight";
   text-align: center;
 `;
 
+const StyledMap = styled.div`
+  height: 120%;
+`;
+
 const StyledH1 = styled.div`
+  /* padding-top:  */
   padding: 4vw;
   font-weight: bold;
   font-size: 1.5rem;
@@ -89,13 +113,12 @@ const StyledH1 = styled.div`
 const StyledH2 = styled.div`
   font-size: 1.5 rem;
   font-weight: bold;
-  /* text-align: center; */
 `;
 
 const StyledStopwatch = styled.div`
   font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 40%;
+  margin-bottom: 5%;
 `;
 
 const StyledBtn = styled.div`
