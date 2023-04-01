@@ -5,7 +5,7 @@ import styled from "styled-components";
 // import axios from "../../store/baseURL";
 
 import Navbar from "../../Common/Navbar/Navbar";
-import ResultList from "../../Common/Result/ResultList";
+// import ResultList from "../../Common/Result/ResultList";
 
 interface Option {
   value: string;
@@ -217,66 +217,82 @@ function FilterRg() {
     error: null,
   });
 
-  const SearchSinal = () => {
-    // # 현재위치 정보 searchRg에 넣기
 
-    const GetGeo = () => {
-      if (!navigator.geolocation) {
-        setLocation({
-          latitude: null,
-          longitude: null,
-          error: "Geolocation이 브라우저에서 작동하지 않음",
-        });
-        return;
+
+  // # 현재위치 정보 받아와서 searchRg에 넣기
+
+  function GetGeo () {
+    return new Promise((resolve, reject) => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+        
+      } else {
+        reject(new Error('Geolocation is not supported'));
       }
+    })
 
-      const success = (position: any) => {
-        setLocation({
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          error: null,
-        });
-      };
+    // 작동 잘하던 GetGeo코드
+    // if (!navigator.geolocation) {
+    //   setLocation({
+    //     latitude: null,
+    //     longitude: null,
+    //     error: "Geolocation이 브라우저에서 작동하지 않음",
+    //   });
+    //   // return;
+    // }
 
-      const error = () => {
-        setLocation({
-          latitude: null,
-          longitude: null,
-          error: "Geolocation 에러",
-        });
-      };
+    // const success = (position: any) => {
+    //   setLocation({
+    //     latitude: position.coords.latitude,
+    //     longitude: position.coords.longitude,
+    //     error: null,
+    //   });
+    // };
 
-      navigator.geolocation.getCurrentPosition(success, error);
-      console.log("위치 받아옴");
-    };
+    // const error = () => {
+    //   setLocation({
+    //     latitude: null,
+    //     longitude: null,
+    //     error: "Geolocation 에러",
+    //   });
+    // };
 
-    const GetGeoCehck = () => {
-      console.log("위치 들어옴");
-      console.log(location.latitude, location.longitude);
-    };
-
-    const AddGeoX = () => {
-      handleMt(location.latitude, "coordX");
-    };
-
-    const AddGeoY = () => {
-      handleMt(location.longitude, "coordY");
-    };
-
-    const AddGeoCheck = () => {
-      console.log("리스트에 들어감");
-      console.log(searchRg);
-    };
-
-    const Activate = async () => {
-      await GetGeo();
-      await GetGeoCehck();
-      await AddGeoY();
-      await AddGeoX();
-      await AddGeoCheck();
-    };
-    Activate();
+    // navigator.geolocation.getCurrentPosition(success, error);
+    // console.log("위치 받아옴");
   };
+
+  function GetGeoCehck () {
+    console.log("위치 들어옴");
+    console.log(location.latitude, location.longitude);
+  };
+
+  function AddGeoX() {
+    handleMt(location.latitude, "coordX");
+  };
+
+  function AddGeoY() {
+    handleMt(location.longitude, "coordY");
+  };
+
+  function AddGeoCheck() {
+    console.log("리스트에 들어감");
+    console.log(searchRg);
+  };
+
+  function SearchSinal() {
+
+    GetGeo()
+      .then(GetGeoCehck)
+      .then(AddGeoX)
+      .then(AddGeoY)
+      .then(AddGeoCheck)
+      .catch((error) => {
+        console.log(error)
+      })
+  };
+  
+
+
 
   function getLocation() {
     console.log(searchRg);
