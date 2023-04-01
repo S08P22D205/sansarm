@@ -10,16 +10,19 @@ interface courseInfo {
   courseMtNo?: number;
   courseXCoords?: Array<number>;
   courseYCoords?: Array<number>;
-  courseElevDiff?: string;
+  courseAbsDiff?: string;
   courseUptime?: number;
   courseDowntime?: number;
   courseLength?: number;
   courseLocation?: string;
-  courseAddress?: string;
+  reviewDate?: Date;
+  reviewTime?: number;
+  reviewRelDiff?: string;
+  reviewContent?: string;
 }
 
 const StyledDiv = styled.div`
-  padding-left: 15vw;
+  padding-left: 23vw;
   padding-right: 15vw;
   margin-top: 5vw;
   font-family: "GmarketSansLight";
@@ -30,6 +33,18 @@ const StyledH3 = styled.h3`
   margin-bottom: 3vw;
   font-weight: bold;
   font-size: 5vw;
+  ::before {
+    content: "";
+    position: absolute;
+    left: -48px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 5vw;
+    height: 5vw;
+    border: 4px solid #238c47;
+    border-radius: 100%;
+    background-color: white;
+  }
 `;
 
 const StyledHr = styled.hr`
@@ -66,6 +81,15 @@ const ReviewCard = styled.div`
   margin-bottom: 5vw;
   position: relative;
   box-shadow: 5px 5px 5px #b7b7b7;
+  ::before {
+    content: "";
+    margin-top: -5vw;
+    position: absolute;
+    left: -39px;
+    width: 2px;
+    height: 130%;
+    background-color: #ddd;
+  }
 `;
 
 const StyledTab = styled.div`
@@ -88,60 +112,70 @@ const StyledLink = styled(Link)`
   text-decoration: none;
 `;
 
-function MyHeart() {
+function MyReview() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
-  const [favoriteCourses, setFavoriteCourses] = useState<courseInfo[]>([{}]);
+  const [reviewCourses, setReviewCourses] = useState<courseInfo[]>([{}]);
 
   useEffect(() => {
-    const getFavoriteCourse = async () => {
-      const res = await axios.get("/user/favorite", {
+    const getReviewCourse = async () => {
+      const res = await axios.get("/user/review", {
         headers: {
           "X-ACCESS-TOKEN": accessToken,
           "X-REFRESH-TOKEN": refreshToken,
         },
       });
-      setFavoriteCourses(res.data.favoriteCourses);
+      setReviewCourses(res.data.reviewCourses);
     };
-    getFavoriteCourse();
+    getReviewCourse();
   }, []);
 
   return (
-    <div className="MyHeart">
+    <div className="MyReview">
       <StyledTab>
         <StyledLink to="/mypage/myheart">
-          <StyledIcon src="/img/heart_pink.png" />
+          <StyledIcon src="/img/heart_black.png" />
         </StyledLink>
         <StyledLink to="/mypage/myreview">
-          <StyledIcon2 src="/img/flag_black.png" />
+          <StyledIcon2 src="/img/flag_red.png" />
         </StyledLink>
       </StyledTab>
       <StyledDiv>
-        {favoriteCourses.map((course, idx) => (
+        {reviewCourses.map((review, idx) => (
           <ReviewCard key={idx}>
             <StyledH3>
-              {course.courseMtNm} {course.courseMtNo}코스
+              {" "}
+              {review.courseMtNm} {review.courseMtNo}코스{" "}
+              {review.reviewRelDiff === "H" ? (
+                <span>⭐⭐⭐</span>
+              ) : review.reviewRelDiff === "N" ? (
+                <span>⭐⭐</span>
+              ) : (
+                <span>⭐</span>
+              )}
             </StyledH3>
             <StyledHr />
             <StyledP>
-              <StyledSpan>상행시간 </StyledSpan>
-              {course.courseUptime}
+              <StyledSpan>방문일 </StyledSpan>
+              {review.reviewDate?.toString()}
             </StyledP>
             <StyledP1>
-              <StyledSpan>하행시간 </StyledSpan>
-              {course.courseDowntime ? (
+              <StyledSpan>소요시간 </StyledSpan>
+              {review.reviewTime ? (
                 <span>
-                  {Math.floor(course.courseDowntime / 60)}시간{" "}
-                  {course.courseDowntime % 60 ? (
-                    <span>{course.courseDowntime % 60}분</span>
-                  ) : null}
+                  {Math.floor(review.reviewTime / 60)}시간{" "}
+                  {review.reviewTime % 60 ? (
+                    <span>{review.reviewTime % 60}분</span>
+                  ) : (
+                    <span></span>
+                  )}
                 </span>
               ) : (
                 <span></span>
               )}
             </StyledP1>
-            <StyledP1>{course.courseLocation}</StyledP1>
+            <StyledP1>{review.reviewContent}</StyledP1>
           </ReviewCard>
         ))}
       </StyledDiv>
@@ -149,4 +183,4 @@ function MyHeart() {
   );
 }
 
-export default MyHeart;
+export default MyReview;
