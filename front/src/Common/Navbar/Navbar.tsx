@@ -22,7 +22,7 @@ function Navbar() {
   };
 
   const moveToMypage = () => {
-    navigate("/mypage");
+    navigate("/mypage/myreview");
     setToggleOn(!toggleOn);
   };
 
