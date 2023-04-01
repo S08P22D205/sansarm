@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "../../store/baseURL.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 interface courseInfo {
@@ -91,6 +91,7 @@ const StyledLink = styled(Link)`
 function MyHeart() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
+  const navigate = useNavigate();
 
   const [favoriteCourses, setFavoriteCourses] = useState<courseInfo[]>([{}]);
 
@@ -119,29 +120,44 @@ function MyHeart() {
       </StyledTab>
       <StyledDiv>
         {favoriteCourses.map((course, idx) => (
-          <ReviewCard key={idx}>
+          <ReviewCard
+            key={idx}
+            onClick={() => navigate(`/coursedetail/${course.courseNo}`)}
+          >
             <StyledH3>
               {course.courseMtNm} {course.courseMtNo}코스
             </StyledH3>
             <StyledHr />
             <StyledP>
+              <StyledSpan>코스길이 </StyledSpan>
+              <span>{course.courseLength}km</span>
+            </StyledP>
+            <StyledP>
               <StyledSpan>상행시간 </StyledSpan>
-              {course.courseUptime}
+              {course.courseUptime ? (
+                <span>
+                  {Math.floor(course.courseUptime / 60) ? (
+                    <span>{Math.floor(course.courseUptime / 60)}시간 </span>
+                  ) : null}
+                  {course.courseUptime % 60 ? (
+                    <span>{course.courseUptime % 60}분</span>
+                  ) : null}
+                </span>
+              ) : null}
             </StyledP>
             <StyledP1>
               <StyledSpan>하행시간 </StyledSpan>
               {course.courseDowntime ? (
                 <span>
-                  {Math.floor(course.courseDowntime / 60)}시간{" "}
+                  {Math.floor(course.courseDowntime / 60) ? (
+                    <span>{Math.floor(course.courseDowntime / 60)}시간 </span>
+                  ) : null}
                   {course.courseDowntime % 60 ? (
                     <span>{course.courseDowntime % 60}분</span>
                   ) : null}
                 </span>
-              ) : (
-                <span></span>
-              )}
+              ) : null}
             </StyledP1>
-            <StyledP1>{course.courseLocation}</StyledP1>
           </ReviewCard>
         ))}
       </StyledDiv>
