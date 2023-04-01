@@ -36,7 +36,7 @@ function CourseDetail() {
   const id = location.pathname.slice(14);
 
   const moveToHiking = () => {
-    navigate("/hiking");
+    navigate("/hiking", { state: courseData });
   };
 
   // 빈 하트 클릭 시 찜 axios 요청 & isClicked 상태 변경
@@ -82,11 +82,11 @@ function CourseDetail() {
           courseNo: id,
         },
       })
-      .then(res => {
+      .then((res) => {
         // console.log("코스 정보 받아오기 :: 성공!");
         setCourseData(res.data);
       })
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }, []);
 
   // isClicked 변경될때마다 찜 여부 받아와 state에 반영

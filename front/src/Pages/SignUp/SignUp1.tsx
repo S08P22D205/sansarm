@@ -106,7 +106,7 @@ function SignUp1() {
           console.log(error);
         });
     } else {
-      alert("회원정보를 입력해주세요")
+      alert("회원정보를 입력해주세요");
     }
   };
 
@@ -155,7 +155,6 @@ function SignUp1() {
           ))}
         </StyledSelect>
       </StyledDiv2>
-
       <StyledButton onClick={apiSignUp1}>완료</StyledButton>
     </StyledDiv>
   );

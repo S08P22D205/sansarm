@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import StyledButtonEasy from "./StyledButtonEasy";
 import StyledButtonSoso from "./StyledButtonSoso";
@@ -28,6 +28,9 @@ interface courseInfo {
 // 코스 정보 객체 받아오기. (백엔드 API가 완성되면 해결하기....)
 function Review() {
   const navigate = useNavigate();
+
+  // props로 넘긴 courseData, time의 state를 location이라는 변수에 담는다.
+  const location = useLocation();
 
   const moveToPhotoPage = () => {
     // navigate("/photo/", { state: props });                   // (2)
@@ -73,8 +76,8 @@ function Review() {
   }
 
   const [review, setReview] = useState({
-    courseNo: 1,
-    reviewTime: 60,
+    courseNo: location.state.courseData.courseNo,
+    reviewTime: location.state.time,
     reviewDiff: "", // E,N,M 순
     reviewContent: "",
   });
@@ -111,7 +114,7 @@ function Review() {
             },
           }
         )
-        .then(response => {
+        .then((response) => {
           console.log("success");
           if (response.data) {
             sessionStorage.setItem("accessToken", response.data.accessToken);
@@ -119,7 +122,7 @@ function Review() {
             moveToPhotoPage();
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     }
@@ -129,7 +132,8 @@ function Review() {
     <StyledDiv>
       <StyledHeader>
         {/* 오늘 "...{props.courseMtNm}+{props.courseMtNo}" <br /> 등산은 어땠나요??        // (3) props로 넘겨받은 정보로 코스명을 보여주기 */}
-        오늘 "..." <br /> 등산은 어땠나요??
+        오늘 "{location.state.courseData.courseMtNm}&nbsp;
+        {location.state.courseData.courseMtNo}코스" <br /> 등산은 어땠나요??
       </StyledHeader>
       <StyledBox>
         <StyledContainer>
@@ -142,7 +146,7 @@ function Review() {
         rows={10}
         placeholder="등산 후기를 자유롭게 입력해주세요"
         value={review.reviewContent}
-        onChange={event => {
+        onChange={(event) => {
           changeReview(event, "reviewContent");
         }}
       ></StyledTextBox>
