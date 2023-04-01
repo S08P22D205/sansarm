@@ -62,15 +62,15 @@ function Main() {
       dispatch(changeHardCourse(res.data));
     };
     // 1. axios 모듈화, recommendSlice 사용한 코드
-    const getageGender = async () => {
-      const res = await courseApi.ageGender(accessToken, refreshToken);
-      dispatch(changeAgeGender(res.data));
-    };
+    // const getageGender = async () => {
+    //   const res = await courseApi.ageGender(accessToken, refreshToken);
+    //   dispatch(changeAgeGender(res.data));
+    // };
     getGenderAge();
     getEasyCourse();
     getNormalCourse();
     getHardCourse();
-    getageGender();
+    // getageGender();
   }, []);
 
   return (
