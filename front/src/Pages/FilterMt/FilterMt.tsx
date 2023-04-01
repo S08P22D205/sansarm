@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { courseApi } from "../../api";
 import styled from "styled-components";
-import ResultList from "../../Common/Result/ResultList";
-// import axios from "../../store/baseURL";
+import ResultList from "./ResultList";
 import flaskApi from "../../api";
+import { useLocation } from "react-router-dom";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
@@ -54,18 +54,22 @@ function FilterMt() {
   // 검색창 focus 상태 useState 세팅
   const [isFocus, setIsFocus] = useState(false);
 
+  // time
   const time: string[] = ["전체", "1미만", "1-2", "2초과"];
   const [onTime, setOnTime] = useState<number>(0);
 
+  // length
   const length: string[] = ["전체", "1미만", "1-3", "3-5", "5초과"];
   const [onLength, setOnLength] = useState<number>(0);
 
+  // axios요청 보낼 객체
   const [searchMt, setSearchMt] = useState<object | any>({
     courseMtNm: "",
     courseTimeBtNo: 0,
     courseLengthBtNo: 0,
   });
 
+  // 타입별로 객체 값 변환
   const handleMt = (data: string | number, type: string) => {
     setSearchMt({
       ...searchMt,
@@ -82,6 +86,7 @@ function FilterMt() {
     });
   };
 
+  // axios 요청으로 받아올 courseList
   const [courseList, setCourseList] = useState<any[]>([]);
 
   // 검색 버튼을 눌렀다는 flag
@@ -105,64 +110,123 @@ function FilterMt() {
         }
       )
       .then((res) => {
-        console.log(res.data.course_list);
         setCourseList(res.data.course_list);
       })
       .catch((err) => console.log(err));
   };
 
+  // 메인에서 필터페이지로 산 이름 넘겨줄 때 =========================
+  const location = useLocation();
+
+  // 1. 산 이름
+  const mtName = decodeURI(location.pathname.slice(10));
+  // console.log(mtName);
+
+  // 2. mtName을 axios객체에 넣기
+  useEffect(() => {
+    if (mtName) {
+      handleMt(mtName, "courseMtNm");
+    }
+  }, [mtName]);
+
+  // console 확인창 ===============================================
   // console.log(searchMt);
   // console.log(courseList);
-  console.log(pressSearch);
+  // console.log(pressSearch);
 
   return (
     <FilterMtDiv className="FilterMt">
       <StyledP2>원하는 등산코스 조건을 선택해주세요</StyledP2>
       <FlexDiv>
         <StyledP3>산이름</StyledP3>
-        <SearchBarDiv>
-          <InputDiv>
-            <Search
-              placeholder="산이름을 입력해주세요"
-              value={keyword}
-              onChange={onChangeData}
-              onFocus={() => {
-                setIsFocus(true);
-              }}
-              onBlur={() => {
-                setIsFocus(false);
-              }}
-              isFocus={isFocus}
-            />
-          </InputDiv>
+        {mtName ? (
+          <SearchBarDiv>
+            <InputDiv>
+              <Search
+                placeholder="산이름을 입력해주세요"
+                value={mtName}
+                onChange={onChangeData}
+                onFocus={() => {
+                  setIsFocus(true);
+                }}
+                onBlur={() => {
+                  setIsFocus(false);
+                }}
+                isFocus={isFocus}
+              />
+            </InputDiv>
 
-          {isFocus ? (
-            <ResultDiv>
-              <ResultUl>
-                {resultData.length > 0 && keyword !== "" ? (
-                  resultData.map((result, index) => (
-                    <Resultli
-                      key={index}
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                      }}
-                      onClick={() => {
-                        console.log(result);
-                        setKeyword(result);
-                        handleMt(result, "courseMtNm");
-                        setIsFocus(false);
-                      }}
-                    >
-                      {result}
-                    </Resultli>
-                  ))
-                ) : (
-                  <Resultli2>검색결과가 없습니다.</Resultli2>
-                )}
-              </ResultUl>
-            </ResultDiv>
-          ) : null}
-        </SearchBarDiv>
+            {isFocus ? (
+              <ResultDiv>
+                <ResultUl>
+                  {resultData.length > 0 && keyword !== "" ? (
+                    resultData.map((result, index) => (
+                      <Resultli
+                        key={index}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                        }}
+                        onClick={() => {
+                          // console.log(result);
+                          setKeyword(result);
+                          handleMt(result, "courseMtNm");
+                          setIsFocus(false);
+                        }}
+                      >
+                        {result}
+                      </Resultli>
+                    ))
+                  ) : (
+                    <Resultli2>검색결과가 없습니다.</Resultli2>
+                  )}
+                </ResultUl>
+              </ResultDiv>
+            ) : null}
+          </SearchBarDiv>
+        ) : (
+          <SearchBarDiv>
+            <InputDiv>
+              <Search
+                placeholder="산이름을 입력해주세요"
+                value={keyword}
+                onChange={onChangeData}
+                onFocus={() => {
+                  setIsFocus(true);
+                }}
+                onBlur={() => {
+                  setIsFocus(false);
+                }}
+                isFocus={isFocus}
+              />
+            </InputDiv>
+
+            {isFocus ? (
+              <ResultDiv>
+                <ResultUl>
+                  {resultData.length > 0 && keyword !== "" ? (
+                    resultData.map((result, index) => (
+                      <Resultli
+                        key={index}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                        }}
+                        onClick={() => {
+                          setKeyword(result);
+                          handleMt(result, "courseMtNm");
+                          setIsFocus(false);
+                        }}
+                      >
+                        {result}
+                      </Resultli>
+                    ))
+                  ) : (
+                    <Resultli2>검색결과가 없습니다.</Resultli2>
+                  )}
+                </ResultUl>
+              </ResultDiv>
+            ) : null}
+          </SearchBarDiv>
+        )}
       </FlexDiv>
       <StyledHr />
 
@@ -348,7 +412,6 @@ const SearchBarDiv = styled.div`
   width: 73%;
   padding-left: 2vw;
   padding-right: 7vw;
-  /* margin-bottom: 2vw; */
 `;
 
 const InputDiv = styled.div`
@@ -393,7 +456,6 @@ const ResultDiv = styled.div`
   padding-left: 3vw;
   padding-bottom: 2vw;
   padding-top: 1vw;
-  /* box-shadow: 0 0 10px #ddd; */
   overflow-y: scroll;
   ::-webkit-scrollbar {
     width: 10px;

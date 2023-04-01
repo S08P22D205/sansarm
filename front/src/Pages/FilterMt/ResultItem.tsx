@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface ResultInfo {
@@ -29,6 +30,13 @@ function ResultItem({
   COURSE_ADDRESS,
   pressSearch,
 }: ResultInfo) {
+  const navigate = useNavigate();
+
+  // 결과목록에서 코스디테일 페이지로 이동
+  const moveToDetail = () => {
+    navigate(`/coursedetail/${COURSE_NO}`);
+  };
+
   const [imgName, setImgName] = useState<string>("");
   const imgUrl =
     "https://www.forest.go.kr/images/data/down/mountain/" + imgName;
@@ -48,7 +56,10 @@ function ResultItem({
         }
       )
       .then((res) => {
-        setImgName(res.data.response.body.items.item[0].imgfilename);
+        if (res.data.response.body.items) {
+          setImgName("");
+          setImgName(res.data.response.body.items.item[0].imgfilename);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -57,30 +68,10 @@ function ResultItem({
 
   useEffect(() => {
     setImgName("");
-    axios
-      .get(
-        "http://apis.data.go.kr/1400000/service/cultureInfoService2/mntInfoImgOpenAPI2",
-        {
-          params: {
-            mntiListNo: COURSE_MT_CD,
-            pageNo: "1",
-            numOfRows: "10",
-            ServiceKey:
-              "52XfZNd3Dlkjj7X/01Wm4ons+WSiajtOTo2O7WCEv993o1qWWflHTiRuM9aig/FBuf7VUON5y3sw7cKfrhUu1w==",
-          },
-        }
-      )
-      .then((res) => {
-        setImgName(res.data.response.body.items.item[0].imgfilename);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   }, [pressSearch]);
 
-  console.log(imgUrl);
   return (
-    <StyledDiv>
+    <StyledDiv onClick={moveToDetail}>
       {imgName ? (
         <StyledImg src={imgUrl} alt={imgName} />
       ) : (
@@ -91,7 +82,10 @@ function ResultItem({
           코스 이름 : {COURSE_MT_NM} {COURSE_MT_NO}코스
         </StyledP>
         <StyledP>코스 길이 : {COURSE_LENGTH} km</StyledP>
-        <StyledP>산행 시간 : {COURSE_UPTIME + COURSE_DOWNTIME} 시간</StyledP>
+        <StyledP>
+          산행 시간 : {Math.floor((COURSE_UPTIME + COURSE_DOWNTIME) / 60)}시간{" "}
+          {Math.floor((COURSE_UPTIME + COURSE_DOWNTIME) % 60)}분
+        </StyledP>
       </StyledDiv2>
     </StyledDiv>
   );
