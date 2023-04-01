@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ReviewItem from "./ReviewItem";
 import styled from "styled-components";
-import axios from "axios";
+import axios from "../../store/baseURL";
 
 interface idInfo {
   id: string;
@@ -27,7 +27,7 @@ function ReviewList({ id }: idInfo) {
   useEffect(() => {
     // 코스에 대한 리뷰 목록 반환 axios
     axios
-      .get(`http://localhost:5000/course/review/${id}`, {
+      .get(`/course/review/${id}`, {
         headers: {
           "X-ACCESS-TOKEN": AccessToken,
           "X-REFRESH-TOKEN": RefreshToken,
@@ -36,29 +36,29 @@ function ReviewList({ id }: idInfo) {
           courseNo: id,
         },
       })
-      .then((res) => {
+      .then(res => {
         // console.log("리뷰 정보 받아오기 :: 성공!");
         // console.log(res.data.reviewList);
         setReviewList(res.data.reviewList);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
 
     // 유저 확인 axios
     axios
-      .get("http://localhost:5000/user/info", {
+      .get("/user/info", {
         headers: {
           "X-ACCESS-TOKEN": AccessToken,
           "X-REFRESH-TOKEN": RefreshToken,
         },
       })
-      .then((res) => {
+      .then(res => {
         // console.log("유저 정보 받아오기 :: 성공!");
         // console.log(res.data.userNicknm);
         setUserNickname(res.data.userNicknm);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   }, []);

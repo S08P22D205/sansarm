@@ -56,11 +56,11 @@ function List() {
   return (
     <StyledDiv className="List">
       <StyledH>{userName}님을 위한 추천코스</StyledH>
-      // <ListItem2
-      //   USER_AGE_POOL={ageGender.USER_AGE_POOL}
-      //   USER_GENDER={ageGender.USER_GENDER}
-      //   COURSE_LIST={ageGender.COURSE_LIST}
-      // />
+      {/* <ListItem2
+       USER_AGE_POOL={ageGender.USER_AGE_POOL}
+       USER_GENDER={ageGender.USER_GENDER}
+        COURSE_LIST={ageGender.COURSE_LIST}
+       /> */}
       <ListItem
         userAge={genderAge[0].userAge}
         userGender={genderAge[0].userGender}
