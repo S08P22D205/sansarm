@@ -121,7 +121,7 @@ function FilterMt() {
 
   // 1. 산 이름
   const mtName = decodeURI(location.pathname.slice(10));
-  console.log(mtName);
+  // console.log(mtName);
 
   // 2. mtName을 axios객체에 넣기
   useEffect(() => {
