@@ -98,7 +98,10 @@ function ResultItem({
           코스 이름 : {COURSE_MT_NM} {COURSE_MT_NO}코스
         </StyledP>
         <StyledP>코스 길이 : {COURSE_LENGTH} km</StyledP>
-        <StyledP>산행 시간 : {COURSE_UPTIME + COURSE_DOWNTIME} 시간</StyledP>
+        <StyledP>
+          산행 시간 : {Math.floor((COURSE_UPTIME + COURSE_DOWNTIME) / 60)}시간{" "}
+          {Math.floor((COURSE_UPTIME + COURSE_DOWNTIME) % 60)}분
+        </StyledP>
       </StyledDiv2>
     </StyledDiv>
   );
