@@ -34,7 +34,8 @@ function Review() {
 
   const moveToPhotoPage = () => {
     // navigate("/photo/", { state: props });                   // (2)
-    navigate("/photo/");
+    // navigate("/photo/");
+    navigate("/mypage")
   };
 
   const [easy, setEasy] = useState(false);
@@ -77,7 +78,7 @@ function Review() {
 
   const [review, setReview] = useState({
     courseNo: location.state.courseData.courseNo,
-    reviewTime: location.state.time,
+    reviewTime: Math.floor(location.state.time / 60000),
     reviewDiff: "", // E,N,M 순
     reviewContent: "",
   });
