@@ -96,7 +96,7 @@ function FilterMt() {
   const searchData = () => {
     flaskApi
       .post(
-        "http://localhost:5001/course/search/mt",
+        "/course/search/mt",
         {
           courseMtNm: searchMt.courseMtNm,
           courseTimeBtNo: searchMt.courseTimeBtNo,

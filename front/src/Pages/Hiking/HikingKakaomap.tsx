@@ -10,13 +10,17 @@ declare global {
 interface Icoords {
   courseXCoords: number[];
   courseYCoords: number[];
+  hikingXCoords: number[];
+  hikingYCoords: number[];
 }
 
 const { kakao } = window;
 
-function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
+function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCoords }: Icoords) {
+  // console.log('들어오는지 확인', hikingXCoords)
   useEffect(() => {
     const length = courseXCoords.length;
+    const walked = hikingXCoords.length;
 
     var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
@@ -43,7 +47,7 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
           path: linePath, // 선을 구성하는 좌표배열
           strokeWeight: 5, // 선의 두께
           strokeColor: "#e72a00", // 선의 색깔
-          strokeOpacity: 0.7, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
+          strokeOpacity: 0.5, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
           strokeStyle: "solid", // 선의 스타일
         });
 
@@ -52,6 +56,31 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
     };
 
     drawingLines(courseXCoords, courseYCoords, length);
+
+    // 움직임을 그릴 좌표들
+    const drawingHiking = (
+      hikingXCoords: number[],
+      hikingYCoords: number[],
+      length: number
+    ) => {
+      var linePath = [];
+      for (let i = 0; i < length; i++) {
+        linePath.push(new kakao.maps.LatLng(hikingXCoords[i], hikingYCoords[i]));
+        // console.log(linePath);
+
+        var polyline = new kakao.maps.Polyline({
+          path: linePath, // 선을 구성하는 좌표배열
+          strokeWeight: 4, // 선의 두께
+          strokeColor: "#238C47", // 선의 색깔
+          strokeOpacity: 0.8, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
+          strokeStyle: "solid", // 선의 스타일
+        });
+
+        polyline.setMap(map);
+      }
+    };
+
+    drawingHiking(hikingXCoords, hikingYCoords, walked);
   }, []);
 
   return <StyledMap id="map" />;
@@ -65,4 +94,4 @@ const StyledMap = styled.div`
   border-radius: 5px;
   /* z-index: -1; */
 `;
-export default Kakaomap;
+export default HikingKakaomap;

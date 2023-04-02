@@ -1,7 +1,7 @@
 [
   {
-    "userAge": 20,
-    "userGender": "여성",
+    "userAge": 50,
+    "userGender": "남성",
     "courseList": [
       {
         "courseNo": 1,
@@ -30,7 +30,7 @@
         "courseLocation": "대구광역시 달성군 유가읍 양리"
       },
       {
-        "courseNo": 3,
+        "courseNo": 623,
         "courseMtNm": "앞산",
         "courseMtCd": 272000301,
         "courseMtNo": 1,

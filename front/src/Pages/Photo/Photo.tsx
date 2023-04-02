@@ -1,10 +1,22 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 function CameraApp() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [imageDataUrl, setImageDataUrl] = useState<string>("");
+
+  const navigate = useNavigate();
+
+  const moveToHiking = () => {
+    navigate("/hiking/");
+  };
+
+  useEffect(() => {
+    startCamera();
+  }, []);
 
   const startCamera = async () => {
     try {
@@ -23,6 +35,7 @@ function CameraApp() {
       cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);
     }
+    moveToHiking();
   };
 
   const captureImage = () => {
@@ -34,7 +47,13 @@ function CameraApp() {
       if (context) {
         context.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
         const dataUrl = canvas.toDataURL();
-        setImageDataUrl(dataUrl);
+        // setImageDataUrl(dataUrl);
+        const downloadLink = document.createElement("a");
+        downloadLink.href = dataUrl;
+        downloadLink.download = "image.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
       }
     }
   };
@@ -46,22 +65,82 @@ function CameraApp() {
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
+    setImageDataUrl("");
   };
 
   return (
-    <div>
-      <h1>Camera App</h1>
-      <video ref={videoRef} autoPlay playsInline></video>
+    <StyledDiv>
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        width={360}
+        height={300}
+      ></video>
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
-      {cameraStream ? (
-        <button onClick={stopCamera}>Stop Camera</button>
+      {/* {cameraStream ? (
+        <button onClick={stopCamera}>카메라 끄기</button>
       ) : (
         <button onClick={startCamera}>Start Camera</button>
-      )}
-      <button onClick={captureImage}>Capture Image</button>
-      {imageDataUrl && <button onClick={downloadImage}>Download Image</button>}
-    </div>
+      )} */}
+      {/* <button onClick={captureImage}>Capture Image</button> */}
+      <StyledCircle onClick={captureImage}>
+        <img src={"/img/camera.png"} alt="camera btn" width={"80%"} />
+      </StyledCircle>
+      {/* {imageDataUrl && (
+        <StyledButton onClick={downloadImage}>이미지 다운</StyledButton>
+      )} */}
+      <StyledButton2 onClick={stopCamera}>카메라 끄기</StyledButton2>
+    </StyledDiv>
   );
 }
+
+const StyledDiv = styled.div`
+  padding-top: 60%;
+`;
+
+const StyledCircle = styled.div`
+  padding-top: 4%;
+  text-align: center;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  margin-left: 40%;
+  margin-right: 12%;
+  margin-top: 10%;
+  border: 3.5px solid #119426;
+`;
+
+const StyledButton = styled.button`
+  margin-left: 30%;
+  margin-top: 5%;
+  background-color: #238c47;
+  width: 40vw;
+  height: 5vh;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  letter-spacing: 2px;
+`;
+
+const StyledButton2 = styled.button`
+  margin-left: 30%;
+  margin-top: 5%;
+  background-color: #ff1900d8;
+  width: 40vw;
+  height: 5vh;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  letter-spacing: 2px;
+`;
 
 export default CameraApp;
