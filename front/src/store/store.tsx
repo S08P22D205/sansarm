@@ -3,6 +3,7 @@ import mainReducer from "./mainSlice";
 import signup2Reducer from "./signup2Slice";
 import recommenReducer from "./RecommendSlice";
 import loginReducer from "./loginSlice";
+import courseReducer from "./courseSlice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     signup2: signup2Reducer,
     recommend: recommenReducer,
     login: loginReducer,
+    course: courseReducer,
   },
 });
 

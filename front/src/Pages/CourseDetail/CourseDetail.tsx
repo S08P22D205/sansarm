@@ -4,6 +4,8 @@ import styled from "styled-components";
 import axios from "../../store/baseURL.js";
 import Kakaomap from "./Kakaomap";
 import ReviewList from "./ReviewList";
+import { useAppDispatch } from "../../store/hooks";
+import { courseActions } from "../../store/courseSlice";
 
 interface courseInfo {
   courseNo?: number;
@@ -37,6 +39,7 @@ function CourseDetail() {
 
   const moveToHiking = () => {
     navigate("/hiking", { state: courseData });
+    dispatch(courseActions.addTime(Date.now()));
   };
 
   // 빈 하트 클릭 시 찜 axios 요청 & isClicked 상태 변경
@@ -70,6 +73,9 @@ function CourseDetail() {
     setIsClicked(!isClicked);
   };
 
+  // redux에 값 저장
+  const dispatch = useAppDispatch();
+
   // axios 요청 : 코스 데이터 가져오기
   useEffect(() => {
     axios
@@ -83,8 +89,10 @@ function CourseDetail() {
         },
       })
       .then((res) => {
-        // console.log("코스 정보 받아오기 :: 성공!");
+        console.log("코스 정보 받아오기 :: 성공!");
+        console.log(res.data);
         setCourseData(res.data);
+        dispatch(courseActions.addCourse(res.data));
       })
       .catch((err) => console.log(err));
   }, []);
