@@ -53,6 +53,7 @@
     ]
   },
   "devDependencies": {
+    "@types/geojson": "^7946.0.10",
     "@types/string-similarity": "^4.0.0",
     "@types/styled-components": "^5.1.26"
   }
