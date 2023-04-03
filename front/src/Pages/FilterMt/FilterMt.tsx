@@ -301,8 +301,8 @@ function FilterMt() {
         <StyledDiv2>
           <StyledImg src="\img\filled_mt.png" alt="filledMt" />
           <div>
-            <StyledP4>원하시는 결과값이 없습니다. </StyledP4>
-            <StyledP4>다른 조건으로 검색해주세요 :) </StyledP4>
+            <StyledP4>결과값이 없습니다. </StyledP4>
+            <StyledP4>원하시는 조건으로 검색해주세요 :) </StyledP4>
           </div>
         </StyledDiv2>
       )}
@@ -329,6 +329,7 @@ const StyledImg = styled.img`
 
 const StyledP4 = styled.p`
   font-family: "GmarketSansMedium";
+  font-size: 14px;
   margin-top: 8px;
   margin-bottom: 3px;
   margin-left: 15px;
