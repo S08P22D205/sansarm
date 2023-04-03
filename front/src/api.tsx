@@ -6,13 +6,13 @@ export interface Tokens {
 }
 
 const flaskApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/flask-api",
-  // baseURL: "http://localhost:5001/",
+  // baseURL: "https://j8d205.p.ssafy.io/flask-api",
+  baseURL: "http://localhost:5001/",
 });
 
 const springApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/api",
-  // baseURL: "http://localhost:5000/",
+  // baseURL: "https://j8d205.p.ssafy.io/api",
+  baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {
