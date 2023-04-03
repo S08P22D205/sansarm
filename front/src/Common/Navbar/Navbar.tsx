@@ -93,10 +93,10 @@ const StyledUl = styled.ul`
 
 const StyledLi = styled.li`
   font-family: "GmarketSansMedium";
-  font-size: 7vw;
+  font-size: 5vw;
   list-style: none;
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
 
 const StyledHr = styled.hr`
