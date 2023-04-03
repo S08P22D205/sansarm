@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
     public ReviewListResponse getReviewList(String userEmail) {
         List<ReviewCourseResponse> reviewList = new ArrayList<>();
         User user = userRepository.findByUserEmail(userEmail);
-        List<Review> reviews = reviewRepository.findAllByUserNo(user.getUserNo());
+        List<Review> reviews = reviewRepository.findAllByUserNoOrderByReviewDateDesc(user.getUserNo());
         for (Review review : reviews) {
             CourseResponse courseResponse = courseService.getCourseDetails(review.getCourseNo());
             reviewList.add(new ReviewCourseResponse(courseResponse.getCourseNo(), courseResponse.getCourseMtNm(), courseResponse.getCourseMtCd(), courseResponse.getCourseMtNo(), courseResponse.getCourseXCoords(), courseResponse.getCourseYCoords(), courseResponse.getCourseElevDiff(), courseResponse.getCourseUptime(), courseResponse.getCourseDowntime(), courseResponse.getCourseLength(), courseResponse.getCourseLocation(), courseResponse.getCourseAddress(), review.getReviewDate(), review.getReviewTime(), review.getReviewRelDiff(), review.getReviewContent()));
