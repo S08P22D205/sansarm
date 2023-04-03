@@ -144,7 +144,7 @@ function FilterMt() {
             <InputDiv>
               <Search
                 placeholder="산이름을 입력해주세요"
-                value={mtName}
+                defaultValue={mtName}
                 onChange={onChangeData}
                 onFocus={() => {
                   setIsFocus(true);

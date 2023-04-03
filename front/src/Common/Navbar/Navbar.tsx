@@ -38,7 +38,7 @@ function Navbar() {
         <StyledImg
           onClick={moveToMain}
           className="logoImg"
-          src="/img/logo2.png"
+          src="/img/logo1_1.png"
           alt="logo"
         />
         <HamBtn onClick={openMenu} />
@@ -66,16 +66,17 @@ const StyledTop = styled.div`
 const StyledDiv = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 60px;
+  height: 70px;
   width: 100%;
   background-color: white;
   border-bottom: 2px solid #d9d9d9;
 `;
 
 const StyledImg = styled.img`
-  margin-left: 8px;
-  margin-top: 1px;
-  height: 70px;
+  margin-left: 10px;
+  margin-top: 10px;
+  height: 55px;
+  width: 80px;
 `;
 
 const StyledUl = styled.ul`
@@ -92,10 +93,10 @@ const StyledUl = styled.ul`
 
 const StyledLi = styled.li`
   font-family: "GmarketSansMedium";
-  font-size: 7vw;
+  font-size: 5vw;
   list-style: none;
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 `;
 
 const StyledHr = styled.hr`
