@@ -179,7 +179,7 @@ function SearchBar() {
                 </div>
               ))
             ) : (
-              <Resultli2>산 이름을 정확히 입력해주세요.</Resultli2>
+              <Resultli2>산 이름을 정확히 입력해 주세요.</Resultli2>
             )}
           </ResultUl>
         </ResultDiv>
