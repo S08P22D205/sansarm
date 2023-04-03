@@ -278,7 +278,7 @@ public class UserController {
         }
     }
 
-    @ApiOperation()
+    @ApiOperation(
             value = "유저 정보 반환",
             notes = "접속 중인 유저의 정보를 조회하고, 성공 시 유저 정보를 반환하고, 실패 시 Fail message를 반환한다.")
     @GetMapping("/info")
@@ -290,7 +290,6 @@ public class UserController {
         }
 
         String userEmail = jwtProvider.getEmailFromToken(accessToken);
-        User user = userRepository.findByUserEmail(userEmail);
 
         try {
             UserInfoResponse userInfoResponse = userService.getUserInfo(userEmail);

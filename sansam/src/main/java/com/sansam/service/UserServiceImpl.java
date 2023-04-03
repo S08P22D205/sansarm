@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
         int cntE = 0;
         int cntN = 0;
         int cntH = 0;
-        for (Review review: reviewList) {
+        for (Review review : reviewList) {
             switch (review.getReviewRelDiff()) {
                 case 'E':
                     cntE++;
@@ -140,8 +140,9 @@ public class UserServiceImpl implements UserService {
                 return true;
             }
         }
-        System.out.println(cntE+" "+cntN+" "+cntH);
+        System.out.println(cntE + " " + cntN + " " + cntH);
         return false;
+    }
 
     @Override
     public UserInfoResponse getUserInfo(String userEmail) {
