@@ -35,7 +35,7 @@ function Review() {
   const moveToPhotoPage = () => {
     // navigate("/photo/", { state: props });                   // (2)
     // navigate("/photo/");
-    navigate("/mypage")
+    navigate("/mypage/myreview");
   };
 
   const [easy, setEasy] = useState(false);
@@ -117,9 +117,13 @@ function Review() {
         )
         .then((response) => {
           console.log("success");
+          console.log(response);
           if (response.data) {
-            sessionStorage.setItem("accessToken", response.data.accessToken);
-            sessionStorage.setItem("refreshToken", response.data.refreshToken);
+            //res.data.response.body.items.
+            sessionStorage.setItem(
+              "accessToken",
+              response.headers["x-access-token"]
+            );
             moveToPhotoPage();
           }
         })
