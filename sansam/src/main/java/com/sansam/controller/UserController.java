@@ -254,6 +254,31 @@ public class UserController {
     }
 
     @ApiOperation(
+            value = "난이도별 코스 추천 가능 여부 반환",
+            notes = "난이도별 코스 추천 가능 여부를 조회하고, 가능하면 True를, 불가능하면 False를, 조회 실패 시 Fail을 반환한다.")
+    @GetMapping("/main/is-recommendable")
+    public ResponseEntity<?> isRecommendable(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            accessToken = response.getHeader("X-ACCESS-TOKEN");
+        } else {
+            response.setHeader("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
+
+        try {
+            if (userService.isRecommendable(user.getUserNo())) {
+                return new ResponseEntity<>(true, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(false, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+                return new ResponseEntity<>("Failed checking whether course recommendation by difficulty is possible.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation()
             value = "유저 정보 반환",
             notes = "접속 중인 유저의 정보를 조회하고, 성공 시 유저 정보를 반환하고, 실패 시 Fail message를 반환한다.")
     @GetMapping("/info")
@@ -265,6 +290,7 @@ public class UserController {
         }
 
         String userEmail = jwtProvider.getEmailFromToken(accessToken);
+        User user = userRepository.findByUserEmail(userEmail);
 
         try {
             UserInfoResponse userInfoResponse = userService.getUserInfo(userEmail);
