@@ -3,7 +3,7 @@ import { courseApi } from "../../api";
 import styled from "styled-components";
 import ResultList from "./ResultList";
 import flaskApi from "../../api";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
@@ -16,6 +16,7 @@ function FilterMt() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
+  const navigate = useNavigate();
   // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
   const [mtList, setMtList] = useState<Array<string>>([""]);
 
@@ -42,7 +43,7 @@ function FilterMt() {
   // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
   useEffect(() => {
     setResultData(
-      mtList.filter((mountain) => {
+      mtList.filter(mountain => {
         if (mountain.includes(keyword) && keyword.length !== 0) {
           return mountain.includes(keyword);
         }
@@ -109,10 +110,10 @@ function FilterMt() {
           },
         }
       )
-      .then((res) => {
+      .then(res => {
         setCourseList(res.data.course_list);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   // 메인에서 필터페이지로 산 이름 넘겨줄 때 =========================
@@ -120,7 +121,7 @@ function FilterMt() {
 
   // 1. 산 이름
   const mtName = decodeURI(location.pathname.slice(10));
-  // console.log(mtName);
+  console.log("mtName", mtName);
 
   // 2. mtName을 axios객체에 넣기
   useEffect(() => {
@@ -163,7 +164,7 @@ function FilterMt() {
                     resultData.map((result, index) => (
                       <Resultli
                         key={index}
-                        onMouseDown={(e) => {
+                        onMouseDown={e => {
                           e.preventDefault();
                         }}
                         onClick={() => {
@@ -171,6 +172,7 @@ function FilterMt() {
                           setKeyword(result);
                           handleMt(result, "courseMtNm");
                           setIsFocus(false);
+                          navigate(`/filtermt/${result}`);
                         }}
                       >
                         {result}
@@ -207,7 +209,7 @@ function FilterMt() {
                     resultData.map((result, index) => (
                       <Resultli
                         key={index}
-                        onMouseDown={(e) => {
+                        onMouseDown={e => {
                           e.preventDefault();
                         }}
                         onClick={() => {
@@ -347,10 +349,9 @@ const StyledBtn = styled.button<ButtonInfo>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) =>
-    props.index === props.timeState ? "#238C47" : "#818181"};
+  color: ${props => (props.index === props.timeState ? "#238C47" : "#818181")};
   border: 2px solid
-    ${(props) => (props.index === props.timeState ? "#238C47" : "#818181")};
+    ${props => (props.index === props.timeState ? "#238C47" : "#818181")};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
@@ -362,10 +363,10 @@ const StyledBtn1 = styled.button<ButtonInfo>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) =>
+  color: ${props =>
     props.index === props.lengthState ? "#238C47" : "#818181"};
   border: 2px solid
-    ${(props) => (props.index === props.lengthState ? "#238C47" : "#818181")};
+    ${props => (props.index === props.lengthState ? "#238C47" : "#818181")};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
@@ -431,7 +432,7 @@ const Search = styled.input<SearchProps>`
   width: 100%;
   height: 11vw;
   border: 1px solid gray;
-  border-radius: ${(props) =>
+  border-radius: ${props =>
     props.isFocus ? "10px 10px 0px 0px" : "10px 10px"};
   font-family: "GmarketSansLight";
   text-align: left;

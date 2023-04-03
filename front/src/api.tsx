@@ -6,18 +6,25 @@ export interface Tokens {
 }
 
 const flaskApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/flask-api",
-  // baseURL: "http://localhost:5001/",
+  // baseURL: "https://j8d205.p.ssafy.io/flask-api",
+  baseURL: "http://localhost:5001/",
 });
 
 const springApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/api",
-  // baseURL: "http://localhost:5000/",
+  // baseURL: "https://j8d205.p.ssafy.io/api",
+  baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {
   userInfo: (accessToken: string | null, refreshToken: string | null) =>
     springApi.get("user/info", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  logOut: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("user/signout", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
