@@ -38,12 +38,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sshagent(credentials: ['ec2-ssh']) {
-                    sh 'docker stop d205-frontend || true"'
-                    sh 'docker rm -f d205-frontend || true'
-                    sh 'docker run -dp 3000:80 --net=bridge --name d205-frontend xronace/d205-frontend:latest'
-                    sh 'docker image prune -f'
-                }
+                sh 'docker stop d205-frontend || true'
+                sh 'docker rm -f d205-frontend || true'
+                sh 'docker run -dp 3000:80 --net=bridge --name d205-frontend xronace/d205-frontend:latest'
+                sh 'docker image prune -f'
             }
         }
     }
