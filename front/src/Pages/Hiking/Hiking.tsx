@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import Kakaomap from "../CourseDetail/Kakaomap";
+import HikingKakaomap from "./HikingKakaomap"
+
+interface ILocation {
+  latitude: number | null,
+  longitude: number | null,
+  error: string | null
+}
 
 function Hiking() {
   const [isRunning, setIsRunning] = useState(false);
@@ -63,13 +69,53 @@ function Hiking() {
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
+
+  // 5초마다 유저 위치정보 받아와서 X/Y 나눠 저장하기
+  const [loc, setLoc] = useState<ILocation>({ latitude: null, longitude: null, error: null });
+  const [latitudeList, setLatitudeList] = useState<number[]>([]);
+  const [longitudeList, setLongitudeList] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (!navigator.geolocation) {
+      setLoc({ latitude: null, longitude: null, error: "Geolocation is not supported by your browser" });
+      return;
+    }
+
+    const success = (position: any) => {
+      const lat = position.coords.latitude;
+      const long = position.coords.longitude;
+
+      setLoc({ latitude: lat, longitude: long, error: null });
+      setLatitudeList((prevState) => [...prevState, lat]);
+      setLongitudeList((prevState) => [...prevState, long]);
+    };
+    
+    const error = () => {
+      setLoc({ latitude: null, longitude: null, error: "Unable to retrieve your location" });
+    };
+    
+    navigator.geolocation.getCurrentPosition(success, error);
+
+    const intervalId = setInterval(() => {
+      navigator.geolocation.getCurrentPosition(success, error);
+    }, 10000);
+    
+    return () => clearInterval(intervalId);
+  }, []);
+  console.log(latitudeList, longitudeList);
+  
+  // }
+
   return (
     <StyledDiv>
       <StyledMap>
         {location.state.courseXCoords && location.state.courseYCoords ? (
-          <Kakaomap
+          <HikingKakaomap
             courseXCoords={location.state.courseXCoords}
             courseYCoords={location.state.courseYCoords}
+            hikingXCoords={latitudeList}
+            hikingYCoords={longitudeList}
+
           />
         ) : null}
       </StyledMap>
