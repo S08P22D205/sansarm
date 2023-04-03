@@ -2,8 +2,13 @@ import { useState } from "react";
 import styled from "styled-components";
 import HamBtn from "./HamBtn";
 import { useNavigate } from "react-router-dom";
+import { userApi } from "../../api";
+import axios from "axios";
 
 function Navbar() {
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
   const navigate = useNavigate();
 
   const moveToMain = () => {
@@ -24,6 +29,17 @@ function Navbar() {
   const moveToMypage = () => {
     navigate("/mypage/myreview");
     setToggleOn(!toggleOn);
+  };
+
+  const logOUt = async () => {
+    const res = await userApi.logOut(accessToken, refreshToken);
+    if (res.data === "Success") {
+      sessionStorage.clear();
+      navigate("/");
+      setToggleOn(!toggleOn);
+    } else {
+      console.log(res.data);
+    }
   };
 
   const [toggleOn, setToggleOn] = useState<boolean>(false);
@@ -53,7 +69,7 @@ function Navbar() {
           <StyledHr />
           <StyledLi onClick={moveToMypage}>마이페이지</StyledLi>
           <StyledHr />
-          <StyledLi>로그아웃</StyledLi>
+          <StyledLi onClick={logOUt}>로그아웃</StyledLi>
         </StyledUl>
       ) : null}
     </StyledTop>

@@ -162,8 +162,8 @@ function SearchBar() {
         <ResultDiv>
           <ResultUl>
             {resultData.length > 0 && keyword !== "" ? (
-              resultData.map(result => (
-                <div>
+              resultData.map((result, index) => (
+                <div key={index}>
                   <Resultli
                     onMouseDown={e => {
                       e.preventDefault();

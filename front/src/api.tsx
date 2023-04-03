@@ -16,8 +16,21 @@ const springApi = axios.create({
 });
 
 export const userApi = {
-  userInfo: (accessToken: string | null, refreshToken: string | null) =>
+  userInfo: (
+    accessToken: string | null | undefined,
+    refreshToken: string | null | undefined
+  ) =>
     springApi.get("user/info", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  logOut: (
+    accessToken: string | null | undefined,
+    refreshToken: string | null | undefined
+  ) =>
+    springApi.get("user/signout", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,

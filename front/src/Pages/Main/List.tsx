@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import ListItem from "./ListItem";
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { changeLoginInfo } from "../../store/loginSlice";
 import { ItemInfo } from "../../store/mainSlice";
 import { RecInfo } from "../../store/RecommendSlice";
 // import ListItem2 from "./ListItem2";
+import { LoginInfo } from "../../store/loginSlice";
 import { userApi } from "../../api";
 import { useEffect, useState } from "react";
 
@@ -21,6 +23,7 @@ const StyledH = styled.p`
 `;
 
 function List() {
+  // const dispatch = useAppDispatch();
   // store에 저장된 각 코스정보를 useSelector로 받아온다!
   const genderAge: Array<ItemInfo> = useAppSelector(
     state => state.main.genderAge
@@ -34,7 +37,12 @@ function List() {
   const hardCourse: Array<ItemInfo> = useAppSelector(
     state => state.main.hardCourse
   );
+  // ucc 찍고나서 다시 원상복구 해놓기
   // const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
+
+  // const loginInfo: LoginInfo = useAppSelector(state => state.login.loginInfo);
+  // const accessToken = loginInfo.accessToken;
+  // const refreshToken = loginInfo.refreshToken;
 
   // accessToken, refreshToken 세션스토리지에서 가져와주기
   const accessToken = sessionStorage.getItem("accessToken");
@@ -48,7 +56,10 @@ function List() {
     // 현재 로그인한 유저정보 받아오는 코드
     const getUserInfo = async () => {
       const res = await userApi.userInfo(accessToken, refreshToken);
+      // 유저 닉네임 state에 저장해주기
       setUserName(res.data.userNicknm);
+      // 세션스토리지 내 accessToken 갱신
+      sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
     };
     getUserInfo();
   }, []);
