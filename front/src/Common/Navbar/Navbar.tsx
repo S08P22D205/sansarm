@@ -33,8 +33,13 @@ function Navbar() {
 
   const logOUt = async () => {
     const res = await userApi.logOut(accessToken, refreshToken);
-    console.log(res.data);
-    sessionStorage.clear();
+    if (res.data === "Success") {
+      sessionStorage.clear();
+      navigate("/");
+      setToggleOn(!toggleOn);
+    } else {
+      console.log(res.data);
+    }
   };
 
   const [toggleOn, setToggleOn] = useState<boolean>(false);
