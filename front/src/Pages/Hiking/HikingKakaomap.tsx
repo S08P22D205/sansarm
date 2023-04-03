@@ -93,6 +93,7 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
     };
 
     drawingHiking(hikingXCoords, hikingYCoords, walked);
+    console.log(hikingXCoords, hikingYCoords)
 
   }, [hikingXCoords]);
 
