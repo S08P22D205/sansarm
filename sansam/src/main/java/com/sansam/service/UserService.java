@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public interface UserService {
     void signUp(SignUpRequest signUpRequest);
     void saveRefreshToken(String refreshToken, int userNo);
-    void signOut(String refreshToken);
+    void signOut(String userEmail);
     FavoriteListResponse getFavoriteList(String userEmail);
     void saveFavorite(int userNo, FavoriteRequest favoriteRequest);
     void deleteFavorite(int userNo, FavoriteRequest favoriteRequest);

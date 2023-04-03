@@ -1,6 +1,5 @@
 package com.sansam.service;
 
-import com.sansam.config.jwt.JwtProvider;
 import com.sansam.data.entity.*;
 import com.sansam.data.repository.*;
 import com.sansam.dto.request.*;
@@ -23,7 +22,6 @@ public class UserServiceImpl implements UserService {
     private final FavoriteRepository favoriteRepository;
     private final ReviewRepository reviewRepository;
     private final CourseServiceImpl courseService;
-    private final JwtProvider jwtProvider;
 
     @Override
     @Transactional
@@ -50,8 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void signOut(String refreshToken) {
-        String userEmail = jwtProvider.getEmailFromToken(refreshToken);
+    public void signOut(String userEmail) {
         Token token = tokenRepository.findByUserEmail(userEmail);
         token.updateRefreshToken(null);
     }

@@ -48,10 +48,18 @@ public class UserController {
     @ApiOperation(
 			value = "로그아웃",
 			notes = "로그아웃 과정에서 refreshToken을 만료시키고 성공하면 Success를, 실패 시 Fail message를 반환한다.")
-    @PostMapping("/signout")
-    public ResponseEntity<String> signOut(@RequestBody SignOutRequest signOutRequest) {
+    @GetMapping("/signout")
+    public ResponseEntity<String> signOut(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
+        if (response.getHeader("X-ACCESS-TOKEN") != null) {
+            accessToken = response.getHeader("X-ACCESS-TOKEN");
+        } else {
+            response.setHeader("X-ACCESS-TOKEN", accessToken);
+        }
+
+        String userEmail = jwtProvider.getEmailFromToken(accessToken);
+
         try {
-            userService.signOut(signOutRequest.getRefreshToken());
+            userService.signOut(userEmail);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed sign out.", HttpStatus.BAD_REQUEST);
