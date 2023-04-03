@@ -16,7 +16,6 @@ function FilterMt() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
-  const navigate = useNavigate();
   // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
   const [mtList, setMtList] = useState<Array<string>>([""]);
 
@@ -287,19 +286,53 @@ function FilterMt() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
-            initializeData();
             setKeyword("");
+            initializeData();
+            setCourseList([]);
           }}
         >
           초기화
         </StyledBtn3>
       </StyledDiv>
 
-      <ResultList courseList={courseList} pressSearch={pressSearch} />
+      {courseList[0] ? (
+        <ResultList courseList={courseList} pressSearch={pressSearch} />
+      ) : (
+        <StyledDiv2>
+          <StyledImg src="\img\filled_mt.png" alt="filledMt" />
+          <div>
+            <StyledP4>원하시는 결과값이 없습니다. </StyledP4>
+            <StyledP4>다른 조건으로 검색해주세요 :) </StyledP4>
+          </div>
+        </StyledDiv2>
+      )}
     </FilterMtDiv>
   );
 }
+// 결과 목록이 없습니다. =====================
+const StyledDiv2 = styled.div`
+  display: flex;
+  margin-top: 50px;
+  margin-left: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #dfdcdc;
+  width: 330px;
+  border-radius: 15px;
+`;
 
+const StyledImg = styled.img`
+  width: 80px;
+`;
+
+const StyledP4 = styled.p`
+  font-family: "GmarketSansMedium";
+  margin-top: 8px;
+  margin-bottom: 3px;
+  margin-left: 15px;
+`;
 const FilterMtDiv = styled.div`
   margin-top: 40px;
 `;
@@ -350,9 +383,10 @@ const StyledBtn = styled.button<ButtonInfo>`
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
   color: ${(props) =>
-    props.index === props.timeState ? "#238C47" : "#818181"};
-  border: 2px solid
-    ${(props) => (props.index === props.timeState ? "#238C47" : "#818181")};
+    props.index === props.timeState ? "#238C47 " : "#818181"};
+  border: solid
+    ${(props) =>
+      props.index === props.timeState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
@@ -366,8 +400,9 @@ const StyledBtn1 = styled.button<ButtonInfo>`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
   color: ${(props) =>
     props.index === props.lengthState ? "#238C47" : "#818181"};
-  border: 2px solid
-    ${(props) => (props.index === props.lengthState ? "#238C47" : "#818181")};
+  border: solid
+    ${(props) =>
+      props.index === props.lengthState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
