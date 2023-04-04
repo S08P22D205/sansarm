@@ -11,7 +11,7 @@ function StyledButtonSoso({ onClick, soso }: Props) {
       {soso === false ? (
         <StyledInnerDiv>
           <img
-            src={"/img/mountainEmpty.png"}
+            src={"/img/mtnNormalEmpty.png"}
             alt="soso button"
             width={"80%"}
             onClick={onClick}
@@ -20,7 +20,7 @@ function StyledButtonSoso({ onClick, soso }: Props) {
       ) : (
         <StyledInnerDiv>
           <img
-            src={"/img/mountainFull.png"}
+            src={"/img/mtnNormalFull.png"}
             alt="soso button"
             width={"80%"}
             onClick={onClick}
