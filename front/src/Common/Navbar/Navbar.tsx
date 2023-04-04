@@ -53,7 +53,7 @@ function Navbar() {
   useEffect(() => {
     function handleClickOutside(e: MouseEvent): void {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setToggleOn(!toggleOn);
+        setToggleOn(false);
       }
     }
 
