@@ -3,7 +3,7 @@ import { courseApi } from "../../api";
 import styled from "styled-components";
 import ResultList from "./ResultList";
 import flaskApi from "../../api";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
@@ -117,10 +117,8 @@ function FilterMt() {
 
   // 메인에서 필터페이지로 산 이름 넘겨줄 때 =========================
   const location = useLocation();
-
-  // 1. 산 이름
-  const mtName = decodeURI(location.pathname.slice(10));
-  // console.log(mtName);
+  const [mtName, setMtName] = useState<string | null>(location.state);
+  // console.log(location.state);
 
   // 2. mtName을 axios객체에 넣기
   useEffect(() => {
@@ -128,6 +126,8 @@ function FilterMt() {
       handleMt(mtName, "courseMtNm");
     }
   }, [mtName]);
+
+  // useEffect(() => {}, [keyword]);
 
   // console 확인창 ===============================================
   // console.log(searchMt);
@@ -144,7 +144,7 @@ function FilterMt() {
             <InputDiv>
               <Search
                 placeholder="산이름을 입력해주세요"
-                value={mtName}
+                defaultValue={mtName || ""}
                 onChange={onChangeData}
                 onFocus={() => {
                   setIsFocus(true);
@@ -167,8 +167,8 @@ function FilterMt() {
                           e.preventDefault();
                         }}
                         onClick={() => {
-                          // console.log(result);
                           setKeyword(result);
+                          setMtName("");
                           handleMt(result, "courseMtNm");
                           setIsFocus(false);
                         }}
@@ -188,7 +188,7 @@ function FilterMt() {
             <InputDiv>
               <Search
                 placeholder="산이름을 입력해주세요"
-                value={keyword}
+                value={keyword || ""}
                 onChange={onChangeData}
                 onFocus={() => {
                   setIsFocus(true);
@@ -277,6 +277,7 @@ function FilterMt() {
           onClick={() => {
             searchData();
             setPressSearch(!pressSearch);
+            initializeData();
           }}
         >
           검색
@@ -285,19 +286,54 @@ function FilterMt() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
-            initializeData();
             setKeyword("");
+            initializeData();
+            setCourseList([]);
           }}
         >
           초기화
         </StyledBtn3>
       </StyledDiv>
 
-      <ResultList courseList={courseList} pressSearch={pressSearch} />
+      {courseList[0] ? (
+        <ResultList courseList={courseList} pressSearch={pressSearch} />
+      ) : (
+        <StyledDiv2>
+          <StyledImg src="\img\filled_mt.png" alt="filledMt" />
+          <div>
+            <StyledP4>결과값이 없습니다. </StyledP4>
+            <StyledP4>원하시는 조건으로 검색해주세요 :) </StyledP4>
+          </div>
+        </StyledDiv2>
+      )}
     </FilterMtDiv>
   );
 }
+// 결과 목록이 없습니다. =====================
+const StyledDiv2 = styled.div`
+  display: flex;
+  margin-top: 50px;
+  margin-left: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #dfdcdc;
+  width: 330px;
+  border-radius: 15px;
+`;
 
+const StyledImg = styled.img`
+  width: 80px;
+`;
+
+const StyledP4 = styled.p`
+  font-family: "GmarketSansMedium";
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 3px;
+  margin-left: 15px;
+`;
 const FilterMtDiv = styled.div`
   margin-top: 40px;
 `;
@@ -348,9 +384,10 @@ const StyledBtn = styled.button<ButtonInfo>`
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
   color: ${(props) =>
-    props.index === props.timeState ? "#238C47" : "#818181"};
-  border: 2px solid
-    ${(props) => (props.index === props.timeState ? "#238C47" : "#818181")};
+    props.index === props.timeState ? "#238C47 " : "#818181"};
+  border: solid
+    ${(props) =>
+      props.index === props.timeState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
@@ -364,8 +401,9 @@ const StyledBtn1 = styled.button<ButtonInfo>`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
   color: ${(props) =>
     props.index === props.lengthState ? "#238C47" : "#818181"};
-  border: 2px solid
-    ${(props) => (props.index === props.lengthState ? "#238C47" : "#818181")};
+  border: solid
+    ${(props) =>
+      props.index === props.lengthState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;

@@ -33,8 +33,8 @@ const Search = styled.input<SearchProps>`
   width: 100%;
   height: 11vw;
   border: 1px solid gray;
-  border-radius: ${props =>
-    props.isFocus ? "10px 10px 0px 0px" : "10px 10px"};
+  border-radius: ${(props) =>
+    props.isFocus && props.value ? "10px 10px 0px 0px" : "10px 10px"};
   font-family: "GmarketSansLight";
   text-align: left;
   font-size: 5vw;
@@ -102,6 +102,7 @@ function SearchBar() {
   // accessToken, refreshToken 세션스토리지에서 가져와주기
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
+  const navigate = useNavigate();
 
   // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
   const [mtList, setMtList] = useState<Array<string>>([""]);
@@ -118,6 +119,8 @@ function SearchBar() {
   // keyword(검색창에 입력하는 값) State 세팅
   const [keyword, setKeyword] = useState<string>("");
 
+  // ======================================
+  const [result, setResult] = useState<string>("");
   // 검색창 입력값 변할 때마다 입력하는 값을 keyword에 저장
   const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value.trim());
@@ -129,7 +132,7 @@ function SearchBar() {
   // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
   useEffect(() => {
     setResultData(
-      mtList.filter(mountain => {
+      mtList.filter((mountain) => {
         if (mountain.includes(keyword) && keyword.length !== 0) {
           return mountain.includes(keyword);
         }
@@ -141,14 +144,10 @@ function SearchBar() {
   // 검색창 focus 상태 useState 세팅
   const [isFocus, setIsFocus] = useState(false);
 
-  // 검색창에서 아래/위 버튼 누르면 불 들어오게 해주면 좋을거같은데 일단 보류...
-
-  // 산이름 클릭 시 해당 산 이름 저장해 줄 state 세팅
-  const [clickedMt, setClickedMt] = useState("");
-  const navigate = useNavigate();
-
-  // 자동완성에 뜬 산이름을 클릭할 경우 발생하는 클릭이벤트
-  function ClickMt() {}
+  const moveToCourseDetail = (result: string) => {
+    navigate("/filtermt", { state: result });
+    // console.log(result);
+  };
 
   return (
     <SearchBarDiv>
@@ -166,19 +165,21 @@ function SearchBar() {
           isFocus={isFocus}
         />
       </InputDiv>
-      {isFocus ? (
+      {isFocus && keyword !== "" ? (
         <ResultDiv>
           <ResultUl>
             {resultData.length > 0 && keyword !== "" ? (
-              resultData.map(result => (
-                <div>
+              resultData.map((result, index) => (
+                <div key={index}>
                   <Resultli
-                    onMouseDown={e => {
+                    onMouseDown={(e) => {
                       e.preventDefault();
                     }}
                     onClick={() => {
-                      console.log(result);
-                      navigate(`/filtermt/${result}`);
+                      // console.log(result);
+                      setResult(result);
+                      moveToCourseDetail(result);
+                      // navigate(`/filtermt/${result}`);
                     }}
                   >
                     {result}
@@ -187,7 +188,7 @@ function SearchBar() {
                 </div>
               ))
             ) : (
-              <Resultli2>검색결과가 없습니다.</Resultli2>
+              <Resultli2>산 이름을 정확히 입력해 주세요.</Resultli2>
             )}
           </ResultUl>
         </ResultDiv>

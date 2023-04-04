@@ -11,7 +11,7 @@ function StyledButtonEasy({ onClick, easy }: Props) {
       {easy === false ? (
         <StyledInnerDiv>
           <img
-            src={"/img/mountainEmpty.png"}
+            src={"/img/mtnEasyEmpty.png"}
             alt="easy button"
             width={"80%"}
             onClick={onClick}
@@ -20,7 +20,7 @@ function StyledButtonEasy({ onClick, easy }: Props) {
       ) : (
         <StyledInnerDiv>
           <img
-            src={"/img/mountainFull.png"}
+            src={"/img/mtnEasyFull.png"}
             alt="easy button"
             width={"80%"}
             onClick={onClick}

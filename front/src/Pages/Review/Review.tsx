@@ -1,10 +1,11 @@
 import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import StyledButtonEasy from "./StyledButtonEasy";
 import StyledButtonSoso from "./StyledButtonSoso";
 import StyledButtonHard from "./StyledButtonHard";
 import axios from "../../store/baseURL.js";
+import { useAppSelector } from "../../store/hooks";
 
 interface courseInfo {
   // props 타입.
@@ -24,19 +25,20 @@ interface courseInfo {
   reviewContent?: string;
 }
 
-// function Review(props: courseInfo) {                       // (1)
-// 코스 정보 객체 받아오기. (백엔드 API가 완성되면 해결하기....)
 function Review() {
-  const navigate = useNavigate();
+  const courseData: courseInfo = useAppSelector(
+    (state) => state.course.detailInfo
+  );
 
-  // props로 넘긴 courseData, time의 state를 location이라는 변수에 담는다.
-  const location = useLocation();
+  const navigate = useNavigate();
 
   const moveToPhotoPage = () => {
     // navigate("/photo/", { state: props });                   // (2)
     // navigate("/photo/");
-    navigate("/mypage")
+    navigate("/mypage/myreview");
   };
+
+  const time: number = useAppSelector((state) => state.course.timeInfo);
 
   const [easy, setEasy] = useState(false);
   const [soso, setSoso] = useState(false);
@@ -55,7 +57,7 @@ function Review() {
   }
 
   function sosoToggle() {
-    if (easy === false) setEasy(true);
+    if (easy === true) setEasy(false);
     if (soso === false) setSoso(true);
     if (hard === true) setHard(false);
 
@@ -66,8 +68,8 @@ function Review() {
   }
 
   function hardToggle() {
-    if (easy === false) setEasy(true);
-    if (soso === false) setSoso(true);
+    if (easy === true) setEasy(false);
+    if (soso === true) setSoso(false);
     if (hard === false) setHard(true);
 
     setReview({
@@ -77,8 +79,8 @@ function Review() {
   }
 
   const [review, setReview] = useState({
-    courseNo: location.state.courseData.courseNo,
-    reviewTime: Math.floor(location.state.time / 60000),
+    courseNo: courseData.courseNo,
+    reviewTime: Math.floor(time / 60000),
     reviewDiff: "", // E,N,M 순
     reviewContent: "",
   });
@@ -117,9 +119,13 @@ function Review() {
         )
         .then((response) => {
           console.log("success");
+          console.log(response);
           if (response.data) {
-            sessionStorage.setItem("accessToken", response.data.accessToken);
-            sessionStorage.setItem("refreshToken", response.data.refreshToken);
+            //res.data.response.body.items.
+            sessionStorage.setItem(
+              "accessToken",
+              response.headers["x-access-token"]
+            );
             moveToPhotoPage();
           }
         })
@@ -133,8 +139,8 @@ function Review() {
     <StyledDiv>
       <StyledHeader>
         {/* 오늘 "...{props.courseMtNm}+{props.courseMtNo}" <br /> 등산은 어땠나요??        // (3) props로 넘겨받은 정보로 코스명을 보여주기 */}
-        오늘 "{location.state.courseData.courseMtNm}&nbsp;
-        {location.state.courseData.courseMtNo}코스" <br /> 등산은 어땠나요??
+        오늘 "{courseData.courseMtNm}&nbsp;
+        {courseData.courseMtNo}코스" <br /> 등산은 어땠나요??
       </StyledHeader>
       <StyledBox>
         <StyledContainer>

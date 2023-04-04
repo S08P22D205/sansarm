@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import HikingKakaomap from "./HikingKakaomap";
-
+import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { courseActions, courseInfo } from "../../store/courseSlice";
 interface ILocation {
   latitude: number | null;
   longitude: number | null;
@@ -10,6 +11,11 @@ interface ILocation {
 }
 
 function Hiking() {
+  const courseData: courseInfo = useAppSelector(
+    (state) => state.course.detailInfo
+  );
+  // console.log(courseData);
+
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const intervalRef = useRef<number | null>(null);
@@ -26,20 +32,18 @@ function Hiking() {
   };
 
   const moveToReviewPage = () => {
-    // navigate("/review/", { state: props });                   // (1)
-    navigate("/review/", {
-      state: { courseData: location.state, time: elapsedTime },
-    });
+    navigate("/review/");
   };
 
   useEffect(() => {
-    //
-    console.log("=> " + location.state.courseMtNm);
     handleStart();
   }, []);
 
+  const dispatch = useAppDispatch();
+  const startTime: number = useAppSelector((state) => state.course.timeInfo);
+
   function handleStart() {
-    const startTime = Date.now() - elapsedTime;
+    // console.log(startTime);
     intervalRef.current = window.setInterval(() => {
       setElapsedTime(Date.now() - startTime);
     }, 1000);
@@ -48,17 +52,12 @@ function Hiking() {
 
   function handleStop() {
     if (window.confirm("등산을 끝내시겠습니까?")) {
+      dispatch(courseActions.addTime(elapsedTime));
       moveToReviewPage();
       setIsRunning(false);
       window.clearInterval(intervalRef.current!);
     }
   }
-
-  // const handleReset = () => {
-  //   window.clearInterval(intervalRef.current!);
-  //   setIsRunning(false);
-  //   setElapsedTime(0);
-  // };
 
   const formatElapsedTime = (time: number) => {
     const hours = Math.floor(time / 3600000);
@@ -109,7 +108,7 @@ function Hiking() {
 
     const intervalId = setInterval(() => {
       navigator.geolocation.getCurrentPosition(success, error);
-    }, 5000);
+    }, 30000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -120,18 +119,18 @@ function Hiking() {
   return (
     <StyledDiv>
       <StyledMap>
-        {location.state.courseXCoords && location.state.courseYCoords ? (
+        {courseData.courseXCoords && courseData.courseYCoords ? (
           <HikingKakaomap
-            courseXCoords={location.state.courseXCoords}
-            courseYCoords={location.state.courseYCoords}
+            courseXCoords={courseData.courseXCoords}
+            courseYCoords={courseData.courseYCoords}
             hikingXCoords={latitudeList}
             hikingYCoords={longitudeList}
           />
         ) : null}
       </StyledMap>
       <StyledH1>
-        {location.state.courseMtNm}&nbsp;
-        {location.state.courseMtNo}코스
+        {courseData.courseMtNm}&nbsp;
+        {courseData.courseMtNo}코스
       </StyledH1>
       <StyledH2> 소요 시간 </StyledH2>
 

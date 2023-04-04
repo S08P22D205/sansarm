@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
+import { useAppSelector } from "../../store/hooks";
 // import Kakaomap from "../CourseDetail/Kakaomap";
 
 declare global {
@@ -37,46 +38,49 @@ function HikingKakaomap({
   // const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
   // console.log(Kakaomap);
+  const newMap: any = useAppSelector((state) => state.course.courseMap);
+
+  // console.log(newMap);
 
   useEffect(() => {
-    const length = courseXCoords.length;
+    // const length = courseXCoords.length;
     const walked = hikingXCoords.length;
 
-    var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+    // var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
-    var options = {
-      //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(hikingXCoords[0], hikingYCoords[0]), //지도의 중심좌표.
-      level: 7, //지도의 레벨(확대, 축소 정도)
-    };
+    // var options = {
+    //   //지도를 생성할 때 필요한 기본 옵션
+    //   center: new kakao.maps.LatLng(hikingXCoords[0], hikingYCoords[0]), //지도의 중심좌표.
+    //   level: 7, //지도의 레벨(확대, 축소 정도)
+    // };
 
-    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    // var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
-    // 선을 그릴 좌표들
-    const drawingLines = (
-      courseXCoords: number[],
-      courseYCoords: number[],
-      length: number
-    ) => {
-      var linePath = [];
-      for (let i = 0; i < length; i++) {
-        linePath.push(
-          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
-        );
-        // console.log(linePath);
+    // // 선을 그릴 좌표들
+    // const drawingLines = (
+    //   courseXCoords: number[],
+    //   courseYCoords: number[],
+    //   length: number
+    // ) => {
+    //   var linePath = [];
+    //   for (let i = 0; i < length; i++) {
+    //     linePath.push(
+    //       new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
+    //     );
+    //     // console.log(linePath);
 
-        var polyline = new kakao.maps.Polyline({
-          path: linePath, // 선을 구성하는 좌표배열
-          strokeWeight: 5, // 선의 두께
-          strokeColor: "#e72a00", // 선의 색깔
-          strokeOpacity: 0.5, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
-          strokeStyle: "solid", // 선의 스타일
-        });
+    //     var polyline = new kakao.maps.Polyline({
+    //       path: linePath, // 선을 구성하는 좌표배열
+    //       strokeWeight: 5, // 선의 두께
+    //       strokeColor: "#e72a00", // 선의 색깔
+    //       strokeOpacity: 0.5, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
+    //       strokeStyle: "solid", // 선의 스타일
+    //     });
 
-        polyline.setMap(map);
-      }
-    };
-    drawingLines(courseXCoords, courseYCoords, length);
+    //     polyline.setMap(map);
+    //   }
+    // };
+    // drawingLines(courseXCoords, courseYCoords, length);
 
     // if (trigger === 0) {
     //   setTrigger(1)
@@ -102,7 +106,7 @@ function HikingKakaomap({
           strokeStyle: "solid", // 선의 스타일
         });
 
-        polyline.setMap(map);
+        polyline.setMap(newMap);
       }
     };
 

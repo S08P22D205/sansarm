@@ -78,9 +78,10 @@ function ResultItem({
         <StyledImg src="https://san.chosun.com/news/photo/202205/15750_66157_37.jpg" />
       )}
       <StyledDiv2>
-        <StyledP>
-          코스 이름 : {COURSE_MT_NM} {COURSE_MT_NO}코스
-        </StyledP>
+        <StyledTitle>
+          {COURSE_MT_NM} {COURSE_MT_NO}코스
+        </StyledTitle>
+        <StyledHr />
         <StyledP>코스 길이 : {COURSE_LENGTH} km</StyledP>
         <StyledP>
           산행 시간 : {Math.floor((COURSE_UPTIME + COURSE_DOWNTIME) / 60)}시간{" "}
@@ -100,21 +101,35 @@ const StyledDiv = styled.div`
 `;
 
 const StyledDiv2 = styled.div`
-  margin-left: 15px;
+  margin-left: 13px;
   margin-bottom: 5px;
   margin-top: 5px;
 `;
 
 const StyledImg = styled.img`
-  width: 100px;
-  height: 70px;
+  width: 110px;
+  height: 85px;
   border-radius: 5px;
   margin-left: 5px;
   margin-top: 5px;
   margin-bottom: 5px;
 `;
+
+const StyledTitle = styled.p`
+  font-family: "GmarketSansLight";
+  font-weight: 700;
+  font-size: 20px;
+  margin: 0;
+`;
+
 const StyledP = styled.p`
   font-family: "GmarketSansLight";
   margin: 0;
+`;
+
+const StyledHr = styled.hr`
+  margin-top: 0;
+  margin-bottom: 5px;
+  width: 180px;
 `;
 export default ResultItem;
