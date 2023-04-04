@@ -39,6 +39,7 @@ function Hiking() {
     handleStart();
   }, []);
 
+  const dispatch = useAppDispatch();
   const startTime: number = useAppSelector((state) => state.course.timeInfo);
 
   function handleStart() {
@@ -51,17 +52,12 @@ function Hiking() {
 
   function handleStop() {
     if (window.confirm("등산을 끝내시겠습니까?")) {
+      dispatch(courseActions.addTime(elapsedTime));
       moveToReviewPage();
       setIsRunning(false);
       window.clearInterval(intervalRef.current!);
     }
   }
-
-  // const handleReset = () => {
-  //   window.clearInterval(intervalRef.current!);
-  //   setIsRunning(false);
-  //   setElapsedTime(0);
-  // };
 
   const formatElapsedTime = (time: number) => {
     const hours = Math.floor(time / 3600000);
