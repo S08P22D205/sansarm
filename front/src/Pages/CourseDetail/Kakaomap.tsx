@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 declare global {
   interface Window {
@@ -15,6 +15,10 @@ interface Icoords {
 const { kakao } = window;
 
 function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
+  const [courseMap, setCourseMap] = useState<any>();
+
+  console.log(courseMap);
+
   useEffect(() => {
     const length = courseXCoords.length;
 
@@ -36,7 +40,9 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
     ) => {
       var linePath = [];
       for (let i = 0; i < length; i++) {
-        linePath.push(new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]));
+        linePath.push(
+          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
+        );
         // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
@@ -48,6 +54,8 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
         });
 
         polyline.setMap(map);
+        const courseMap = polyline.getMap();
+        setCourseMap(courseMap);
       }
     };
 

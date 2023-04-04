@@ -100,6 +100,8 @@ function FilterRg() {
       setRgBtn(1);
       setLocBtn(0);
       setLocation({ latitude: null, longitude: null, error: null });
+      SetvolSet(0)
+      handleMt(0, "courseRadius")
     }
 
     // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
@@ -162,13 +164,17 @@ function FilterRg() {
 
   // 반경정보 받아오기
   const [volumePercent, setVolumePercent] = useState(0);
+  const [volset, SetvolSet] = useState(0)
 
   const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
     const bar = e.currentTarget;
-    const clickX = e.nativeEvent.offsetX;
+    SetvolSet(e.nativeEvent.offsetX);
     const barWidth = bar.clientWidth;
-    const volumePercent = clickX / barWidth;
+    const volumePercent = (volset / barWidth);
     setVolumePercent(volumePercent);
+    // const volumeValue = volumePercent.toFixed(0)
+    handleMt(Number((volumePercent*100/3.33).toFixed(0)), "courseRadius")
+    // console.log(volumePercent ,typeof volumePercent)
     // Call a function to handle the volume change here
   };
 
@@ -301,11 +307,7 @@ function FilterRg() {
   return (
     <div>
       {/* <Navbar /> */}
-
-      <p>Navbar 들어갈 예정</p>
-      <p>원하는 등산 조건을 선택해주세요</p>
-      <p>(이상은 FilterMt와 통일할 예정)</p>
-
+      <StyledP2>원하는 등산코스 조건을 선택해주세요</StyledP2>
       <TabDiv>
         {rgBtn === 1 ? (
           <Tab1>지역검색</Tab1>
@@ -421,6 +423,15 @@ function FilterRg() {
 //   font-family: "GmarketSansLight";
 // `;
 
+const StyledP2 = styled.p`
+  color: black;
+  margin-top: 30px;
+  margin-left: 25px;
+  margin-bottom: 15px;
+  font-size: 19px;
+  font-family: "GmarketSansMedium";
+`;
+
 const TabDiv = styled.div`
   width: 93vw;
   height: 40vw;
@@ -428,6 +439,8 @@ const TabDiv = styled.div`
   border-radius: 20px;
   background-color: #cfe2c8;
   font-family: "GmarketSansMedium";
+  margin-top : 5vw;
+  margin-bottom : 10vw;
 `;
 const Tab1 = styled.button`
   width: 45vw;

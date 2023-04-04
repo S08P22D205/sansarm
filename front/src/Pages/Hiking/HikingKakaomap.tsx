@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+// import Kakaomap from "../CourseDetail/Kakaomap";
 
 declare global {
   interface Window {
@@ -16,7 +17,13 @@ interface Icoords {
 
 const { kakao } = window;
 
-function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCoords }: Icoords) {
+function HikingKakaomap({
+  courseXCoords,
+  courseYCoords,
+  hikingXCoords,
+  hikingYCoords,
+}: Icoords) {
+  // const [trigger, setTrigger] = useState(0)
   // console.log('들어오는지 확인', hikingXCoords)
 
   // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
@@ -29,11 +36,11 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
 
   // const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
+  // console.log(Kakaomap);
 
   useEffect(() => {
     const length = courseXCoords.length;
     const walked = hikingXCoords.length;
-
 
     var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
@@ -53,7 +60,9 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
     ) => {
       var linePath = [];
       for (let i = 0; i < length; i++) {
-        linePath.push(new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]));
+        linePath.push(
+          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
+        );
         // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
@@ -67,8 +76,11 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
         polyline.setMap(map);
       }
     };
-
     drawingLines(courseXCoords, courseYCoords, length);
+
+    // if (trigger === 0) {
+    //   setTrigger(1)
+    // }
 
     const drawingHiking = (
       hikingXCoords: number[],
@@ -77,7 +89,9 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
     ) => {
       var linePath = [];
       for (let i = 0; i < length; i++) {
-        linePath.push(new kakao.maps.LatLng(hikingXCoords[i], hikingYCoords[i]));
+        linePath.push(
+          new kakao.maps.LatLng(hikingXCoords[i], hikingYCoords[i])
+        );
         // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
@@ -93,24 +107,23 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
     };
 
     drawingHiking(hikingXCoords, hikingYCoords, walked);
-    console.log(hikingXCoords, hikingYCoords)
-
+    console.log(hikingXCoords, hikingYCoords);
   }, [hikingXCoords]);
 
   // useEffect(() => {
   //   const walked = hikingXCoords.length;
 
-    // var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+  // var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
-    // var options = {
-    //   //지도를 생성할 때 필요한 기본 옵션
-    //   center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
-    //   level: 7, //지도의 레벨(확대, 축소 정도)
-    // };
+  // var options = {
+  //   //지도를 생성할 때 필요한 기본 옵션
+  //   center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
+  //   level: 7, //지도의 레벨(확대, 축소 정도)
+  // };
 
-    // var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+  // var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
-    // 움직임을 그릴 좌표들
+  // 움직임을 그릴 좌표들
   //   const drawingHiking = (
   //     hikingXCoords: number[],
   //     hikingYCoords: number[],
@@ -136,7 +149,15 @@ function HikingKakaomap({ courseXCoords, courseYCoords, hikingXCoords, hikingYCo
   //   drawingHiking(hikingXCoords, hikingYCoords, walked);
   // }, [hikingXCoords]);
 
-  return <StyledMap id="map" />;
+  // console.log(courseXCoords, courseYCoords)
+
+  return (
+    <div>
+      {/* <Kakaomap courseXCoords={courseXCoords} courseYCoords={courseYCoords} /> */}
+      <br />
+      <StyledMap id="map" />
+    </div>
+  );
 }
 
 const StyledMap = styled.div`
