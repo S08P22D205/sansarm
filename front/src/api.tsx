@@ -6,13 +6,13 @@ export interface Tokens {
 }
 
 const flaskApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/flask-api",
-  // baseURL: "http://localhost:5001/",
+  // baseURL: "https://j8d205.p.ssafy.io/flask-api",
+  baseURL: "http://localhost:5001/",
 });
 
 const springApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/api",
-  // baseURL: "http://localhost:5000/",
+  // baseURL: "https://j8d205.p.ssafy.io/api",
+  baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {
@@ -28,6 +28,13 @@ export const userApi = {
     refreshToken: string | null | undefined
   ) =>
     springApi.get("user/signout", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  isRec: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("user/main/is-recommendable", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
@@ -50,15 +57,15 @@ export const courseApi = {
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  isRec: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/is-recommendable", {
+  recommend: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/recommend", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  recommend: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/recommend", {
+  topTen: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("course/top-ten", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,

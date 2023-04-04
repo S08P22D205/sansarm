@@ -4,6 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper";
 import "swiper/css";
 import "swiper/css/free-mode";
+import "swiper/css/effect-cards";
 import ListCard from "./ListCard";
 
 const StyledH = styled.p`
@@ -16,7 +17,8 @@ const StyledH = styled.p`
 
 const StyledSlide = styled(SwiperSlide)`
   width: 30vw;
-  background-color: #f0f5ee;
+  /* background-color: #f0f5ee; */
+  background-color: #f5f5f5;
   border: none;
   border-radius: 5px;
   margin-bottom: 3vw;
@@ -49,10 +51,10 @@ function ListItem({
         {COURSE_LIST.map((course, index) => (
           <StyledSlide key={index}>
             <ListCard
-              courseMtNm={course.COURSE_MT_NM}
-              courseMtNo={course.COURSE_MT_NO}
-              courseMtCd={course.COURSE_MT_CD}
-              courseNo={course.COURSE_NO}
+              COURSE_MT_NM={course.COURSE_MT_NM}
+              COURSE_MT_NO={course.COURSE_MT_NO}
+              COURSE_MT_CD={course.COURSE_MT_CD}
+              COURSE_NO={course.COURSE_NO}
             />
           </StyledSlide>
         ))}
