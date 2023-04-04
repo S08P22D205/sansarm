@@ -1,12 +1,9 @@
 import styled from "styled-components";
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { changeUserInfo } from "../../store/loginSlice";
+import { useAppSelector } from "../../store/hooks";
 import { RecInfo } from "../../store/RecommendSlice";
 import { DiffInfo } from "../../store/RecommendSlice";
 import ListItem from "./ListItem";
 import { UserInfo } from "../../store/loginSlice";
-import { userApi } from "../../api";
-import { useEffect, useState } from "react";
 import { courseInfo } from "../../store/courseSlice";
 import ListItemTopTen from "./ListItemTopTen";
 
@@ -36,7 +33,6 @@ function List() {
 
   // store에 저장된 난이도별 코스 추천 가능 여부 받아오기
   const isRec: boolean = useAppSelector(state => state.login.isRec);
-  console.log(topTen);
 
   return (
     <StyledDiv className="List">

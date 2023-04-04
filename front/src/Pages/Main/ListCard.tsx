@@ -55,6 +55,7 @@ function ListCard({
   const imgUrl =
     "https://www.forest.go.kr/images/data/down/mountain/" + imgName;
 
+  // console.log(imgName);
   useEffect(() => {
     const getImgSrc = async () => {
       const res = await axios.get(
@@ -69,8 +70,12 @@ function ListCard({
           },
         }
       );
-      if (res.data.response.body.items[0]) {
-        setImgName(res.data.response.body.items.item[0].imgfilename);
+      if (res.data.response.body.items) {
+        if (res.data.response.body.items[0]) {
+          setImgName(res.data.response.body.items.item[0].imgfilename);
+        } else {
+          setImgName(res.data.response.body.items.item.imgfilename);
+        }
       }
     };
     getImgSrc();
