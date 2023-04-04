@@ -10,6 +10,7 @@ export interface UserInfo {
 
 interface LoginState {
   userInfo: UserInfo;
+  isRec: boolean;
 }
 
 const initialState: LoginState = {
@@ -20,6 +21,7 @@ const initialState: LoginState = {
     userGender: "",
     userLocation: "",
   },
+  isRec: false,
 };
 
 export const loginSlice = createSlice({
@@ -29,8 +31,11 @@ export const loginSlice = createSlice({
     changeUserInfo: (state, action: PayloadAction<UserInfo>) => {
       state.userInfo = action.payload;
     },
+    changeIsRec: (state, action: PayloadAction<boolean>) => {
+      state.isRec = action.payload;
+    },
   },
 });
 
-export const { changeUserInfo } = loginSlice.actions;
+export const { changeUserInfo, changeIsRec } = loginSlice.actions;
 export default loginSlice.reducer;

@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { courseInfo } from "./courseSlice";
 
 export interface CourseInfo {
   COURSE_NO?: number;
@@ -11,6 +12,7 @@ export interface CourseInfo {
   COURSE_LENGTH?: number;
   COURSE_LOCATION?: string;
   COURSE_ADDRESS?: string;
+  courseIdx?: number;
 }
 
 export interface DiffInfo {
@@ -29,6 +31,7 @@ export interface RecInfo {
 interface MainState {
   genderAge: RecInfo;
   difficultyCourse: DiffInfo;
+  topTen: courseInfo[];
 }
 
 const initialState: MainState = {
@@ -42,6 +45,15 @@ const initialState: MainState = {
     NORMAL_COURSE_LIST: [{}],
     HARD_COURSE_LIST: [{}],
   },
+  topTen: [
+    {
+      courseNo: 0,
+      courseLength: 0,
+      courseMtNm: "",
+      courseMtNo: 0,
+      courseUptime: 0,
+    },
+  ],
 };
 
 export const RecommendSlice = createSlice({
@@ -54,8 +66,12 @@ export const RecommendSlice = createSlice({
     changeCourses: (state, action: PayloadAction<DiffInfo>) => {
       state.difficultyCourse = action.payload;
     },
+    changeTopTen: (state, action: PayloadAction<courseInfo[]>) => {
+      state.topTen = action.payload;
+    },
   },
 });
 
-export const { changeAgeGender, changeCourses } = RecommendSlice.actions;
+export const { changeAgeGender, changeCourses, changeTopTen } =
+  RecommendSlice.actions;
 export default RecommendSlice.reducer;

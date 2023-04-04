@@ -2,11 +2,15 @@ import styled from "styled-components";
 import List from "./List";
 import { useEffect } from "react";
 import MainBtn from "./MainBtn";
-import { useAppDispatch } from "../../store/hooks";
-import { changeAgeGender, changeCourses } from "../../store/RecommendSlice";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import {
+  changeAgeGender,
+  changeCourses,
+  changeTopTen,
+} from "../../store/RecommendSlice";
 import { courseApi, userApi } from "../../api";
 import SearchBar from "./SearchBar";
-import { changeUserInfo } from "../../store/loginSlice";
+import { changeUserInfo, changeIsRec } from "../../store/loginSlice";
 
 const StyledDiv = styled.div`
   padding-top: 8vw;
@@ -28,27 +32,46 @@ function Main() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
+  // store에 저장된 난이도별 코스 추천 가능 여부 받아오기
+  const isRec: boolean = useAppSelector(state => state.login.isRec);
+
   // 처음 마운트 됐을 때
   useEffect(() => {
     // 1. 성별, 나이에 맞는 코스 정보 받아와서 store에 저장해주기 (axios 모듈화, recommendSlice 사용)
     const getageGender = async () => {
       const res = await courseApi.ageGender(accessToken, refreshToken);
       dispatch(changeAgeGender(res.data));
+      // 세션스토리지 내 accessToken 갱신
+      sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
     };
-    // 2-1. 난이도별 코스 추천 받을 수 있는지 여부 확인하기
+    // 2. 유저 정보 받아와서 store에 저장해주기
     const getUserInfo = async () => {
       const res = await userApi.userInfo(accessToken, refreshToken);
       dispatch(changeUserInfo(res.data));
     };
-    // 2-2. 코스 정보 받아와서 store에 저장해주기
+    // 3-1. 난이도별 코스 추천 받을 수 있는지 여부 store에 저장해주기
+    const getIsRec = async () => {
+      const res = await userApi.isRec(accessToken, refreshToken);
+      dispatch(changeIsRec(res.data));
+    };
+    // 3-2. 코스 정보 받아와서 store에 저장해주기
     const getCourses = async () => {
       const res = await courseApi.recommend(accessToken, refreshToken);
       dispatch(changeCourses(res.data));
     };
-    // 3.
+    // 3-3. 리뷰 최다 top10 코스 목록 store에 저장해주기
+    const getTopTen = async () => {
+      const res = await courseApi.topTen(accessToken, refreshToken);
+      dispatch(changeTopTen(res.data.topTenCourseList));
+    };
     getageGender();
-    getCourses();
     getUserInfo();
+    getIsRec();
+    if (isRec) {
+      getCourses();
+    } else {
+      getTopTen();
+    }
   }, []);
 
   return (
