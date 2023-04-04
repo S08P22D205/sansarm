@@ -46,8 +46,8 @@ function ListItem({
         loop={true}
         freeMode={true}
       >
-        {COURSE_LIST.map(course => (
-          <StyledSlide key={course.COURSE_NO}>
+        {COURSE_LIST.map((course, index) => (
+          <StyledSlide key={index}>
             <ListCard
               courseMtNm={course.COURSE_MT_NM}
               courseMtNo={course.COURSE_MT_NO}

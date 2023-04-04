@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { changeLoginInfo } from "../../store/loginSlice";
+import { changeUserInfo } from "../../store/loginSlice";
 import { RecInfo } from "../../store/RecommendSlice";
 import { DiffInfo } from "../../store/RecommendSlice";
 import ListItem from "./ListItem";
-import { LoginInfo } from "../../store/loginSlice";
+import { UserInfo } from "../../store/loginSlice";
 import { userApi } from "../../api";
 import { useEffect, useState } from "react";
 
@@ -29,9 +29,9 @@ function List() {
   const courses: DiffInfo = useAppSelector(
     state => state.recommend.difficultyCourse
   );
-  // const easy: RecInfo = useAppSelector(state => state.recommend.easyCourse);
-  // const normal: RecInfo = useAppSelector(state => state.recommend.normalCourse);
-  // const hard: RecInfo = useAppSelector(state => state.recommend.hardCourse);
+
+  // store에 저장된 유저정보를 useSelector로 받아오기
+  const userInfo: UserInfo = useAppSelector(state => state.login.userInfo);
 
   // const loginInfo: LoginInfo = useAppSelector(state => state.login.loginInfo);
   // const accessToken = loginInfo.accessToken;
@@ -49,7 +49,7 @@ function List() {
     // 현재 로그인한 유저정보 받아오는 코드
     const getUserInfo = async () => {
       const res = await userApi.userInfo(accessToken, refreshToken);
-      console.log(res.data);
+      // console.log(res.data);
       // 유저 닉네임 state에 저장해주기
       setUserName(res.data.userNicknm);
       // 세션스토리지 내 accessToken 갱신
@@ -60,7 +60,7 @@ function List() {
 
   return (
     <StyledDiv className="List">
-      <StyledH>{userName}님을 위한 추천코스</StyledH>
+      <StyledH>{userInfo.userNicknm}님을 위한 추천코스</StyledH>
       <ListItem
         USER_AGE_POOL={ageGender.USER_AGE_POOL}
         USER_GENDER={ageGender.USER_GENDER}

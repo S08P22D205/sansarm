@@ -6,13 +6,13 @@ export interface Tokens {
 }
 
 const flaskApi = axios.create({
-  // baseURL: "https://j8d205.p.ssafy.io/flask-api",
-  baseURL: "http://localhost:5001/",
+  baseURL: "https://j8d205.p.ssafy.io/flask-api",
+  // baseURL: "http://localhost:5001/",
 });
 
 const springApi = axios.create({
-  // baseURL: "https://j8d205.p.ssafy.io/api",
-  baseURL: "http://localhost:5000/",
+  baseURL: "https://j8d205.p.ssafy.io/api",
+  // baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {
@@ -59,27 +59,6 @@ export const courseApi = {
     }),
   recommend: (accessToken: string | null, refreshToken: string | null) =>
     flaskApi.get("course/main/recommend", {
-      headers: {
-        "X-ACCESS-TOKEN": accessToken,
-        "X-REFRESH-TOKEN": refreshToken,
-      },
-    }),
-  easy: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/easy", {
-      headers: {
-        "X-ACCESS-TOKEN": accessToken,
-        "X-REFRESH-TOKEN": refreshToken,
-      },
-    }),
-  normal: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/normal", {
-      headers: {
-        "X-ACCESS-TOKEN": accessToken,
-        "X-REFRESH-TOKEN": refreshToken,
-      },
-    }),
-  hard: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/hard", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,

@@ -3,15 +3,10 @@ import List from "./List";
 import { useEffect } from "react";
 import MainBtn from "./MainBtn";
 import { useAppDispatch } from "../../store/hooks";
-import {
-  changeAgeGender,
-  // changeEasyCourses,
-  // changeNormalCourses,
-  // changeHardCourses,
-  changeCourses,
-} from "../../store/RecommendSlice";
+import { changeAgeGender, changeCourses } from "../../store/RecommendSlice";
 import { courseApi, userApi } from "../../api";
 import SearchBar from "./SearchBar";
+import { changeUserInfo } from "../../store/loginSlice";
 
 const StyledDiv = styled.div`
   padding-top: 8vw;
@@ -40,31 +35,20 @@ function Main() {
       const res = await courseApi.ageGender(accessToken, refreshToken);
       dispatch(changeAgeGender(res.data));
     };
-    // 2-1. 코스 정보 받아와서 store에 저장해주기
+    // 2-1. 난이도별 코스 추천 받을 수 있는지 여부 확인하기
+    const getUserInfo = async () => {
+      const res = await userApi.userInfo(accessToken, refreshToken);
+      dispatch(changeUserInfo(res.data));
+    };
+    // 2-2. 코스 정보 받아와서 store에 저장해주기
     const getCourses = async () => {
       const res = await courseApi.recommend(accessToken, refreshToken);
       dispatch(changeCourses(res.data));
     };
-    // // 2. Easy 코스 정보 받아와서 store에 저장해주기
-    // const getEasy = async () => {
-    //   const res = await courseApi.easy(accessToken, refreshToken);
-    //   dispatch(changeEasyCourses(res.data));
-    // };
-    // // 3. Normal 코스 정보 받아와서 store에 저장해주기
-    // const getNormal = async () => {
-    //   const res = await courseApi.normal(accessToken, refreshToken);
-    //   dispatch(changeNormalCourses(res.data));
-    // };
-    // // 4. Hard 코스 정보 받아와서 store에 저장해주기
-    // const getHard = async () => {
-    //   const res = await courseApi.hard(accessToken, refreshToken);
-    //   dispatch(changeHardCourses(res.data));
-    // };
+    // 3.
     getageGender();
     getCourses();
-    // getEasy();
-    // getNormal();
-    // getHard();
+    getUserInfo();
   }, []);
 
   return (

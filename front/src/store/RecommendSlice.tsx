@@ -29,9 +29,6 @@ export interface RecInfo {
 interface MainState {
   genderAge: RecInfo;
   difficultyCourse: DiffInfo;
-  easyCourse: RecInfo;
-  normalCourse: RecInfo;
-  hardCourse: RecInfo;
 }
 
 const initialState: MainState = {
@@ -45,15 +42,6 @@ const initialState: MainState = {
     NORMAL_COURSE_LIST: [{}],
     HARD_COURSE_LIST: [{}],
   },
-  easyCourse: {
-    COURSE_LIST: [],
-  },
-  normalCourse: {
-    COURSE_LIST: [],
-  },
-  hardCourse: {
-    COURSE_LIST: [],
-  },
 };
 
 export const RecommendSlice = createSlice({
@@ -66,23 +54,8 @@ export const RecommendSlice = createSlice({
     changeCourses: (state, action: PayloadAction<DiffInfo>) => {
       state.difficultyCourse = action.payload;
     },
-    changeEasyCourses: (state, action: PayloadAction<RecInfo>) => {
-      state.easyCourse = action.payload;
-    },
-    changeNormalCourses: (state, action: PayloadAction<RecInfo>) => {
-      state.normalCourse = action.payload;
-    },
-    changeHardCourses: (state, action: PayloadAction<RecInfo>) => {
-      state.hardCourse = action.payload;
-    },
   },
 });
 
-export const {
-  changeAgeGender,
-  changeCourses,
-  changeEasyCourses,
-  changeNormalCourses,
-  changeHardCourses,
-} = RecommendSlice.actions;
+export const { changeAgeGender, changeCourses } = RecommendSlice.actions;
 export default RecommendSlice.reducer;
