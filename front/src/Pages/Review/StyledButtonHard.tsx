@@ -11,7 +11,7 @@ function StyledButtonHard({ onClick, hard }: Props) {
       {hard === false ? (
         <StyledInnerdDiv>
           <img
-            src={"/img/mountainEmpty.png"}
+            src={"/img/mtnHardEmpty.png"}
             alt="hard button"
             width={"80%"}
             onClick={onClick}
@@ -20,7 +20,7 @@ function StyledButtonHard({ onClick, hard }: Props) {
       ) : (
         <StyledInnerdDiv>
           <img
-            src={"/img/mountainFull.png"}
+            src={"/img/mtnHardFull.png"}
             alt="hard button"
             width={"80%"}
             onClick={onClick}

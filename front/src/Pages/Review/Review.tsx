@@ -57,7 +57,7 @@ function Review() {
   }
 
   function sosoToggle() {
-    if (easy === false) setEasy(true);
+    if (easy === true) setEasy(false);
     if (soso === false) setSoso(true);
     if (hard === true) setHard(false);
 
@@ -68,8 +68,8 @@ function Review() {
   }
 
   function hardToggle() {
-    if (easy === false) setEasy(true);
-    if (soso === false) setSoso(true);
+    if (easy === true) setEasy(false);
+    if (soso === true) setSoso(false);
     if (hard === false) setHard(true);
 
     setReview({
