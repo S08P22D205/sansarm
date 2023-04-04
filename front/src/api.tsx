@@ -33,6 +33,13 @@ export const userApi = {
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
+  isRec: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("user/main/is-recommendable", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
 };
 
 export const courseApi = {
@@ -50,15 +57,15 @@ export const courseApi = {
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  isRec: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/is-recommendable", {
+  recommend: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/recommend", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  recommend: (accessToken: string | null, refreshToken: string | null) =>
-    flaskApi.get("course/main/recommend", {
+  topTen: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("course/top-ten", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
