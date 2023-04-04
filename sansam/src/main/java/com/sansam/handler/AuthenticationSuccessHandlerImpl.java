@@ -6,6 +6,7 @@ import com.sansam.data.entity.User;
 import com.sansam.data.repository.UserRepository;
 import com.sansam.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -24,6 +25,12 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     private final UserRepository userRepository;
     private final UserServiceImpl userService;
 
+    @Value("${kakao-success-login-uri}")
+    private String kakaoSuccessLoginUri;
+
+    @Value("${kakao-success-signup-uri}")
+    private String kakaoSuccessSignupUri;
+
     @Transactional
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -34,9 +41,9 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
                 String accessToken = jwtProvider.createAccessToken(user.getUserEmail());
                 String refreshToken = jwtProvider.createRefreshToken(user.getUserEmail());
                 userService.saveRefreshToken(refreshToken, user.getUserNo());
-                response.sendRedirect("https://j8d205.p.ssafy.io/login?"+accessToken+"?"+refreshToken);
+                response.sendRedirect(kakaoSuccessLoginUri+accessToken+"?"+refreshToken);
             } else {
-                response.sendRedirect("https://j8d205.p.ssafy.io/signup/1?no="+user.getUserNo());
+                response.sendRedirect(kakaoSuccessSignupUri+user.getUserNo());
             }
         } catch (Exception e) {
             System.out.println(e);
