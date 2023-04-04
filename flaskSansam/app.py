@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
 import requests
+import config
 
 app = Flask(__name__)
 CORS(app)
@@ -17,7 +18,7 @@ app.database = database
 
 
 def get_email_response(access_token, refresh_token):
-    url = 'http://localhost:5000/user/email'
+    url = config.SPRING_BOOT_URL+"user/email"
     headers = {'X-ACCESS-TOKEN': access_token, 'X-REFRESH-TOKEN': refresh_token}
     response = requests.get(url, headers=headers)
 
@@ -90,7 +91,6 @@ def get_course_by_age_and_gender():
 
         for item in course:
             course_in_dict[item] = course[item]
-        print(course_in_dict)
 
         result['COURSE_LIST'].append(course_in_dict)
 
@@ -207,8 +207,8 @@ def get_course_by_mt_name():
     return response
 
 
-@app.route("/course/main/easy", methods=["GET"])
-def get_course_recommend_easy():
+@app.route("/course/main/recommend", methods=["GET"])
+def get_course_recommend():
     access_token = request.headers.get("X-ACCESS-TOKEN")
     refresh_token = request.headers.get("X-REFRESH-TOKEN")
 
@@ -217,64 +217,64 @@ def get_course_recommend_easy():
     access_token = email_response.headers.get("X-ACCESS-TOKEN")
 
     body = {}
-    body['COURSE_LIST'] = []
+    body['EASY_COURSE_LIST'] = []
+    body['NORMAL_COURSE_LIST'] = []
+    body['HARD_COURSE_LIST'] = []
 
     with database.connect() as conn:
         review_easy = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'E'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
+                SELECT c.COURSE_ELEV_DIFF, c.COURSE_UPTIME, c.COURSE_DOWNTIME, c.COURSE_LENGTH
+                FROM COURSE c
+                INNER JOIN REVIEW r ON c.COURSE_NO = r.COURSE_NO
+                INNER JOIN USER u ON r.USER_NO = u.USER_NO
+                WHERE r.REVIEW_REL_DIFF = 'E'
+                AND u.USER_EMAIL = '{user_email}'
+                ORDER BY r.REVIEW_DATE DESC
+                LIMIT 1
+            """)).mappings().one()
 
     with database.connect() as conn:
         review_normal = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'N'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
+                SELECT c.COURSE_ELEV_DIFF, c.COURSE_UPTIME, c.COURSE_DOWNTIME, c.COURSE_LENGTH
+                FROM COURSE c
+                INNER JOIN REVIEW r ON c.COURSE_NO = r.COURSE_NO
+                INNER JOIN USER u ON r.USER_NO = u.USER_NO
+                WHERE r.REVIEW_REL_DIFF = 'N'
+                AND u.USER_EMAIL = '{user_email}'
+                ORDER BY r.REVIEW_DATE DESC
+                LIMIT 1
+            """)).mappings().one()
 
     with database.connect() as conn:
         review_hard = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'H'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
+                SELECT c.COURSE_ELEV_DIFF, c.COURSE_UPTIME, c.COURSE_DOWNTIME, c.COURSE_LENGTH
+                FROM COURSE c
+                INNER JOIN REVIEW r ON c.COURSE_NO = r.COURSE_NO
+                INNER JOIN USER u ON r.USER_NO = u.USER_NO
+                WHERE r.REVIEW_REL_DIFF = 'H'
+                AND u.USER_EMAIL = '{user_email}'
+                ORDER BY r.REVIEW_DATE DESC
+                LIMIT 1
+            """)).mappings().one()
 
-    centroid_easy = np.array([float(review_easy['COURSE_ELEV_DIFF']), review_easy['COURSE_UPTIME'], review_easy['COURSE_DOWNTIME'], float(review_easy['COURSE_LENGTH'])])
-    centroid_normal = np.array([float(review_normal['COURSE_ELEV_DIFF']), review_normal['COURSE_UPTIME'], review_normal['COURSE_DOWNTIME'], float(review_normal['COURSE_LENGTH'])])
-    centroid_hard = np.array([float(review_hard['COURSE_ELEV_DIFF']), review_hard['COURSE_UPTIME'], review_hard['COURSE_DOWNTIME'], float(review_hard['COURSE_LENGTH'])])
+    centroid_easy = np.array(
+        [float(review_easy['COURSE_ELEV_DIFF']), review_easy['COURSE_UPTIME'], review_easy['COURSE_DOWNTIME'],
+         float(review_easy['COURSE_LENGTH'])])
+    centroid_normal = np.array(
+        [float(review_normal['COURSE_ELEV_DIFF']), review_normal['COURSE_UPTIME'], review_normal['COURSE_DOWNTIME'],
+         float(review_normal['COURSE_LENGTH'])])
+    centroid_hard = np.array(
+        [float(review_hard['COURSE_ELEV_DIFF']), review_hard['COURSE_UPTIME'], review_hard['COURSE_DOWNTIME'],
+         float(review_hard['COURSE_LENGTH'])])
     centroids = np.array([centroid_easy, centroid_normal, centroid_hard])
-    print(centroids)
 
     with database.connect() as conn:
         courses = conn.execute(text(f"""
-            SELECT *
-            FROM COURSE;
-        """)).mappings().all()
+                SELECT *
+                FROM COURSE;
+            """)).mappings().all()
 
     df = pd.DataFrame(courses)
-    print(df)
 
     data = df[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']]
     kmeans = KMeans(n_clusters=3, init=centroids, max_iter=300, random_state=0)
@@ -283,229 +283,30 @@ def get_course_recommend_easy():
     data['cluster'] = kmeans.labels_
     X, y = data[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']].values, kmeans.labels_
 
-    # 각 점에서 센트로이드까지 거리 반환
     dist_model = kmeans.transform(X)
     easy_model = dist_model[:, 0]
-
-    # easy인 경우
-    # top 10 smallest의 idx 반환 (순서대로 X)
-    ind = np.argpartition(dist_model[:, 0], 10)[:10]
-    top_10 = easy_model[ind]
-
-    # sorted top 10 smallest idx
-    sorted_top_10_idx = ind[np.argsort(top_10)]
-
-    top_10_df = df.iloc[sorted_top_10_idx]
-    """ get top 10 df to json V1 """
-    # for i in range(10):
-    #     temp = {'COURSE_NO': int(top_10_df.iloc[i][8]), 'COURSE_MT_CD': top_10_df.iloc[i][5],
-    #             'COURSE_MT_NM': top_10_df.iloc[i][6], 'COURSE_MT_NO': int(top_10_df.iloc[i][7]),
-    #             'COURSE_ELEV_DIFF': float(top_10_df.iloc[i][2]), 'COURSE_UPTIME': int(top_10_df.iloc[i][9]),
-    #             'COURSE_DOWNTIME': int(top_10_df.iloc[i][1]), 'COURSE_LENGTH': float(top_10_df.iloc[i][3]),
-    #             'COURSE_LOCATION': top_10_df.iloc[i][4], 'COURSE_ADDRESS': top_10_df.iloc[i][0]}
-    #     body['COURSE_LIST'].append(temp)
-    """ get top 10 df to json V2 """
-    body['COURSE_LIST'] = top_10_df.to_dict('r')
-
-    response = make_response(body)
-    response.headers["X-ACCESS-TOKEN"] = access_token
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Expose-Headers", "X-ACCESS-TOKEN")
-
-    return response
-
-
-@app.route("/course/main/normal", methods=["GET"])
-def get_course_recommend_normal():
-    access_token = request.headers.get("X-ACCESS-TOKEN")
-    refresh_token = request.headers.get("X-REFRESH-TOKEN")
-
-    email_response = get_email_response(access_token, refresh_token)
-    user_email = email_response.json()['userEmail']
-    access_token = email_response.headers.get("X-ACCESS-TOKEN")
-
-    body = {}
-    body['COURSE_LIST'] = []
-
-    with database.connect() as conn:
-        review_easy = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'E'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
-
-    with database.connect() as conn:
-        review_normal = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'N'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
-
-    with database.connect() as conn:
-        review_hard = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'H'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
-
-    centroid_easy = np.array([float(review_easy['COURSE_ELEV_DIFF']), review_easy['COURSE_UPTIME'], review_easy['COURSE_DOWNTIME'], float(review_easy['COURSE_LENGTH'])])
-    centroid_normal = np.array([float(review_normal['COURSE_ELEV_DIFF']), review_normal['COURSE_UPTIME'], review_normal['COURSE_DOWNTIME'], float(review_normal['COURSE_LENGTH'])])
-    centroid_hard = np.array([float(review_hard['COURSE_ELEV_DIFF']), review_hard['COURSE_UPTIME'], review_hard['COURSE_DOWNTIME'], float(review_hard['COURSE_LENGTH'])])
-    centroids = np.array([centroid_easy, centroid_normal, centroid_hard])
-    print(centroids)
-
-    with database.connect() as conn:
-        courses = conn.execute(text(f"""
-            SELECT *
-            FROM COURSE;
-        """)).mappings().all()
-
-    df = pd.DataFrame(courses)
-    print(df)
-
-    data = df[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']]
-    kmeans = KMeans(n_clusters=3, init=centroids, max_iter=300, random_state=0)
-    kmeans.fit(data)
-
-    data['cluster'] = kmeans.labels_
-    X, y = data[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']].values, kmeans.labels_
-
-    # 각 점에서 센트로이드까지 거리 반환
-    dist_model = kmeans.transform(X)
     normal_model = dist_model[:, 1]
-
-    # easy인 경우
-    # top 10 smallest의 idx 반환 (순서대로 X)
-    ind = np.argpartition(dist_model[:, 1], 10)[:10]
-    top_10 = normal_model[ind]
-
-    # sorted top 10 smallest idx
-    sorted_top_10_idx = ind[np.argsort(top_10)]
-
-    top_10_df = df.iloc[sorted_top_10_idx]
-
-    body['COURSE_LIST'] = top_10_df.to_dict('r')
-
-    response = make_response(body)
-    response.headers["X-ACCESS-TOKEN"] = access_token
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Expose-Headers", "X-ACCESS-TOKEN")
-
-    return response
-
-
-@app.route("/course/main/hard", methods=["GET"])
-def get_course_recommend_hard():
-    access_token = request.headers.get("X-ACCESS-TOKEN")
-    refresh_token = request.headers.get("X-REFRESH-TOKEN")
-
-    email_response = get_email_response(access_token, refresh_token)
-    user_email = email_response.json()['userEmail']
-    access_token = email_response.headers.get("X-ACCESS-TOKEN")
-
-    body = {}
-    body['COURSE_LIST'] = []
-
-    with database.connect() as conn:
-        review_easy = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'E'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
-
-    with database.connect() as conn:
-        review_normal = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'N'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
-
-    with database.connect() as conn:
-        review_hard = conn.execute(text(f"""
-            SELECT COURSE_ELEV_DIFF, COURSE_UPTIME, COURSE_DOWNTIME, COURSE_LENGTH
-            FROM COURSE
-            WHERE COURSE_NO = (SELECT COURSE_NO
-                                FROM REVIEW
-                                WHERE REVIEW_REL_DIFF = 'H'
-                                AND USER_NO = (SELECT USER_NO
-                                                FROM USER
-                                                WHERE USER_EMAIL = '{user_email}')
-                                ORDER BY REVIEW_DATE DESC
-                                LIMIT 1)
-        """)).mappings().one()
-
-    centroid_easy = np.array([float(review_easy['COURSE_ELEV_DIFF']), review_easy['COURSE_UPTIME'], review_easy['COURSE_DOWNTIME'], float(review_easy['COURSE_LENGTH'])])
-    centroid_normal = np.array([float(review_normal['COURSE_ELEV_DIFF']), review_normal['COURSE_UPTIME'], review_normal['COURSE_DOWNTIME'], float(review_normal['COURSE_LENGTH'])])
-    centroid_hard = np.array([float(review_hard['COURSE_ELEV_DIFF']), review_hard['COURSE_UPTIME'], review_hard['COURSE_DOWNTIME'], float(review_hard['COURSE_LENGTH'])])
-    centroids = np.array([centroid_easy, centroid_normal, centroid_hard])
-    print(centroids)
-
-    with database.connect() as conn:
-        courses = conn.execute(text(f"""
-            SELECT *
-            FROM COURSE;
-        """)).mappings().all()
-
-    df = pd.DataFrame(courses)
-    print(df)
-
-    data = df[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']]
-    kmeans = KMeans(n_clusters=3, init=centroids, max_iter=300, random_state=0)
-    kmeans.fit(data)
-
-    data['cluster'] = kmeans.labels_
-    X, y = data[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']].values, kmeans.labels_
-
-    # 각 점에서 센트로이드까지 거리 반환
-    dist_model = kmeans.transform(X)
     hard_model = dist_model[:, 2]
 
-    # easy인 경우
-    # top 10 smallest의 idx 반환 (순서대로 X)
-    ind = np.argpartition(dist_model[:, 2], 10)[:10]
-    top_10 = hard_model[ind]
+    easy_ind = np.argpartition(dist_model[:, 0], 10)[:10]
+    normal_ind = np.argpartition(dist_model[:, 1], 10)[:10]
+    hard_ind = np.argpartition(dist_model[:, 2], 10)[:10]
 
-    # sorted top 10 smallest idx
-    sorted_top_10_idx = ind[np.argsort(top_10)]
+    easy_top_10 = easy_model[easy_ind]
+    normal_top_10 = normal_model[normal_ind]
+    hard_top_10 = hard_model[hard_ind]
 
-    top_10_df = df.iloc[sorted_top_10_idx]
+    easy_sorted_top_10_idx = easy_ind[np.argsort(easy_top_10)]
+    normal_sorted_top_10_idx = normal_ind[np.argsort(normal_top_10)]
+    hard_sorted_top_10_idx = hard_ind[np.argsort(hard_top_10)]
 
-    body['COURSE_LIST'] = top_10_df.to_dict('r')
+    easy_top_10_df = df.iloc[easy_sorted_top_10_idx]
+    normal_top_10_df = df.iloc[normal_sorted_top_10_idx]
+    hard_top_10_df = df.iloc[hard_sorted_top_10_idx]
+
+    body['EASY_COURSE_LIST'] = easy_top_10_df.to_dict('r')
+    body['NORMAL_COURSE_LIST'] = normal_top_10_df.to_dict('r')
+    body['HARD_COURSE_LIST'] = hard_top_10_df.to_dict('r')
 
     response = make_response(body)
     response.headers["X-ACCESS-TOKEN"] = access_token
@@ -516,4 +317,4 @@ def get_course_recommend_hard():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=5001)
+    app.run(debug=False, host="0.0.0.0", port=5001)

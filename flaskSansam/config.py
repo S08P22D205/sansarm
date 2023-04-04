@@ -8,3 +8,6 @@ DB = {
 }
 
 DB_URL = f"mysql+mysqlconnector://{DB['user']}:{DB['password']}@{DB['host']}:{DB['port']}/{DB['database']}?charset=utf8"
+
+SPRING_BOOT_URL = "https://172.17.0.1:5000/"
+# SPRING_BOOT_URL = "http://localhost:5000/"
