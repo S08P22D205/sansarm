@@ -17,7 +17,7 @@ app.database = database
 
 
 def get_email_response(access_token, refresh_token):
-    url = 'http://172.17.0.1:5000/user/email'
+    url = 'http://localhost:5000/user/email'
     headers = {'X-ACCESS-TOKEN': access_token, 'X-REFRESH-TOKEN': refresh_token}
     response = requests.get(url, headers=headers)
 
@@ -90,6 +90,7 @@ def get_course_by_age_and_gender():
 
         for item in course:
             course_in_dict[item] = course[item]
+        print(course_in_dict)
 
         result['COURSE_LIST'].append(course_in_dict)
 
@@ -186,7 +187,7 @@ def get_course_by_mt_name():
 
     with database.connect() as conn:
         courses = conn.execute(text(f"""
-        SELECT * 
+        SELECT  COURSE_NO
         FROM `COURSE`
         WHERE `COURSE_MT_NM` = '{course_mt_name}'
         AND `COURSE_UPTIME` + `COURSE_DOWNTIME` BETWEEN {left_time} AND {right_time} 
@@ -295,14 +296,16 @@ def get_course_recommend_easy():
     sorted_top_10_idx = ind[np.argsort(top_10)]
 
     top_10_df = df.iloc[sorted_top_10_idx]
-
-    for i in range(10):
-        temp = {'COURSE_NO': int(top_10_df.iloc[i][8]), 'COURSE_MT_CD': top_10_df.iloc[i][5],
-                'COURSE_MT_NM': top_10_df.iloc[i][6], 'COURSE_MT_NO': int(top_10_df.iloc[i][7]),
-                'COURSE_ELEV_DIFF': float(top_10_df.iloc[i][2]), 'COURSE_UPTIME': int(top_10_df.iloc[i][9]),
-                'COURSE_DOWNTIME': int(top_10_df.iloc[i][1]), 'COURSE_LENGTH': float(top_10_df.iloc[i][3]),
-                'COURSE_LOCATION': top_10_df.iloc[i][4], 'COURSE_ADDRESS': top_10_df.iloc[i][0]}
-        body['COURSE_LIST'].append(temp)
+    """ get top 10 df to json V1 """
+    # for i in range(10):
+    #     temp = {'COURSE_NO': int(top_10_df.iloc[i][8]), 'COURSE_MT_CD': top_10_df.iloc[i][5],
+    #             'COURSE_MT_NM': top_10_df.iloc[i][6], 'COURSE_MT_NO': int(top_10_df.iloc[i][7]),
+    #             'COURSE_ELEV_DIFF': float(top_10_df.iloc[i][2]), 'COURSE_UPTIME': int(top_10_df.iloc[i][9]),
+    #             'COURSE_DOWNTIME': int(top_10_df.iloc[i][1]), 'COURSE_LENGTH': float(top_10_df.iloc[i][3]),
+    #             'COURSE_LOCATION': top_10_df.iloc[i][4], 'COURSE_ADDRESS': top_10_df.iloc[i][0]}
+    #     body['COURSE_LIST'].append(temp)
+    """ get top 10 df to json V2 """
+    body['COURSE_LIST'] = top_10_df.to_dict('r')
 
     response = make_response(body)
     response.headers["X-ACCESS-TOKEN"] = access_token
@@ -402,13 +405,7 @@ def get_course_recommend_normal():
 
     top_10_df = df.iloc[sorted_top_10_idx]
 
-    for i in range(10):
-        temp = {'COURSE_NO': int(top_10_df.iloc[i][8]), 'COURSE_MT_CD': top_10_df.iloc[i][5],
-                'COURSE_MT_NM': top_10_df.iloc[i][6], 'COURSE_MT_NO': int(top_10_df.iloc[i][7]),
-                'COURSE_ELEV_DIFF': float(top_10_df.iloc[i][2]), 'COURSE_UPTIME': int(top_10_df.iloc[i][9]),
-                'COURSE_DOWNTIME': int(top_10_df.iloc[i][1]), 'COURSE_LENGTH': float(top_10_df.iloc[i][3]),
-                'COURSE_LOCATION': top_10_df.iloc[i][4], 'COURSE_ADDRESS': top_10_df.iloc[i][0]}
-        body['COURSE_LIST'].append(temp)
+    body['COURSE_LIST'] = top_10_df.to_dict('r')
 
     response = make_response(body)
     response.headers["X-ACCESS-TOKEN"] = access_token
@@ -508,13 +505,7 @@ def get_course_recommend_hard():
 
     top_10_df = df.iloc[sorted_top_10_idx]
 
-    for i in range(10):
-        temp = {'COURSE_NO': int(top_10_df.iloc[i][8]), 'COURSE_MT_CD': top_10_df.iloc[i][5],
-                'COURSE_MT_NM': top_10_df.iloc[i][6], 'COURSE_MT_NO': int(top_10_df.iloc[i][7]),
-                'COURSE_ELEV_DIFF': float(top_10_df.iloc[i][2]), 'COURSE_UPTIME': int(top_10_df.iloc[i][9]),
-                'COURSE_DOWNTIME': int(top_10_df.iloc[i][1]), 'COURSE_LENGTH': float(top_10_df.iloc[i][3]),
-                'COURSE_LOCATION': top_10_df.iloc[i][4], 'COURSE_ADDRESS': top_10_df.iloc[i][0]}
-        body['COURSE_LIST'].append(temp)
+    body['COURSE_LIST'] = top_10_df.to_dict('r')
 
     response = make_response(body)
     response.headers["X-ACCESS-TOKEN"] = access_token
@@ -525,4 +516,4 @@ def get_course_recommend_hard():
 
 
 if __name__ == '__main__':
-    app.run(debug=False, host="0.0.0.0", port=5001)
+    app.run(debug=True, host="0.0.0.0", port=5001)
