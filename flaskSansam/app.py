@@ -55,46 +55,29 @@ def get_course_by_age_and_gender():
     user_gender = user_info['USER_GENDER']
 
     # 유저의 나이대로 변경(20대, 30대 등)
-    user_age = user_age // 10 * 10
+    user_age = user_age // 10 ** 2
 
     with database.connect() as conn:
-        reviews = conn.execute(text(f"""
-        SELECT * 
-        FROM `REVIEW`
-        WHERE `USER_NO` IN (SELECT `USER_NO`
-                            FROM `USER`
-                            WHERE `USER_AGE` BETWEEN {user_age} AND {user_age+9}
-                            AND `USER_GENDER` = '{user_gender}')
-        ORDER BY REVIEW_DATE;
+        courses = conn.execute(text(f"""
+            SELECT c.*
+            FROM COURSE c
+            INNER JOIN REVIEW r ON c.COURSE_NO = r.COURSE_NO
+            INNER JOIN USER u ON r.USER_NO = u.USER_NO
+            WHERE u.USER_AGE BETWEEN {user_age} AND {user_age}+9
+            AND u.USER_GENDER = '{user_gender}'
+            GROUP BY c.COURSE_NO
+            HAVING MAX(r.REVIEW_DATE)
+            ORDER BY MAX(r.REVIEW_DATE) DESC;
         """)).mappings().all()
-
-    courses = set()
-
-    for review in reviews:
-        courses.add(review['COURSE_NO'])
 
     result = {
         'USER_AGE_POOL': user_age,
-        'USER_GENDER': user_gender,
-        'COURSE_LIST': []
+        'USER_GENDER': user_gender
     }
+    courses = list(map(dict, courses))
+    result['COURSE_LIST'] = courses
 
-    for course in courses:
-        with database.connect() as conn:
-            course = conn.execute(text(f"""
-                SELECT *
-                FROM `COURSE`
-                WHERE `COURSE_NO` = {course}
-            """)).mappings().one()
-
-        course_in_dict = {}
-
-        for item in course:
-            course_in_dict[item] = course[item]
-
-        result['COURSE_LIST'].append(course_in_dict)
-
-    response = make_response(jsonify(result))
+    response = make_response(result)
     response.headers.set("X-ACCESS-TOKEN", access_token)
     response.headers.add("Access-Control-Allow-Origin", "*")
     response.headers.add("Access-Control-Expose-Headers", "X-ACCESS-TOKEN")
