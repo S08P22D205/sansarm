@@ -1,11 +1,10 @@
 import styled from "styled-components";
-import ListItem from "./ListItem";
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { changeLoginInfo } from "../../store/loginSlice";
-import { ItemInfo } from "../../store/mainSlice";
+import { changeUserInfo } from "../../store/loginSlice";
 import { RecInfo } from "../../store/RecommendSlice";
-// import ListItem2 from "./ListItem2";
-import { LoginInfo } from "../../store/loginSlice";
+import { DiffInfo } from "../../store/RecommendSlice";
+import ListItem from "./ListItem";
+import { UserInfo } from "../../store/loginSlice";
 import { userApi } from "../../api";
 import { useEffect, useState } from "react";
 
@@ -24,21 +23,15 @@ const StyledH = styled.p`
 
 function List() {
   // const dispatch = useAppDispatch();
+
   // store에 저장된 각 코스정보를 useSelector로 받아온다!
-  const genderAge: Array<ItemInfo> = useAppSelector(
-    state => state.main.genderAge
+  const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
+  const courses: DiffInfo = useAppSelector(
+    state => state.recommend.difficultyCourse
   );
-  const easyCourse: Array<ItemInfo> = useAppSelector(
-    state => state.main.easyCourse
-  );
-  const normalCourse: Array<ItemInfo> = useAppSelector(
-    state => state.main.normalCourse
-  );
-  const hardCourse: Array<ItemInfo> = useAppSelector(
-    state => state.main.hardCourse
-  );
-  // ucc 찍고나서 다시 원상복구 해놓기
-  // const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
+
+  // store에 저장된 유저정보를 useSelector로 받아오기
+  const userInfo: UserInfo = useAppSelector(state => state.login.userInfo);
 
   // const loginInfo: LoginInfo = useAppSelector(state => state.login.loginInfo);
   // const accessToken = loginInfo.accessToken;
@@ -56,6 +49,7 @@ function List() {
     // 현재 로그인한 유저정보 받아오는 코드
     const getUserInfo = async () => {
       const res = await userApi.userInfo(accessToken, refreshToken);
+      // console.log(res.data);
       // 유저 닉네임 state에 저장해주기
       setUserName(res.data.userNicknm);
       // 세션스토리지 내 accessToken 갱신
@@ -66,27 +60,22 @@ function List() {
 
   return (
     <StyledDiv className="List">
-      <StyledH>{userName}님을 위한 추천코스</StyledH>
-      {/* <ListItem2
-       USER_AGE_POOL={ageGender.USER_AGE_POOL}
-       USER_GENDER={ageGender.USER_GENDER}
+      <StyledH>{userInfo.userNicknm}님을 위한 추천코스</StyledH>
+      <ListItem
+        USER_AGE_POOL={ageGender.USER_AGE_POOL}
+        USER_GENDER={ageGender.USER_GENDER}
         COURSE_LIST={ageGender.COURSE_LIST}
-       /> */}
-      <ListItem
-        userAge={genderAge[0].userAge}
-        userGender={genderAge[0].userGender}
-        courseList={genderAge[0].courseList}
       />
       <ListItem
-        courseList={easyCourse[0].courseList}
-        courseName="보다 편한 코스는 어때요?"
+        COURSE_LIST={courses.EASY_COURSE_LIST}
+        courseName="당신을 위한 편안한 코스"
       />
       <ListItem
-        courseList={normalCourse[0].courseList}
+        COURSE_LIST={courses.NORMAL_COURSE_LIST}
         courseName="이정도면 할만한데?"
       />
       <ListItem
-        courseList={hardCourse[0].courseList}
+        COURSE_LIST={courses.HARD_COURSE_LIST}
         courseName="이 길은 쉽지 않을걸..."
       />
     </StyledDiv>

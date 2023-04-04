@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { RecInfo } from "../../store/RecommendSlice";
+import { ItemInfo } from "../../store/mainSlice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { FreeMode } from "swiper";
 import "swiper/css";
@@ -22,18 +22,18 @@ const StyledSlide = styled(SwiperSlide)`
   margin-bottom: 3vw;
 `;
 
-function ListItem2({
+function ListItemDummy({
   courseName,
-  USER_AGE_POOL,
-  USER_GENDER,
-  COURSE_LIST,
-}: RecInfo) {
+  userAge,
+  userGender,
+  courseList,
+}: ItemInfo) {
   return (
     <div className="ListItem">
-      {USER_AGE_POOL && USER_GENDER ? (
+      {userAge && userGender ? (
         <StyledH>
-          {USER_AGE_POOL}대{" "}
-          {USER_GENDER === "F" ? <span>여성</span> : <span>남성</span>}분들이
+          {userAge}대{" "}
+          {userGender === "F" ? <span>여성</span> : <span>남성</span>}들이
           선호하는 코스
         </StyledH>
       ) : (
@@ -46,13 +46,13 @@ function ListItem2({
         loop={true}
         freeMode={true}
       >
-        {COURSE_LIST.map(course => (
-          <StyledSlide key={course.COURSE_NO}>
+        {courseList.map(course => (
+          <StyledSlide key={course.courseNo}>
             <ListCard
-              courseMtNm={course.COURSE_MT_NM}
-              courseMtNo={course.COURSE_MT_NO}
-              courseMtCd={course.COURSE_MT_CD}
-              courseNo={course.COURSE_NO}
+              courseMtNm={course.courseMtNm}
+              courseMtNo={course.courseMtNo}
+              courseMtCd={course.courseMtCd}
+              courseNo={course.courseNo}
             />
           </StyledSlide>
         ))}
@@ -61,4 +61,4 @@ function ListItem2({
   );
 }
 
-export default ListItem2;
+export default ListItemDummy;
