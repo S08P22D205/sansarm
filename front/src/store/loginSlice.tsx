@@ -7,12 +7,26 @@ export interface LoginInfo {
 
 interface LoginState {
   loginInfo: LoginInfo;
+  userInfo: {
+    userEmail: string;
+    userNicknm: string;
+    userAge: number;
+    userGender: string;
+    userLocation: string;
+  };
 }
 
 const initialState: LoginState = {
   loginInfo: {
     accessToken: "",
     refreshToken: "",
+  },
+  userInfo: {
+    userEmail: "",
+    userNicknm: "",
+    userAge: 0,
+    userGender: "",
+    userLocation: "",
   },
 };
 

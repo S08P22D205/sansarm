@@ -6,20 +6,17 @@ export interface Tokens {
 }
 
 const flaskApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/flask-api",
-  // baseURL: "http://localhost:5001/",
+  // baseURL: "https://j8d205.p.ssafy.io/flask-api",
+  baseURL: "http://localhost:5001/",
 });
 
 const springApi = axios.create({
-  baseURL: "https://j8d205.p.ssafy.io/api",
-  // baseURL: "http://localhost:5000/",
+  // baseURL: "https://j8d205.p.ssafy.io/api",
+  baseURL: "http://localhost:5000/",
 });
 
 export const userApi = {
-  userInfo: (
-    accessToken: string | null | undefined,
-    refreshToken: string | null | undefined
-  ) =>
+  userInfo: (accessToken: string | null, refreshToken: string | null) =>
     springApi.get("user/info", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
@@ -53,9 +50,41 @@ export const courseApi = {
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  easy: () => flaskApi.get("course/main/easy"),
-  normal: () => flaskApi.get("course/main/normal"),
-  hard: () => flaskApi.get("course/main/hard"),
+  isRec: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/is-recommendable", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  recommend: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/recommend", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  easy: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/easy", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  normal: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/normal", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  hard: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/hard", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
   // filterMt: (accessToken: string | null, refreshToken: string | null) =>
   //   flaskApi.post("course/search/mt", {
   //     headers: {

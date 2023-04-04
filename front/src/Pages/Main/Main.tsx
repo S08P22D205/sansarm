@@ -1,20 +1,14 @@
 import styled from "styled-components";
 import List from "./List";
-import axios from "axios";
 import { useEffect } from "react";
 import MainBtn from "./MainBtn";
 import { useAppDispatch } from "../../store/hooks";
 import {
-  changeGenderAge,
-  changeEasyCourse,
-  changeNormalCourse,
-  changeHardCourse,
-} from "../../store/mainSlice";
-import {
   changeAgeGender,
-  changeEasyCourses,
-  changeNormalCourses,
-  changeHardCourses,
+  // changeEasyCourses,
+  // changeNormalCourses,
+  // changeHardCourses,
+  changeCourses,
 } from "../../store/RecommendSlice";
 import { courseApi, userApi } from "../../api";
 import SearchBar from "./SearchBar";
@@ -41,36 +35,36 @@ function Main() {
 
   // 처음 마운트 됐을 때
   useEffect(() => {
-    // 1. 성별, 나이에 맞는 코스 정보 받아와서 store에 저장해주기
-    const getGenderAge = async () => {
-      const res = await axios.get("/dummy/GenderAge.json");
-      dispatch(changeGenderAge(res.data));
+    // 1. 성별, 나이에 맞는 코스 정보 받아와서 store에 저장해주기 (axios 모듈화, recommendSlice 사용)
+    const getageGender = async () => {
+      const res = await courseApi.ageGender(accessToken, refreshToken);
+      dispatch(changeAgeGender(res.data));
     };
-    // 2. Easy 코스 정보 받아와서 store에 저장해주기
-    const getEasyCourse = async () => {
-      const res = await axios.get("/dummy/EasyCourse.json");
-      dispatch(changeEasyCourse(res.data));
+    // 2-1. 코스 정보 받아와서 store에 저장해주기
+    const getCourses = async () => {
+      const res = await courseApi.recommend(accessToken, refreshToken);
+      dispatch(changeCourses(res.data));
     };
-    // 3. Normal 코스 정보 받아와서 store에 저장해주기
-    const getNormalCourse = async () => {
-      const res = await axios.get("/dummy/NormalCourse.json");
-      dispatch(changeNormalCourse(res.data));
-    };
-    // 4. Hard 코스 정보 받아와서 store에 저장해주기
-    const getHardCourse = async () => {
-      const res = await axios.get("/dummy/HardCourse.json");
-      dispatch(changeHardCourse(res.data));
-    };
-    // 1. axios 모듈화, recommendSlice 사용한 코드
-    // const getageGender = async () => {
-    //   const res = await courseApi.ageGender(accessToken, refreshToken);
-    //   dispatch(changeAgeGender(res.data));
+    // // 2. Easy 코스 정보 받아와서 store에 저장해주기
+    // const getEasy = async () => {
+    //   const res = await courseApi.easy(accessToken, refreshToken);
+    //   dispatch(changeEasyCourses(res.data));
     // };
-    getGenderAge();
-    getEasyCourse();
-    getNormalCourse();
-    getHardCourse();
-    // getageGender();
+    // // 3. Normal 코스 정보 받아와서 store에 저장해주기
+    // const getNormal = async () => {
+    //   const res = await courseApi.normal(accessToken, refreshToken);
+    //   dispatch(changeNormalCourses(res.data));
+    // };
+    // // 4. Hard 코스 정보 받아와서 store에 저장해주기
+    // const getHard = async () => {
+    //   const res = await courseApi.hard(accessToken, refreshToken);
+    //   dispatch(changeHardCourses(res.data));
+    // };
+    getageGender();
+    getCourses();
+    // getEasy();
+    // getNormal();
+    // getHard();
   }, []);
 
   return (

@@ -11,17 +11,12 @@ export interface CourseInfo {
   COURSE_LENGTH?: number;
   COURSE_LOCATION?: string;
   COURSE_ADDRESS?: string;
-  // courseNo?: number;
-  // courseMtNm?: string;
-  // courseMtCd?: number;
-  // courseMtNo?: number;
-  // courseXCoords?: Array<number>;
-  // courseYCoords?: Array<number>;
-  // courseAbsDiff?: string;
-  // courseUptime?: number;
-  // courseDowntime?: number;
-  // courseLength?: number;
-  // courseLocation?: string;
+}
+
+export interface DiffInfo {
+  EASY_COURSE_LIST: CourseInfo[];
+  NORMAL_COURSE_LIST: CourseInfo[];
+  HARD_COURSE_LIST: CourseInfo[];
 }
 
 export interface RecInfo {
@@ -29,13 +24,11 @@ export interface RecInfo {
   USER_GENDER?: string;
   COURSE_LIST: CourseInfo[];
   courseName?: string;
-  // userAge?: number;
-  // userGender?: string;
-  // courseList: courseInfo[];
 }
 
 interface MainState {
   genderAge: RecInfo;
+  difficultyCourse: DiffInfo;
   easyCourse: RecInfo;
   normalCourse: RecInfo;
   hardCourse: RecInfo;
@@ -46,24 +39,20 @@ const initialState: MainState = {
     USER_AGE_POOL: 0,
     USER_GENDER: "",
     COURSE_LIST: [],
-    // userAge: 0,
-    // userGender: "",
-    // courseList: [],
   },
-
+  difficultyCourse: {
+    EASY_COURSE_LIST: [{}],
+    NORMAL_COURSE_LIST: [{}],
+    HARD_COURSE_LIST: [{}],
+  },
   easyCourse: {
     COURSE_LIST: [],
-    // courseList: [],
   },
-
   normalCourse: {
     COURSE_LIST: [],
-    // courseList: [],
   },
-
   hardCourse: {
     COURSE_LIST: [],
-    // courseList: [],
   },
 };
 
@@ -73,6 +62,9 @@ export const RecommendSlice = createSlice({
   reducers: {
     changeAgeGender: (state, action: PayloadAction<RecInfo>) => {
       state.genderAge = action.payload;
+    },
+    changeCourses: (state, action: PayloadAction<DiffInfo>) => {
+      state.difficultyCourse = action.payload;
     },
     changeEasyCourses: (state, action: PayloadAction<RecInfo>) => {
       state.easyCourse = action.payload;
@@ -88,6 +80,7 @@ export const RecommendSlice = createSlice({
 
 export const {
   changeAgeGender,
+  changeCourses,
   changeEasyCourses,
   changeNormalCourses,
   changeHardCourses,
