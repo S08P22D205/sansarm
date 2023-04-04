@@ -33,7 +33,7 @@ const Search = styled.input<SearchProps>`
   width: 100%;
   height: 11vw;
   border: 1px solid gray;
-  border-radius: ${props =>
+  border-radius: ${(props) =>
     props.isFocus && props.value ? "10px 10px 0px 0px" : "10px 10px"};
   font-family: "GmarketSansLight";
   text-align: left;
@@ -119,6 +119,8 @@ function SearchBar() {
   // keyword(검색창에 입력하는 값) State 세팅
   const [keyword, setKeyword] = useState<string>("");
 
+  // ======================================
+  const [result, setResult] = useState<string>("");
   // 검색창 입력값 변할 때마다 입력하는 값을 keyword에 저장
   const onChangeData = (e: React.FormEvent<HTMLInputElement>) => {
     setKeyword(e.currentTarget.value.trim());
@@ -130,7 +132,7 @@ function SearchBar() {
   // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
   useEffect(() => {
     setResultData(
-      mtList.filter(mountain => {
+      mtList.filter((mountain) => {
         if (mountain.includes(keyword) && keyword.length !== 0) {
           return mountain.includes(keyword);
         }
@@ -141,6 +143,11 @@ function SearchBar() {
 
   // 검색창 focus 상태 useState 세팅
   const [isFocus, setIsFocus] = useState(false);
+
+  const moveToCourseDetail = (result: string) => {
+    navigate("/filtermt", { state: result });
+    // console.log(result);
+  };
 
   return (
     <SearchBarDiv>
@@ -165,12 +172,14 @@ function SearchBar() {
               resultData.map((result, index) => (
                 <div key={index}>
                   <Resultli
-                    onMouseDown={e => {
+                    onMouseDown={(e) => {
                       e.preventDefault();
                     }}
                     onClick={() => {
-                      console.log(result);
-                      navigate(`/filtermt/${result}`);
+                      // console.log(result);
+                      setResult(result);
+                      moveToCourseDetail(result);
+                      // navigate(`/filtermt/${result}`);
                     }}
                   >
                     {result}

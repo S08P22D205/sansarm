@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
 import HamBtn from "./HamBtn";
 import { useNavigate } from "react-router-dom";
@@ -48,8 +48,23 @@ function Navbar() {
     setToggleOn(!toggleOn);
   };
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent): void {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setToggleOn(false);
+      }
+    }
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [ref]);
+
   return (
-    <StyledTop className="Navbar">
+    <StyledTop className="Navbar" ref={ref}>
       <StyledDiv>
         <StyledImg
           onClick={moveToMain}
