@@ -11,6 +11,7 @@ export interface mtInfo {
   courseYCoords: number;
   courseMtNm: string;
   courseMtNo: number;
+  courseNo: number;
 }
 
 function MyMap() {
@@ -18,8 +19,6 @@ function MyMap() {
   const refreshToken = sessionStorage.getItem("refreshToken");
 
   const [ExpMtInfo, setExpMtInfo] = useState<Array<mtInfo>>([]);
-
-  console.log("갔다온산목록정보", ExpMtInfo);
 
   useEffect(() => {
     const getExpMtList = async () => {
@@ -29,19 +28,21 @@ function MyMap() {
           "X-REFRESH-TOKEN": refreshToken,
         },
       });
-      console.log("리뷰내용", res.data.reviewCourses);
+      // console.log("리뷰내용", res.data.reviewCourses);
       const length = res.data.reviewCourses.length;
       for (let i = 0; i < length; i++) {
         const Coordslen = res.data.reviewCourses[i].courseXCoords.length;
         const XCoords = res.data.reviewCourses[i].courseXCoords[Coordslen - 1];
         const YCoords = res.data.reviewCourses[i].courseYCoords[Coordslen - 1];
         const MtName = res.data.reviewCourses[i].courseMtNm;
-        const CourseNo = res.data.reviewCourses[i].courseMtNo;
+        const CourseMtNo = res.data.reviewCourses[i].courseMtNo;
+        const CourseNo = res.data.reviewCourses[i].courseNo;
         const MtInfo: mtInfo = {
           courseXCoords: XCoords,
           courseYCoords: YCoords,
           courseMtNm: MtName,
-          courseMtNo: CourseNo,
+          courseMtNo: CourseMtNo,
+          courseNo: CourseNo,
         };
         setExpMtInfo(prevInfo => [...prevInfo, MtInfo]);
       }
