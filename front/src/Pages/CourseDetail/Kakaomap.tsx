@@ -22,8 +22,11 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
 
     var options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
-      level: 7, //지도의 레벨(확대, 축소 정도)
+      center: new kakao.maps.LatLng(
+        courseXCoords[length / 2],
+        courseYCoords[length / 2]
+      ), //지도의 중심좌표.
+      level: 8, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
@@ -36,7 +39,9 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
     ) => {
       var linePath = [];
       for (let i = 0; i < length; i++) {
-        linePath.push(new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i]));
+        linePath.push(
+          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
+        );
         // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
