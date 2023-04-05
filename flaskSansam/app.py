@@ -170,7 +170,7 @@ def get_course_by_mt_name():
 
     with database.connect() as conn:
         courses = conn.execute(text(f"""
-        SELECT  COURSE_NO
+        SELECT *
         FROM `COURSE`
         WHERE `COURSE_MT_NM` = '{course_mt_name}'
         AND `COURSE_UPTIME` + `COURSE_DOWNTIME` BETWEEN {left_time} AND {right_time} 
