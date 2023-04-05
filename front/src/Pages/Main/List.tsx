@@ -34,6 +34,12 @@ function List() {
   // store에 저장된 난이도별 코스 추천 가능 여부 받아오기
   const isRec: boolean = useAppSelector(state => state.login.isRec);
 
+  console.log("ageGender", ageGender);
+  console.log("courses", courses);
+  console.log("topTen", topTen);
+  console.log("userInfo", userInfo);
+  console.log("isRec", isRec);
+
   return (
     <StyledDiv className="List">
       <StyledH>{userInfo.userNicknm}님을 위한 추천코스</StyledH>
