@@ -22,7 +22,6 @@ function MyKakaoMap(props: { ExpMtInfo: mtInfo[] }) {
       imageOption
     );
 
-    console.log("카카오맵 내", props.ExpMtInfo);
     props.ExpMtInfo.forEach(info => {
       const maker = new window.kakao.maps.Marker({
         map: map,
@@ -34,7 +33,6 @@ function MyKakaoMap(props: { ExpMtInfo: mtInfo[] }) {
         clickable: true,
       });
       window.kakao.maps.event.addListener(maker, "click", function () {
-        console.log("마커 찍음!");
         navigate(`/coursedetail/${info.courseNo}`);
       });
       // new window.kakao.maps.CustomOverlay({
@@ -175,7 +173,7 @@ const StyledMap = styled.div`
   margin-top: 10px;
   width: 90vw;
   /* height: 150vw; */
-  height: 70%;
+  height: 65%;
   border-radius: 5px;
   /* z-index: -1; */
 `;
