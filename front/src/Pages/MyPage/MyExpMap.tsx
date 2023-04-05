@@ -31,10 +31,10 @@ function MyExpMap() {
   // const [courseYCoords, setCourseYCoords] = useState<number[]>([]);
   // const courseXCoords : Array<number|undefined> = [];
   // const courseYCoords : Array<number|undefined> = [];
-  const XCoords: number[] = []
-  const YCoords: number[] = []
-  const Mtname : string[] = []
-  const CourseNo : number[] = []
+  const XCoords: Array<number> = []
+  const YCoords: Array<number> = []
+  const Mtname : Array<string> = []
+  const CourseNo : Array<number> = []
 
 
   useEffect(() => {
@@ -48,8 +48,8 @@ function MyExpMap() {
       console.log(res.data.reviewCourses)
       const length =res.data.reviewCourses.length;
       for (let i = 0; i < length; i++) {
-        XCoords.push(res.data.reviewCourses[i].courseXCoords.slice(-1))
-        YCoords.push(res.data.reviewCourses[i].courseYCoords.slice(-1))
+        XCoords.push(res.data.reviewCourses[i].courseXCoords[length-1])
+        YCoords.push(res.data.reviewCourses[i].courseYCoords[length-1])
         Mtname.push(res.data.reviewCourses[i].courseMtNm)
         CourseNo.push(res.data.reviewCourses[i].courseMtNo)
         // console.log(res.data.reviewCourses[i].courseXCoords.slice(-1))
