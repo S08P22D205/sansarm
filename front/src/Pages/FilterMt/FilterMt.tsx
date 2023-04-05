@@ -156,7 +156,7 @@ function FilterMt() {
               />
             </InputDiv>
 
-            {isFocus ? (
+            {isFocus && keyword !== "" ? (
               <ResultDiv>
                 <ResultUl>
                   {resultData.length > 0 && keyword !== "" ? (
@@ -177,7 +177,7 @@ function FilterMt() {
                       </Resultli>
                     ))
                   ) : (
-                    <Resultli2>검색결과가 없습니다.</Resultli2>
+                    <Resultli2>산 이름을 정확히 입력해 주세요.</Resultli2>
                   )}
                 </ResultUl>
               </ResultDiv>
@@ -200,7 +200,7 @@ function FilterMt() {
               />
             </InputDiv>
 
-            {isFocus ? (
+            {isFocus && keyword !== "" ? (
               <ResultDiv>
                 <ResultUl>
                   {resultData.length > 0 && keyword !== "" ? (
@@ -220,7 +220,7 @@ function FilterMt() {
                       </Resultli>
                     ))
                   ) : (
-                    <Resultli2>검색결과가 없습니다.</Resultli2>
+                    <Resultli2>산 이름을 정확히 입력해 주세요.</Resultli2>
                   )}
                 </ResultUl>
               </ResultDiv>
@@ -470,7 +470,7 @@ const Search = styled.input<SearchProps>`
   height: 11vw;
   border: 1px solid gray;
   border-radius: ${(props) =>
-    props.isFocus ? "10px 10px 0px 0px" : "10px 10px"};
+    props.isFocus && props.value ? "10px 10px 0px 0px" : "10px 10px"};
   font-family: "GmarketSansLight";
   text-align: left;
   font-size: 5vw;
@@ -523,7 +523,7 @@ const Resultli2 = styled.li`
   height: 5vw;
   list-style-type: none;
   font-family: "GmarketSansLight";
-  font-size: 5vw;
+  font-size: 4vw;
   padding-top: 2vw;
   line-height: 25px;
   margin-bottom: 4vw;

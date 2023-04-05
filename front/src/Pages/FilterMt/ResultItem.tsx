@@ -78,7 +78,7 @@ function ResultItem({
       )}
       <StyledDiv2>
         <StyledTitle>
-          {COURSE_MT_NM} {COURSE_MT_NO}코스
+          {COURSE_LOCATION} {COURSE_MT_NM} {COURSE_MT_NO}코스
         </StyledTitle>
         <StyledHr />
         <StyledP>코스 길이 : {COURSE_LENGTH} km</StyledP>

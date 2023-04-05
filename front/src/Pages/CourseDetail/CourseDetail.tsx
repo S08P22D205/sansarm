@@ -89,8 +89,8 @@ function CourseDetail() {
         },
       })
       .then((res) => {
-        console.log("코스 정보 받아오기 :: 성공!");
-        console.log(res.data);
+        // console.log("코스 정보 받아오기 :: 성공!");
+        // console.log(res.data);
         setCourseData(res.data);
         dispatch(courseActions.addCourse(res.data));
       })
@@ -115,6 +115,7 @@ function CourseDetail() {
     <div className="CourseDetail">
       <StyledDiv>
         <StyledTitle>
+          {courseData.courseLocation}&nbsp;
           {courseData.courseMtNm}&nbsp;
           {courseData.courseMtNo}코스
           {isClicked ? (
