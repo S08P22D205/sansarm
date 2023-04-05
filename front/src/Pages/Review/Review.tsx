@@ -139,7 +139,7 @@ function Review() {
     <StyledDiv>
       <StyledHeader>
         {/* 오늘 "...{props.courseMtNm}+{props.courseMtNo}" <br /> 등산은 어땠나요??        // (3) props로 넘겨받은 정보로 코스명을 보여주기 */}
-        오늘 "{courseData.courseMtNm}&nbsp;
+        오늘 "{courseData.courseLocation}&nbsp;{courseData.courseMtNm}&nbsp;
         {courseData.courseMtNo}코스" <br /> 등산은 어땠나요??
       </StyledHeader>
       <StyledBox>
