@@ -150,24 +150,30 @@ function CourseDetail() {
           ) : null}
           <StyledDiv2>
             <StyledContent>
-              코스 길이 : {courseData.courseLength}km
+              코스 길이 : <StyledSpan>{courseData.courseLength}km</StyledSpan>
             </StyledContent>
             {courseData.courseUptime ? (
               <StyledContent>
-                상행 시간 : {Math.floor(courseData.courseUptime / 60)}시간{" "}
-                {Math.floor(courseData.courseUptime % 60)}분
+                상행 시간 :{" "}
+                <StyledSpan>
+                  {Math.floor(courseData.courseUptime / 60)}시간{" "}
+                  {Math.floor(courseData.courseUptime % 60)}분
+                </StyledSpan>
               </StyledContent>
             ) : null}
 
             {courseData.courseDowntime ? (
               <StyledContent>
-                하행 시간 : {Math.floor(courseData.courseDowntime / 60)}시간{" "}
-                {Math.floor(courseData.courseDowntime % 60)}분
+                하행 시간 :{" "}
+                <StyledSpan>
+                  {Math.floor(courseData.courseDowntime / 60)}
+                  시간 {Math.floor(courseData.courseDowntime % 60)}분
+                </StyledSpan>
               </StyledContent>
             ) : null}
           </StyledDiv2>
 
-          <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
+          <StyledBtn onClick={moveToHiking}>시작하기</StyledBtn>
 
           <ReviewList id={id} />
         </div>
@@ -182,7 +188,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledDiv2 = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   margin-left: 40px;
 `;
 
@@ -199,9 +205,14 @@ const StyledIcon = styled.img`
 
 const StyledContent = styled.p`
   font-family: "GmarketSansLight";
+  font-size: 18px;
   margin: 5px;
 `;
 
+const StyledSpan = styled.span`
+  font-family: "GmarketSansMedium";
+  /* font-weight: 1000; */
+`;
 const StyledBtn = styled.button`
   background-color: #238c47;
   color: white;
@@ -214,7 +225,7 @@ const StyledBtn = styled.button`
   width: 70%;
   height: 50px;
   margin-left: 15%;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 20px;
 `;
 
