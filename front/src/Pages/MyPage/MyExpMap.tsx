@@ -31,8 +31,11 @@ function MyExpMap() {
   // const [courseYCoords, setCourseYCoords] = useState<number[]>([]);
   // const courseXCoords : Array<number|undefined> = [];
   // const courseYCoords : Array<number|undefined> = [];
-  const courseXCoords:number[] = []
-  const courseYCoords:number[] = []
+  const XCoords: number[] = []
+  const YCoords: number[] = []
+  const Mtname : string[] = []
+  const CourseNo : number[] = []
+
 
   useEffect(() => {
     const getExpMtList = async () => {
@@ -42,14 +45,16 @@ function MyExpMap() {
           "X-REFRESH-TOKEN": refreshToken,
         },
       });
-      // console.log(res.data.reviewCourses)
+      console.log(res.data.reviewCourses)
       const length =res.data.reviewCourses.length;
       for (let i = 0; i < length; i++) {
-        courseXCoords.push(res.data.reviewCourses[i].courseXCoords.slice(-1))
-        courseYCoords.push(res.data.reviewCourses[i].courseYCoords.slice(-1))
+        XCoords.push(res.data.reviewCourses[i].courseXCoords.slice(-1))
+        YCoords.push(res.data.reviewCourses[i].courseYCoords.slice(-1))
+        Mtname.push(res.data.reviewCourses[i].courseMtNm)
+        CourseNo.push(res.data.reviewCourses[i].courseMtNo)
         // console.log(res.data.reviewCourses[i].courseXCoords.slice(-1))
       }
-      // console.log(courseXCoords, courseYCoords)
+      console.log('위에서 확인', XCoords, YCoords, Mtname, CourseNo)
 
 
       // res.data.reviewCourses.map((review:any) => (
@@ -80,7 +85,7 @@ function MyExpMap() {
         </StyledLink>
       </StyledTab>
       <StyledDiv>
-        <MyExpMapKakaoMap courseXCoords={courseXCoords} courseYCoords={courseYCoords}/>
+        <MyExpMapKakaoMap XCoords={XCoords} YCoords={YCoords} Mtname={Mtname} CourseNo={CourseNo}/>
       </StyledDiv>
     </div>
   )
@@ -109,8 +114,10 @@ const StyledLink = styled(Link)`
 `;
 
 const StyledDiv = styled.div`
-  padding-left: 23vw;
-  padding-right: 15vw;
+  width: 100vw;
+  height: 200vw;
+  padding-left: 5vw;
+  padding-right: 5vw;
   margin-top: 5vw;
   font-family: "GmarketSansLight";
 `;
