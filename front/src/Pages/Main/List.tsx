@@ -7,19 +7,6 @@ import { UserInfo } from "../../store/loginSlice";
 import { courseInfo } from "../../store/courseSlice";
 import ListItemTopTen from "./ListItemTopTen";
 
-const StyledDiv = styled.div`
-  padding-left: 20px;
-  padding-right: 20px;
-`;
-
-const StyledH = styled.p`
-  text-align: center;
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: 5vw;
-  margin-bottom: 3vw;
-`;
-
 function List() {
   // store에 저장된 각 코스정보를 useSelector로 받아온다!
   const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
@@ -36,7 +23,10 @@ function List() {
 
   return (
     <StyledDiv className="List">
-      <StyledH>{userInfo.userNicknm}님을 위한 추천코스</StyledH>
+      <StyledH>
+        <StyledIcon src="/img/mt_s.png" alt="mountain" /> {userInfo.userNicknm}
+        님을 위한 추천코스 <StyledIcon src="/img/mt_s.png" alt="mountain" />
+      </StyledH>
       <ListItem
         USER_AGE_POOL={ageGender.USER_AGE_POOL}
         USER_GENDER={ageGender.USER_GENDER}
@@ -65,5 +55,24 @@ function List() {
     </StyledDiv>
   );
 }
+
+const StyledDiv = styled.div`
+  padding-left: 20px;
+  padding-right: 20px;
+`;
+
+const StyledIcon = styled.img`
+  width: 20px;
+  margin-top: -5px;
+`;
+
+const StyledH = styled.p`
+  text-align: center;
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: 5.1vw;
+  margin-bottom: 3.5vw;
+  margin-top: 6vw;
+`;
 
 export default List;

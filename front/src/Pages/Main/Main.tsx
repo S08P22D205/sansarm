@@ -2,7 +2,7 @@ import styled from "styled-components";
 import List from "./List";
 import { useEffect, useState } from "react";
 import MainBtn from "./MainBtn";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useAppDispatch } from "../../store/hooks";
 import {
   changeAgeGender,
   changeCourses,
@@ -11,18 +11,6 @@ import {
 import { courseApi, userApi } from "../../api";
 import SearchBar from "./SearchBar";
 import { changeUserInfo, changeIsRec } from "../../store/loginSlice";
-
-const StyledDiv = styled.div`
-  padding-top: 8vw;
-`;
-
-const StyledH = styled.p`
-  text-align: center;
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: 5.6vw;
-  margin-bottom: 12px;
-`;
 
 function Main() {
   // dispatch 사용하기 위해 정의해주기
@@ -89,5 +77,17 @@ function Main() {
     </StyledDiv>
   );
 }
+
+const StyledDiv = styled.div`
+  padding-top: 8vw;
+`;
+
+const StyledH = styled.p`
+  text-align: center;
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: 5.6vw;
+  margin-bottom: 12px;
+`;
 
 export default Main;

@@ -1,6 +1,30 @@
 import { ReactElement } from "react";
 import styled from "styled-components";
 
+interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  className?: string;
+  children: string;
+  imgsrc?: string;
+  imgalt: string;
+  onClick: () => void;
+}
+
+function RecBtn({
+  className,
+  children,
+  imgsrc,
+  imgalt,
+  onClick,
+  ...rest
+}: ButtonInfo): ReactElement {
+  return (
+    <StyledBtn className={className} onClick={onClick} {...rest}>
+      <BtnName>{children}</BtnName>
+      <StyledIcon src={imgsrc} alt={imgalt} />
+    </StyledBtn>
+  );
+}
+
 const StyledBtn = styled.button`
   width: 50%;
   padding: 15px;
@@ -26,29 +50,5 @@ const StyledIcon = styled.img`
   width: 14vw;
   margin-top: 5px;
 `;
-
-interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  className?: string;
-  children: string;
-  imgsrc?: string;
-  imgalt: string;
-  onClick: () => void;
-}
-
-function RecBtn({
-  className,
-  children,
-  imgsrc,
-  imgalt,
-  onClick,
-  ...rest
-}: ButtonInfo): ReactElement {
-  return (
-    <StyledBtn className={className} onClick={onClick} {...rest}>
-      <BtnName>{children}</BtnName>
-      <StyledIcon src={imgsrc} alt={imgalt} />
-    </StyledBtn>
-  );
-}
 
 export default RecBtn;

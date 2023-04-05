@@ -7,23 +7,6 @@ import "swiper/css/free-mode";
 import "swiper/css/effect-cards";
 import ListCard from "./ListCard";
 
-const StyledH = styled.p`
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: 4vw;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const StyledSlide = styled(SwiperSlide)`
-  width: 30vw;
-  /* background-color: #f0f5ee; */
-  background-color: #f5f5f5;
-  border: none;
-  border-radius: 5px;
-  margin-bottom: 3vw;
-`;
-
 function ListItem({
   courseName,
   USER_AGE_POOL,
@@ -44,7 +27,7 @@ function ListItem({
       <Swiper
         modules={[FreeMode]}
         spaceBetween={10}
-        slidesPerView={3}
+        slidesPerView={3.2}
         loop={true}
         freeMode={true}
       >
@@ -55,12 +38,31 @@ function ListItem({
               COURSE_MT_NO={course.COURSE_MT_NO}
               COURSE_MT_CD={course.COURSE_MT_CD}
               COURSE_NO={course.COURSE_NO}
+              COURSE_LOCATION={course.COURSE_LOCATION}
             />
           </StyledSlide>
         ))}
       </Swiper>
+      <hr />
     </div>
   );
 }
+
+const StyledH = styled.p`
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: 4.3vw;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const StyledSlide = styled(SwiperSlide)`
+  width: 30vw;
+  /* background-color: #f0f5ee; */
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 3vw;
+`;
 
 export default ListItem;

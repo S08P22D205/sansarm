@@ -5,49 +5,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import defImg from "./DefaultImg";
 
-const StyledH = styled.p`
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: small;
-  text-align: center;
-  margin: 3px;
-  margin-top: 0px;
-`;
-
-const StyledImg = styled.img`
-  width: 25vw;
-  height: 18vw;
-  border: none;
-  border-radius: 5px;
-  margin: 5px;
-`;
-
-const LargeImg = styled.img`
-  width: 100%;
-`;
-
-const StyledLank = styled.h2`
-  font-family: "GmarketSansLight";
-  text-align: center;
-  font-weight: bold;
-  margin-top: 3vw;
-  margin-bottom: 1vw;
-`;
-
-const StyledCourse = styled.p`
-  font-family: "GmarketSansLight";
-  text-align: center;
-  font-weight: bold;
-  font-size: 4vw;
-  margin: 3px;
-  margin-top: 0px;
-`;
-
 function ListCard({
   COURSE_MT_NM,
   COURSE_MT_NO,
   COURSE_MT_CD,
   COURSE_NO,
+  COURSE_LOCATION,
   courseIdx,
 }: CourseInfo) {
   // navigate 사용하기 위해 선언
@@ -109,6 +72,7 @@ function ListCard({
           ) : (
             <StyledImg src={randomVal} alt="img" />
           )}
+          <StyledH>{COURSE_LOCATION}</StyledH>
           <StyledH>{COURSE_MT_NM}</StyledH>
           <StyledH>{COURSE_MT_NO}코스</StyledH>
         </div>
@@ -116,5 +80,45 @@ function ListCard({
     </div>
   );
 }
+
+const StyledH = styled.p`
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: small;
+  text-align: center;
+  margin: 2px;
+  margin-top: 0px;
+`;
+
+const StyledImg = styled.img`
+  /* width: 25vw; */
+  width: 90%;
+  height: 18vw;
+  border: none;
+  border-radius: 5px;
+  margin: 5%;
+`;
+
+const LargeImg = styled.img`
+  width: 100%;
+  height: 30vw;
+`;
+
+const StyledLank = styled.h2`
+  font-family: "GmarketSansLight";
+  text-align: center;
+  font-weight: bold;
+  margin-top: 3vw;
+  margin-bottom: 1vw;
+`;
+
+const StyledCourse = styled.p`
+  font-family: "GmarketSansLight";
+  text-align: center;
+  font-weight: bold;
+  font-size: 4vw;
+  margin: 3px;
+  margin-top: 0px;
+`;
 
 export default ListCard;

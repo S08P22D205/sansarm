@@ -29,7 +29,6 @@ const defImg: Array<string> = [
   "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2F20160520_46%2Fjhunkim319_1463713261528m1Xjw_JPEG%2F%25BB%25EA%25B0%25FA%25B9%25D9%25B4%25D9_31.jpg&type=sc960_832",
   "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAxODEyMTVfMTA1%2FMDAxNTQ0ODYzMTk5NDI4.ehvO46gQh9Or9KlBTEQezGgrbBMTZL1hYhcTwhrzr5kg.jOETqAv1D2xRFkgYNOXrqvPPA4D5w5wge94m9qSRi80g.JPEG.ssnn1206%2F20181205_171147_-_%25BA%25B9%25BB%25E7%25BA%25BB.jpg&type=sc960_832",
   "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2Fdata2%2F2004%2F4%2F27%2F26%2F%25BA%25F1%25BA%25C0%25B4%25C9%25BC%25B1.jpg&type=sc960_832",
-  "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMjA1MzBfMTcw%2FMDAxNjUzODk4MTYzNzEy.oajjVikP7MJveTKoB9696FLkscQD-aT5ujz5Al8qmGQg.1eNBkOqTa0WCIPV___8Dj1kdjmHKceDwOMOPa7m9g3og.JPEG.atomy_official%2F%25BC%25AD%25BF%25EF%25B0%25E6%25B1%25E2__%25BA%25CF%25C7%25D1%25BB%25EA_%25281%2529.jpg&type=sc960_832",
 ];
 
 export default defImg;
