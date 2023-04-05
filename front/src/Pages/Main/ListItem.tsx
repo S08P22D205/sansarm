@@ -27,7 +27,7 @@ function ListItem({
       <Swiper
         modules={[FreeMode]}
         spaceBetween={10}
-        slidesPerView={3}
+        slidesPerView={3.2}
         loop={true}
         freeMode={true}
       >
@@ -38,10 +38,12 @@ function ListItem({
               COURSE_MT_NO={course.COURSE_MT_NO}
               COURSE_MT_CD={course.COURSE_MT_CD}
               COURSE_NO={course.COURSE_NO}
+              COURSE_LOCATION={course.COURSE_LOCATION}
             />
           </StyledSlide>
         ))}
       </Swiper>
+      <hr />
     </div>
   );
 }
@@ -49,7 +51,7 @@ function ListItem({
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
   font-weight: bold;
-  font-size: 4vw;
+  font-size: 4.3vw;
   text-align: left;
   margin-bottom: 5px;
 `;

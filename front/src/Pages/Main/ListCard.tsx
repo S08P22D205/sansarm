@@ -10,6 +10,7 @@ function ListCard({
   COURSE_MT_NO,
   COURSE_MT_CD,
   COURSE_NO,
+  COURSE_LOCATION,
   courseIdx,
 }: CourseInfo) {
   // navigate 사용하기 위해 선언
@@ -71,6 +72,7 @@ function ListCard({
           ) : (
             <StyledImg src={randomVal} alt="img" />
           )}
+          <StyledH>{COURSE_LOCATION}</StyledH>
           <StyledH>{COURSE_MT_NM}</StyledH>
           <StyledH>{COURSE_MT_NO}코스</StyledH>
         </div>
@@ -84,16 +86,17 @@ const StyledH = styled.p`
   font-weight: bold;
   font-size: small;
   text-align: center;
-  margin: 3px;
+  margin: 2px;
   margin-top: 0px;
 `;
 
 const StyledImg = styled.img`
-  width: 25vw;
+  /* width: 25vw; */
+  width: 90%;
   height: 18vw;
   border: none;
   border-radius: 5px;
-  margin: 5px;
+  margin: 5%;
 `;
 
 const LargeImg = styled.img`

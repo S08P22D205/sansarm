@@ -23,7 +23,10 @@ function List() {
 
   return (
     <StyledDiv className="List">
-      <StyledH>{userInfo.userNicknm}님을 위한 추천코스</StyledH>
+      <StyledH>
+        <StyledIcon src="/img/mt_s.png" alt="mountain" /> {userInfo.userNicknm}
+        님을 위한 추천코스 <StyledIcon src="/img/mt_s.png" alt="mountain" />
+      </StyledH>
       <ListItem
         USER_AGE_POOL={ageGender.USER_AGE_POOL}
         USER_GENDER={ageGender.USER_GENDER}
@@ -58,12 +61,18 @@ const StyledDiv = styled.div`
   padding-right: 20px;
 `;
 
+const StyledIcon = styled.img`
+  width: 20px;
+  margin-top: -5px;
+`;
+
 const StyledH = styled.p`
   text-align: center;
   font-family: "GmarketSansLight";
   font-weight: bold;
-  font-size: 5vw;
-  margin-bottom: 3vw;
+  font-size: 5.1vw;
+  margin-bottom: 3.5vw;
+  margin-top: 6vw;
 `;
 
 export default List;

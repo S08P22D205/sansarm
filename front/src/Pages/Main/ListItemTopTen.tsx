@@ -15,28 +15,6 @@ interface RecInfo {
   COURSE_LIST: courseInfo[];
 }
 
-const StyledH = styled.p`
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: 4vw;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const StyledSwiper = styled(Swiper)`
-  padding-left: 20vw;
-  padding-right: 20vw;
-`;
-
-const StyledSlide = styled(SwiperSlide)`
-  width: 30vw;
-  height: 60vw;
-  background-color: #f5f5f5;
-  border: none;
-  border-radius: 5px;
-  margin-bottom: 3vw;
-`;
-
 function ListItemTopTen({ courseName, COURSE_LIST }: RecInfo) {
   // store에 저장된 난이도별 코스 추천 가능 여부 받아오기
   const isRec: boolean = useAppSelector(state => state.login.isRec);
@@ -66,5 +44,27 @@ function ListItemTopTen({ courseName, COURSE_LIST }: RecInfo) {
     </div>
   );
 }
+
+const StyledH = styled.p`
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: 5vw;
+  text-align: center;
+  margin-bottom: 10px;
+`;
+
+const StyledSwiper = styled(Swiper)`
+  padding-left: 20vw;
+  padding-right: 20vw;
+`;
+
+const StyledSlide = styled(SwiperSlide)`
+  width: 30vw;
+  height: 60vw;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 3vw;
+`;
 
 export default ListItemTopTen;
