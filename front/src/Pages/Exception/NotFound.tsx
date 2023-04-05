@@ -10,7 +10,7 @@ function NotFound() {
 
   return (
     <div>
-      <StyledP>검색 결과가 없습니다.</StyledP>
+      <StyledP>잘못된 페이지입니다.</StyledP>
       <StyledImg src="\img\tthan_san.png" alt="tthan_san" />
 
       <StyledDiv>
@@ -18,7 +18,7 @@ function NotFound() {
         <StyledP2>이 산이 아닌가벼...</StyledP2>
       </StyledDiv>
 
-      <StyledButton onClick={moveToMain}>홈으로</StyledButton>
+      <StyledButton onClick={moveToMain}>돌아가기</StyledButton>
     </div>
   );
 }
@@ -26,7 +26,8 @@ function NotFound() {
 const StyledP = styled.p`
   display: flex;
   justify-content: center;
-  margin-top: 90px;
+  margin-top: 180px;
+  margin-bottom: 20px;
   font-family: "GmarketSansMedium";
   font-size: 30px;
 `;
@@ -40,7 +41,7 @@ const StyledImg = styled.img`
 const StyledDiv = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 15px;
+  margin-top: 30px;
 `;
 
 const StyledP2 = styled.p`
