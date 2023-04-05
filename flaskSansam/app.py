@@ -162,11 +162,13 @@ def get_course_by_mt_name():
 
     res_dict = request.get_json()
     course_mt_name = res_dict["courseMtNm"]
-    bt_len_no = res_dict["courseLengthBtNo"]
     bt_time_no = res_dict["courseTimeBtNo"]
+    bt_len_no = res_dict["courseLengthBtNo"]
 
-    left_time, right_time = course_time[int(bt_len_no)]
-    left_len, right_len = course_length[int(bt_time_no)]
+    print(bt_len_no, bt_time_no)
+
+    left_time, right_time = course_time[int(bt_time_no)]
+    left_len, right_len = course_length[int(bt_len_no)]
 
     with database.connect() as conn:
         courses = conn.execute(text(f"""
