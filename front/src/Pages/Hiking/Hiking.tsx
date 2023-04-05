@@ -12,7 +12,7 @@ interface ILocation {
 
 function Hiking() {
   const courseData: courseInfo = useAppSelector(
-    (state) => state.course.detailInfo
+    state => state.course.detailInfo
   );
 
   const [isRunning, setIsRunning] = useState(false);
@@ -26,12 +26,12 @@ function Hiking() {
 
   const moveToPhotoPage = () => {
     if (window.confirm("사진을 찍을까요?")) {
-      navigate("/photo/", {});
+      navigate("/photo", {});
     }
   };
 
   const moveToReviewPage = () => {
-    navigate("/review/");
+    navigate("/review");
   };
 
   useEffect(() => {
@@ -44,7 +44,7 @@ function Hiking() {
   }, []);
 
   const dispatch = useAppDispatch();
-  const startTime: number = useAppSelector((state) => state.course.timeInfo);
+  const startTime: number = useAppSelector(state => state.course.timeInfo);
 
   function handleStart() {
     // console.log(startTime);
@@ -96,8 +96,8 @@ function Hiking() {
       const long = position.coords.longitude;
 
       setLoc({ latitude: lat, longitude: long, error: null });
-      setLatitudeList((prevState) => [...prevState, lat]);
-      setLongitudeList((prevState) => [...prevState, long]);
+      setLatitudeList(prevState => [...prevState, lat]);
+      setLongitudeList(prevState => [...prevState, long]);
     };
 
     const error = () => {

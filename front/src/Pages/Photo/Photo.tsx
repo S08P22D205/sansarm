@@ -12,7 +12,7 @@ function CameraApp() {
   const navigate = useNavigate();
 
   const moveToHiking = () => {
-    navigate("/hiking/");
+    navigate("/hiking");
   };
 
   console.log(cameraStream);
@@ -77,7 +77,7 @@ function CameraApp() {
   const stopCamera = async () => {
     console.log(cameraStream);
     if (cameraStream) {
-      cameraStream.getTracks().forEach((track) => track.stop());
+      cameraStream.getTracks().forEach(track => track.stop());
       setCameraStream(null);
       console.log("카메라 끄기");
       console.log(cameraStream);

@@ -31,13 +31,13 @@ function App() {
           <Route path="/login/*" element={<Login />} />
           <Route path="/signup/1" element={<SignUp1 />} />
           <Route path="/signup/2" element={<SignUp2 />} />
-          <Route path="/main/*" element={<Main />} />
+          <Route path="/main/" element={<Main />} />
           <Route path="/filtermt/*" element={<FilterMt />} />
-          <Route path="/filterrg/*" element={<FilterRg />} />
+          <Route path="/filterrg/" element={<FilterRg />} />
           <Route path="/coursedetail/*" element={<CourseDetail />} />
-          <Route path="/hiking/*" element={<Hiking />} />
-          <Route path="/review/*" element={<Review />} />
-          <Route path="/photo/*" element={<Photo />} />
+          <Route path="/hiking" element={<Hiking />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/photo" element={<Photo />} />
           <Route path="/mypage/*" element={<MyPage />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
