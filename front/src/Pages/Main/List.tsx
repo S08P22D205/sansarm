@@ -71,7 +71,7 @@ const StyledH = styled.p`
   font-family: "GmarketSansLight";
   font-weight: bold;
   font-size: 5.1vw;
-  margin-bottom: 3.5vw;
+  margin-bottom: 6vw;
   margin-top: 6vw;
 `;
 
