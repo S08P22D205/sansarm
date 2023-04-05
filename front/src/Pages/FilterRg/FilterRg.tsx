@@ -7,6 +7,9 @@ import styled from "styled-components";
 import Navbar from "../../Common/Navbar/Navbar";
 // import ResultList from "../../Common/Result/ResultList";
 
+import { Slider } from "@mui/material/";
+
+
 interface Option {
   value: string;
   label: string;
@@ -18,11 +21,14 @@ interface UserLocation {
   error: string | null;
 }
 
+
+
 // 위치정보 받아오기 관련 레거시 코드2
 // interface IPosition {
 //   latitude: number;
 //   longitude: number;
 // }
+
 
 function FilterRg() {
   // 위치정보 받아오기 관련 레거시 코드2
@@ -100,8 +106,8 @@ function FilterRg() {
       setRgBtn(1);
       setLocBtn(0);
       setLocation({ latitude: null, longitude: null, error: null });
-      SetvolSet(0)
       handleMt(0, "courseRadius")
+      setVolVal(0)
     }
 
     // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
@@ -109,24 +115,24 @@ function FilterRg() {
 
   // 지역기반 드랍박스 목록
   const regions: Option[] = [
-    { value: "미선택", label: "지역을 선택해주세요" },
-    { value: "서울시", label: "서울시" },
-    { value: "부산시", label: "부산시" },
-    { value: "대구시", label: "대구시" },
-    { value: "인천시", label: "인천시" },
-    { value: "광주시", label: "광주시" },
-    { value: "대전시", label: "대전시" },
-    { value: "울산시", label: "울산시" },
-    { value: "세종시", label: "세종시" },
-    { value: "경기도", label: "경기도" },
-    { value: "강원도", label: "강원도" },
-    { value: "충청북도", label: "충청북도" },
-    { value: "충청남도", label: "충청남도" },
-    { value: "전라북도", label: "전라북도" },
-    { value: "전라남도", label: "전라남도" },
-    { value: "경상북도", label: "경상북도" },
-    { value: "경상남도", label: "경상남도" },
-    { value: "제주도", label: "제주도" },
+    { value: "", label: "지역을 선택해주세요" },
+    { value: "서울", label: "서울시" },
+    { value: "부산", label: "부산시" },
+    { value: "대구", label: "대구시" },
+    { value: "인천", label: "인천시" },
+    { value: "광주", label: "광주시" },
+    { value: "대전", label: "대전시" },
+    { value: "울산", label: "울산시" },
+    { value: "세종", label: "세종시" },
+    { value: "경기", label: "경기도" },
+    { value: "강원", label: "강원도" },
+    { value: "충북", label: "충청북도" },
+    { value: "충남", label: "충청남도" },
+    { value: "전북", label: "전라북도" },
+    { value: "전남", label: "전라남도" },
+    { value: "경북", label: "경상북도" },
+    { value: "경남", label: "경상남도" },
+    { value: "제주", label: "제주도" },
   ];
 
   // 지역명 갱신
@@ -163,24 +169,13 @@ function FilterRg() {
   // }, [location])
 
   // 반경정보 받아오기
-  const [volumePercent, setVolumePercent] = useState(0);
-  const [volset, SetvolSet] = useState(0)
-  
+  const [volval, setVolVal] = useState<number>(0)
 
-  const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
-    const bar = e.currentTarget;
-    console.log('이거',e.nativeEvent.offsetX)
-    // e.nativeEvent.offsetX를 담는 useState하나더
-
-    SetvolSet(e.nativeEvent.offsetX);
-    const barWidth = bar.clientWidth;
-    const volumePercent = (volset / barWidth);
-    setVolumePercent(volumePercent);
-    // const volumeValue = volumePercent.toFixed(0)
-    handleMt(Number((volumePercent*100/3.33).toFixed(0)), "courseRadius")
-    // console.log(volumePercent ,typeof volumePercent)
-    // Call a function to handle the volume change here
+  const volChange = (event: any, newValue: number | number[]) => {
+    setVolVal(newValue as number); // Update the state variable when the slider's value changes
   };
+    
+
 
   // 지역/위치 이하---------------------------------------
 
@@ -218,7 +213,8 @@ function FilterRg() {
       courseTimeBtNo: 0,
     });
     setRgBtn(1);
-    ChangeTab();
+    setLocBtn(0)
+    // ChangeTab();
   }
 
   const [location, setLocation] = useState<UserLocation>({
@@ -232,43 +228,43 @@ function FilterRg() {
   // # 현재위치 정보 받아와서 searchRg에 넣기
 
   function GetGeo () {
-    return new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
+    // return new Promise((resolve, reject) => {
+    //   if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(resolve, reject);
         
-      } else {
-        reject(new Error('Geolocation is not supported'));
-      }
-    })
+    //   } else {
+    //     reject(new Error('Geolocation is not supported'));
+    //   }
+    // })
 
     // 작동 잘하던 GetGeo코드
-    // if (!navigator.geolocation) {
-    //   setLocation({
-    //     latitude: null,
-    //     longitude: null,
-    //     error: "Geolocation이 브라우저에서 작동하지 않음",
-    //   });
-    //   // return;
-    // }
+    if (!navigator.geolocation) {
+      setLocation({
+        latitude: null,
+        longitude: null,
+        error: "Geolocation이 브라우저에서 작동하지 않음",
+      });
+      // return;
+    }
 
-    // const success = (position: any) => {
-    //   setLocation({
-    //     latitude: position.coords.latitude,
-    //     longitude: position.coords.longitude,
-    //     error: null,
-    //   });
-    // };
+    const success = (position: any) => {
+      setLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        error: null,
+      });
+    };
 
-    // const error = () => {
-    //   setLocation({
-    //     latitude: null,
-    //     longitude: null,
-    //     error: "Geolocation 에러",
-    //   });
-    // };
+    const error = () => {
+      setLocation({
+        latitude: null,
+        longitude: null,
+        error: "Geolocation 에러",
+      });
+    };
 
-    // navigator.geolocation.getCurrentPosition(success, error);
-    // console.log("위치 받아옴");
+    navigator.geolocation.getCurrentPosition(success, error);
+    console.log("위치 받아옴");
   };
 
   function GetGeoCehck () {
@@ -289,16 +285,32 @@ function FilterRg() {
     console.log(searchRg);
   };
 
-  function SearchSinal() {
+  function AddVol(){
+    handleMt(volval, "courseRadius")
+  }
 
-    GetGeo()
-      .then(GetGeoCehck)
-      .then(AddGeoX)
-      .then(AddGeoY)
-      .then(AddGeoCheck)
-      .catch((error) => {
-        console.log(error)
-      })
+  function SearchSinal() {
+    if (rgBtn === 1){
+      // console.log('지역검색')
+      // if (|)
+    } else if (locBtn === 1){
+      console.log('위치검색')
+    }
+
+
+    // GetGeo()
+    // console.log(location)
+
+
+    // GetGeo()
+    //   .then(GetGeoCehck)
+    //   .then(AddGeoX)
+    //   .then(AddGeoY)
+    //   .then(AddGeoCheck)
+    //   .then(AddVol)
+    //   .catch((error) => {
+    //     console.log(error)
+    //   })
   };
   
 
@@ -330,8 +342,8 @@ function FilterRg() {
             현재위치
           </UnTab2>
         )}
-        <Tabcontent>
-          {rgBtn === 1 ? (
+        {rgBtn === 1 ? (
+          <TabcontentRg>
             <StyledDiv2>
               <StyledSelect
                 onChange={(event) => SelectRegion(event, "courseLocation")}
@@ -347,15 +359,33 @@ function FilterRg() {
                 ))}
               </StyledSelect>
             </StyledDiv2>
-          ) : (
+          </TabcontentRg>
+          ) : 
+          (
+            <TabcontentLoc>
             <VolBarDiv>
-              <p>반경</p>
-              <VolBar onClick={handleVolumeChange}>
-                <VolBarFill percent={volumePercent} />
-              </VolBar>
+              <VolP>
+                반경
+                (km)  
+              </VolP>
+              <SliderDiv>
+                <Slider
+                  // color="primary"
+                  aria-label="Temperature"
+                  defaultValue={0}
+                  // getAriaValueText={valuetext}
+                  valueLabelDisplay="auto"
+                  step={1}
+                  marks={true}
+                  min={0}
+                  max={30}
+                  value={volval}
+                  onChange={volChange}
+                />
+              </SliderDiv>
             </VolBarDiv>
+          </TabcontentLoc>
           )}
-        </Tabcontent>
       </TabDiv>
 
       {/* -------------------------------------------------- */}
@@ -408,6 +438,7 @@ function FilterRg() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
+            setVolVal(0);
             initializer();
           }}
         >
@@ -438,7 +469,7 @@ const StyledP2 = styled.p`
 
 const TabDiv = styled.div`
   width: 93vw;
-  height: 40vw;
+  height: 36vw;
   margin-left: 3.5vw;
   border-radius: 20px;
   background-color: #cfe2c8;
@@ -448,58 +479,82 @@ const TabDiv = styled.div`
 `;
 const Tab1 = styled.button`
   width: 45vw;
-  height: 15vw;
+  height: 13vw;
   margin-left: 1.5vw;
-  margin-top: 1vw;
-  border-radius: 20px;
+  margin-top: 1.5vw;
+  border-top-right-radius : 20px;
+  border-top-left-radius : 20px;
   border: none;
   background-color: white;
-  box-shadow: 3px 3px 3px #818181 inset;
-  font-size: 7vw;
+  // box-shadow: 3px 3px 3px #818181 inset;
+  font-size: 6vw;
 `;
 const UnTab1 = styled.button`
   width : 45vw;
-  height : 15vw;
+  height : 13vw;
   margin-left : 1.5vw;
-  margin-top : 1vw;
-  border-radius : 20px;
+  margin-top : 1.5vw;
+  border-top-right-radius : 20px;
+  border-top-left-radius : 20px;
   border : none;
   background-color: #CFE2C8;
-  font-size : 7vw;
+  font-size : 6vw;
   &: hover{
     cursor : pointer;
 `;
 const Tab2 = styled.button`
   width: 45vw;
-  height: 15vw;
+  height: 13vw;
   // margin-left : 4vw;
-  margin-top: 1vw;
-  border-radius: 20px;
+  margin-top: 1.5vw;
+  border-top-right-radius : 20px;
+  border-top-left-radius : 20px;
   border: none;
   background-color: white;
-  box-shadow: 3px 3px 3px #818181 inset;
-  font-size: 7vw;
+  // box-shadow: 3px 3px 3px #818181 inset;
+  font-size: 6vw;
 `;
 
 const UnTab2 = styled.button`
   width : 45vw;
-  height : 15vw;
+  height : 13vw;
   // margin-left : 4vw;
-  margin-top : 1vw;
-  border-radius : 20px;
+  margin-top : 1.5vw;
+  border-top-right-radius : 20px;
+  border-top-left-radius : 20px;
   border : none;
   background-color: #CFE2C8;
-  font-size : 7vw;
+  font-size : 6vw;
   &: hover{
     cursor : pointer;
 `;
-const Tabcontent = styled.div`
+const TabcontentRg = styled.div`
   width: 90vw;
-  height: 21vw;
+  height: 20vw;
   margin-left: 1.5vw;
-  margin-top: 1vw;
+  // margin-top: 1vw;
   background-color: white;
-  border-radius: 20px;
+  // border : 1px solid #CFE2C8;
+  // border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TabcontentLoc = styled.div`
+  width: 90vw;
+  height: 20vw;
+  margin-left: 1.5vw;
+  // margin-top: 1vw;
+  background-color: white;
+  // border : 1px solid #CFE2C8;
+  border-top-left-radius: 20px;
+  // border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -528,17 +583,63 @@ const StyledInput = styled.input`
 
 const StyledSelect = styled.select`
   width: 80vw;
-  height: 7vh;
+  height: 6vh;
   border: 3px solid black;
   border-radius: 10px;
   overflow-y: auto;
-  font-size: 7vw;
+  font-size: 6vw;
 `;
 
 const StyledOption = styled.option`
   overflow-y: scroll;
-  font-size: 5vw;
+  font-size: 4vw;
 `;
+
+const VolP = styled.p`
+  font-size : 5vw;
+  padding-top : 5vw;
+`
+
+const SliderDiv = styled.div`
+  width : 75vw;
+  // padding-top : 4vw;
+  && {
+    color: #1B954C;
+    height: 16vw;
+    padding: 13px 0;
+  }
+
+  && .MuiSlider-rail {
+    height: 3vw;
+    opacity: 1;
+    background-color: #BDBDBD;
+  }
+
+  && .MuiSlider-track {
+    height: 3vw;
+    opacity: 1;
+    background-color: #1B954C;
+  }
+
+  && .MuiSlider-thumb {
+    width: 6vw;
+    height: 6vw;
+    background-color: #1B954C;
+    border: 2px solid #fff;
+    margin-top: -0.4vw;
+    margin-left: -10px;
+
+    &:focus,
+    &:hover,
+    &:active {
+      box-shadow: 0 0 0 8px rgba(27, 149, 76, 0.16);
+    }
+
+    &.Mui-focusVisible {
+      box-shadow: 0 0 0 8px rgba(27, 149, 76, 0.16);
+    }
+  }
+`
 
 const VolBarDiv = styled.div`
   width: 80vw;
@@ -548,20 +649,6 @@ const VolBarDiv = styled.div`
   justify-content: space-between;
 `;
 
-const VolBar = styled.div`
-  width: 60vw;
-  height: 4vw;
-  font-size: 7vw;
-  background-color: #d8d8d8;
-  border: 1px solid #999;
-`;
-
-const VolBarFill = styled.div<{ percent: number }>`
-  height: 100%;
-  background-color: #238c47;
-  transition: width 0.3s ease-in-out;
-  width: ${(props) => props.percent * 100}%;
-`;
 
 // ----------------------------------------
 
