@@ -64,7 +64,6 @@ function MyMap() {
         </StyledLink>
       </StyledTab>
       <StyledDiv>
-        <p>mymap</p>
         <MyKakaoMap ExpMtInfo={ExpMtInfo} />
         {/* <MyExpMapKakaoMap XCoords={XCoords} YCoords={YCoords} Mtname={Mtname} CourseNo={CourseNo}/> */}
       </StyledDiv>
