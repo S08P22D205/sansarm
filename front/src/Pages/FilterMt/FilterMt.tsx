@@ -293,6 +293,7 @@ function FilterMt() {
             setKeyword("");
             initializeData();
             setCourseList([]);
+            setMtName("");
           }}
         >
           초기화
