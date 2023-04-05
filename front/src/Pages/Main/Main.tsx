@@ -75,7 +75,9 @@ function Main() {
       const res = await courseApi.recommend(accessToken, refreshToken);
       dispatch(changeCourses(res.data));
     };
-    getCourses();
+    if (isRec) {
+      getCourses();
+    }
   }, [isRec]);
 
   return (
