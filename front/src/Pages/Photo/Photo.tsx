@@ -36,7 +36,7 @@ function CameraApp() {
       if (action === "POP") {
         // await listenBackEvent();
         await stopCamera();
-        window.confirm("뒤로 가시?");
+        // window.confirm("사진 촬영을 종료하시겠습니까?");
         console.log("뒤로가기 버튼 클릭됨!@" + cameraStream);
       }
     });
@@ -102,16 +102,6 @@ function CameraApp() {
         document.body.removeChild(downloadLink);
       }
     }
-  };
-
-  const downloadImage = () => {
-    const downloadLink = document.createElement("a");
-    downloadLink.href = imageDataUrl;
-    downloadLink.download = "image.png";
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
-    setImageDataUrl("");
   };
 
   return (
