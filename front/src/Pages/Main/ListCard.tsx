@@ -93,7 +93,8 @@ const StyledH = styled.p`
 const StyledImg = styled.img`
   /* width: 25vw; */
   width: 90%;
-  height: 18vw;
+  height: 20vw;
+  /* height: 18vw; */
   border: none;
   border-radius: 5px;
   margin: 5%;
