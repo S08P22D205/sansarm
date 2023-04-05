@@ -36,10 +36,6 @@ function Hiking() {
 
   useEffect(() => {
     // window.location.reload();
-    try {
-      const stream = navigator.mediaDevices.getUserMedia({ video: false });
-      console.log("asdfdsf");
-    } catch (err) {}
     handleStart();
   }, []);
 
@@ -212,7 +208,7 @@ const StyledCircle = styled.div`
   height: 70px;
   float: right;
   margin-right: 12%;
-  margin-top: 10%;
+  /* margin-top: 10%; */
   border: 3.5px solid #119426;
 `;
 
