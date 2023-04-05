@@ -6,6 +6,7 @@ import Kakaomap from "./Kakaomap";
 import ReviewList from "./ReviewList";
 import { useAppDispatch } from "../../store/hooks";
 import { courseActions } from "../../store/courseSlice";
+import Loading from "../../Common/Loading/Loading";
 
 interface courseInfo {
   courseNo?: number;
@@ -25,6 +26,9 @@ interface courseInfo {
 function CourseDetail() {
   const [courseData, setCourseData] = useState<courseInfo>({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
+
+  // 로딩 중
+  const [loading, setLoading] = useState(true);
 
   // navigate, location 사용
   const navigate = useNavigate();
@@ -93,6 +97,7 @@ function CourseDetail() {
         // console.log(res.data);
         setCourseData(res.data);
         dispatch(courseActions.addCourse(res.data));
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -113,52 +118,60 @@ function CourseDetail() {
 
   return (
     <div className="CourseDetail">
-      <StyledDiv>
-        <StyledTitle>
-          {courseData.courseLocation}&nbsp;
-          {courseData.courseMtNm}&nbsp;
-          {courseData.courseMtNo}코스
-          {isClicked ? (
-            <StyledIcon
-              src="/img/heart_pink.png"
-              alt="하트"
-              onClick={unClickedHeart}
+      {loading ? (
+        <Loading />
+      ) : (
+        <div>
+          <StyledDiv>
+            <StyledTitle>
+              {courseData.courseLocation}&nbsp;
+              {courseData.courseMtNm}&nbsp;
+              {courseData.courseMtNo}코스
+              {isClicked ? (
+                <StyledIcon
+                  src="/img/heart_pink.png"
+                  alt="하트"
+                  onClick={unClickedHeart}
+                />
+              ) : (
+                <StyledIcon
+                  src="/img/heart_black.png"
+                  alt="하트"
+                  onClick={clickHeart}
+                />
+              )}
+            </StyledTitle>
+          </StyledDiv>
+          {courseData.courseXCoords && courseData.courseYCoords ? (
+            <Kakaomap
+              courseXCoords={courseData.courseXCoords}
+              courseYCoords={courseData.courseYCoords}
             />
-          ) : (
-            <StyledIcon
-              src="/img/heart_black.png"
-              alt="하트"
-              onClick={clickHeart}
-            />
-          )}
-        </StyledTitle>
-      </StyledDiv>
-      {courseData.courseXCoords && courseData.courseYCoords ? (
-        <Kakaomap
-          courseXCoords={courseData.courseXCoords}
-          courseYCoords={courseData.courseYCoords}
-        />
-      ) : null}
-      <StyledDiv2>
-        <StyledContent>코스 길이 : {courseData.courseLength}km</StyledContent>
-        {courseData.courseUptime ? (
-          <StyledContent>
-            상행 시간 : {Math.floor(courseData.courseUptime / 60)}시간{" "}
-            {Math.floor(courseData.courseUptime % 60)}분
-          </StyledContent>
-        ) : null}
+          ) : null}
+          <StyledDiv2>
+            <StyledContent>
+              코스 길이 : {courseData.courseLength}km
+            </StyledContent>
+            {courseData.courseUptime ? (
+              <StyledContent>
+                상행 시간 : {Math.floor(courseData.courseUptime / 60)}시간{" "}
+                {Math.floor(courseData.courseUptime % 60)}분
+              </StyledContent>
+            ) : null}
 
-        {courseData.courseDowntime ? (
-          <StyledContent>
-            하행 시간 : {Math.floor(courseData.courseDowntime / 60)}시간{" "}
-            {Math.floor(courseData.courseDowntime % 60)}분
-          </StyledContent>
-        ) : null}
-      </StyledDiv2>
+            {courseData.courseDowntime ? (
+              <StyledContent>
+                하행 시간 : {Math.floor(courseData.courseDowntime / 60)}시간{" "}
+                {Math.floor(courseData.courseDowntime % 60)}분
+              </StyledContent>
+            ) : null}
+          </StyledDiv2>
 
-      <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
+          <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
 
-      <ReviewList id={id} />
+          <ReviewList id={id} />
+        </div>
+      )}
     </div>
   );
 }
