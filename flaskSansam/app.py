@@ -55,7 +55,7 @@ def get_course_by_age_and_gender():
     user_gender = user_info['USER_GENDER']
 
     # 유저의 나이대로 변경(20대, 30대 등)
-    user_age = user_age // 10 ** 2
+    user_age = user_age // 10 * 10
 
     with database.connect() as conn:
         courses = conn.execute(text(f"""
@@ -264,9 +264,9 @@ def get_course_recommend():
     kmeans.fit(data)
 
     data['cluster'] = kmeans.labels_
-    X, y = data[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']].values, kmeans.labels_
+    values, keys = data[['COURSE_ELEV_DIFF', 'COURSE_UPTIME', 'COURSE_DOWNTIME', 'COURSE_LENGTH']].values, kmeans.labels_
 
-    dist_model = kmeans.transform(X)
+    dist_model = kmeans.transform(values)
     easy_model = dist_model[:, 0]
     normal_model = dist_model[:, 1]
     hard_model = dist_model[:, 2]
@@ -287,9 +287,9 @@ def get_course_recommend():
     normal_top_10_df = df.iloc[normal_sorted_top_10_idx]
     hard_top_10_df = df.iloc[hard_sorted_top_10_idx]
 
-    body['EASY_COURSE_LIST'] = easy_top_10_df.to_dict('r')
-    body['NORMAL_COURSE_LIST'] = normal_top_10_df.to_dict('r')
-    body['HARD_COURSE_LIST'] = hard_top_10_df.to_dict('r')
+    body['EASY_COURSE_LIST'] = easy_top_10_df.to_dict('records')
+    body['NORMAL_COURSE_LIST'] = normal_top_10_df.to_dict('records')
+    body['HARD_COURSE_LIST'] = hard_top_10_df.to_dict('records')
 
     response = make_response(body)
     response.headers["X-ACCESS-TOKEN"] = access_token
