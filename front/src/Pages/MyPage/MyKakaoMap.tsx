@@ -1,21 +1,57 @@
 import styled from "styled-components";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { mtInfo } from "./MyMap";
 
 function MyKakaoMap(props: { ExpMtInfo: mtInfo[] }) {
-  //   useEffect(() => {
-  //     createMap();
-  //   }, []);
+  const navigate = useNavigate();
   useEffect(() => {
     let container = document.getElementById("map");
     let options = {
       center: new window.kakao.maps.LatLng(36.1039, 127.9672), // 지도의 중심좌표
       level: 13,
     };
-    let map = new window.kakao.maps.Map(container, options);
+    const map = new window.kakao.maps.Map(container, options);
 
-    const InfoLength = props.ExpMtInfo.length;
-    console.log(InfoLength);
+    let imageSrc = "/img/flag_red.png",
+      imageSize = new window.kakao.maps.Size(30, 35),
+      imageOption = { offset: new window.kakao.maps.Point(27, 69) };
+    let markerImage = new window.kakao.maps.MarkerImage(
+      imageSrc,
+      imageSize,
+      imageOption
+    );
+
+    console.log("카카오맵 내", props.ExpMtInfo);
+    props.ExpMtInfo.forEach(info => {
+      const maker = new window.kakao.maps.Marker({
+        map: map,
+        position: new window.kakao.maps.LatLng(
+          info.courseXCoords,
+          info.courseYCoords
+        ),
+        image: markerImage,
+        clickable: true,
+      });
+      window.kakao.maps.event.addListener(maker, "click", function () {
+        console.log("마커 찍음!");
+        navigate(`/coursedetail/${info.courseNo}`);
+      });
+      // new window.kakao.maps.CustomOverlay({
+      //   map: map,
+      //   position: new window.kakao.maps.LatLng(
+      //     info.courseXCoords,
+      //     info.courseYCoords
+      //   ),
+      //   content:
+      //     '<div class="customoverlay">' +
+      //     `<a href="https://j8d205.p.ssafy.io/coursedetail/${info.courseNo}">` +
+      //     `<span class="${info.courseMtNm}">${info.courseMtNm}</span>` +
+      //     "</a>" +
+      //     "</div>",
+      //   yAnchor: 1,
+      // });
+    });
 
     // for (let i = 0; i < InfoLength; i++) {
     //   console.log("프롭스", ExpMtInfo[i]);
@@ -42,7 +78,7 @@ function MyKakaoMap(props: { ExpMtInfo: mtInfo[] }) {
     //       "코스",
     //   });
     // }
-  }, []);
+  }, [props.ExpMtInfo]);
 
   //   const createMap = () => {
   //     let container = document.getElementById("map");
@@ -138,7 +174,8 @@ const StyledMap = styled.div`
   // margin-left: 5vw;
   margin-top: 10px;
   width: 90vw;
-  height: 150vw;
+  /* height: 150vw; */
+  height: 70%;
   border-radius: 5px;
   /* z-index: -1; */
 `;
