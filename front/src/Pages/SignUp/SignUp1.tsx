@@ -162,14 +162,16 @@ function SignUp1() {
 }
 
 const StyledDiv = styled.div`
-  padding-top: 40%;
+  padding-top: 30%;
   height: 100vh;
   font-family: "GmarketSansLight";
 `;
 
 const StyledH1 = styled.div`
   text-align: center;
-  padding: 4vw;
+  /* padding: 4vw; */
+  font-size: 2.5vh;
+  font-weight: bold;
 `;
 
 const StyledSpace = styled.div`
@@ -182,10 +184,15 @@ const StyledDiv2 = styled.div`
 `;
 
 const StyledInput = styled.input`
+  ::placeholder,
+  ::-webkit-input-placeholder {
+    color: black;
+  }
   width: 75vw;
   height: 5vh;
   padding: 12px 12px;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
 `;
 
 const StyledSelect = styled.select`
@@ -204,25 +211,17 @@ const StyledButton = styled.button`
   float: right;
   font-weight: 600;
   width: 35vw;
-  height: 5vh;
+  height: 6vh;
   color: white;
   background-color: #238c47;
-  font-size: 4vw;
-  margin-top: 60%;
+  font-size: 5vw;
+  margin-top: 30%;
   margin-right: 15vw;
   padding: 10px;
   cursor: pointer;
   border: none;
   border-radius: 15px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  :hover {
-    letter-spacing: 2px;
-    transform: scale(1.2);
-    cursor: pointer;
-    background-color: #ff5f2e;
-    color: white;
-    outline: 0;
-  }
 `;
 
 export default SignUp1;
