@@ -1,9 +1,6 @@
 package com.sansam.controller;
 
-import com.sansam.dto.response.CourseResponse;
-import com.sansam.dto.response.CourseReviewListResponse;
-import com.sansam.dto.response.MountainListResponse;
-import com.sansam.dto.response.TopTenCourseListResponse;
+import com.sansam.dto.response.*;
 import com.sansam.service.CourseServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -93,6 +90,19 @@ public class CourseController {
             return new ResponseEntity<>(topTenCourseListResponse, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed getting top10 course list.", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @ApiOperation(
+            value = "무작위 코스 1개 반환",
+            notes = "무작위로 등산 코스 1개를 조회하고, 성공 시 코스를, 실패시 Fail을 반환한다.")
+    @GetMapping("/random")
+    ResponseEntity<?> getRandomCourse() {
+        try {
+            RandomCourseResponse randomCourseResponse = courseService.getRandomCourse();
+            return new ResponseEntity<>(randomCourseResponse, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed getting random course.", HttpStatus.BAD_REQUEST);
         }
     }
 }
