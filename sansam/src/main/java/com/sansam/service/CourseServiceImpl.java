@@ -12,10 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -101,5 +98,15 @@ public class CourseServiceImpl implements CourseService {
         }
 
         return new TopTenCourseListResponse(topTenCourseList);
+    }
+
+    @Override
+    public RandomCourseResponse getRandomCourse() {
+        Random random = new Random();
+        System.out.println("total number of courses is "+courseRepository.count());
+        int randomCourseNo = random.nextInt((int) courseRepository.count());
+        Course randomCourse = courseRepository.findCourseByCourseNo(randomCourseNo+1);
+
+        return new RandomCourseResponse(randomCourse.getCourseNo(), randomCourse.getCourseMtNm(), randomCourse.getCourseMtNo(), randomCourse.getCourseElevDiff(), randomCourse.getCourseUptime(), randomCourse.getCourseDowntime(), randomCourse.getCourseLength(), randomCourse.getCourseLocation(), randomCourse.getCourseAddress());
     }
 }
