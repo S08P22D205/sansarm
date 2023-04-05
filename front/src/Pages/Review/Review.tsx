@@ -98,7 +98,7 @@ function Review() {
   };
 
   const apiReviewInsert = () => {
-    if (review.reviewDiff !== "") {
+    if (review.reviewDiff !== "" && review.reviewContent !== "") {
       console.log(review);
       console.log(sessionStorage.getItem("accessToken"));
       axios
@@ -132,6 +132,8 @@ function Review() {
         .catch((error) => {
           console.log(error);
         });
+    } else {
+      alert("등산 후기를 남겨주세요");
     }
   };
 
@@ -167,7 +169,7 @@ function Review() {
 const StyledDiv = styled.div``;
 
 const StyledBox = styled.div`
-  margin: 5% 0 5%;
+  /* margin: 5% 0 5%; */
 `;
 
 const StyledContainer = styled.div`
@@ -178,8 +180,10 @@ const StyledContainer = styled.div`
 `;
 
 const StyledHeader = styled.h1`
-  margin-top: 25%;
+  margin-top: 8%;
   font-family: "GmarketSansLight";
+  line-height: 150%;
+  font-weight: bold;
   text-align: center;
   font-size: 6vw;
   padding: 4vw;
@@ -198,13 +202,19 @@ const StyledTextBox = styled.textarea`
 `;
 
 const StyledSubmitButton = styled.button`
+  background-color: #238c47;
+  color: white;
+  font-family: "GmarketSansLight";
+  font-size: 20px;
+  border: 0;
+  border-radius: 10px;
   width: 60%;
   margin-top: 10%;
   margin-left: 20%;
   height: 5vh;
-  font-family: "GmarketSansLight";
   font-weight: bold;
   font-size: medium;
+  border: 1px;
 `;
 
 export default Review;

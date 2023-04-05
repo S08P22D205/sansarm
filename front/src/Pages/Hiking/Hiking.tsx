@@ -180,7 +180,7 @@ const StyledStopwatch = styled.div`
 const StyledBtn = styled.div`
   text-align: center;
   margin-left: 25%;
-  padding-top: 3.5%;
+  padding-top: 3%;
   background-color: #238c47;
   width: 50vw;
   height: 6vh;
