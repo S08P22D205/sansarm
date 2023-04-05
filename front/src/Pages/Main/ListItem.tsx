@@ -26,7 +26,7 @@ function ListItem({
       )}
       <Swiper
         modules={[FreeMode]}
-        spaceBetween={10}
+        spaceBetween={8}
         slidesPerView={3.2}
         loop={true}
         freeMode={true}
