@@ -18,9 +18,9 @@ import { useAppSelector } from "./store/hooks";
 
 function App() {
   const userNicknm: string = useAppSelector(
-    state => state.login.userInfo.userNicknm
+    (state) => state.login.userInfo.userNicknm
   );
-  console.log(userNicknm);
+  // console.log(userNicknm);
 
   return (
     <div className="app">
