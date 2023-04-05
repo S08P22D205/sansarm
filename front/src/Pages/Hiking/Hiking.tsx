@@ -14,7 +14,6 @@ function Hiking() {
   const courseData: courseInfo = useAppSelector(
     (state) => state.course.detailInfo
   );
-  // console.log(courseData);
 
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -36,6 +35,11 @@ function Hiking() {
   };
 
   useEffect(() => {
+    // window.location.reload();
+    try {
+      const stream = navigator.mediaDevices.getUserMedia({ video: false });
+      console.log("asdfdsf");
+    } catch (err) {}
     handleStart();
   }, []);
 
@@ -108,7 +112,7 @@ function Hiking() {
 
     const intervalId = setInterval(() => {
       navigator.geolocation.getCurrentPosition(success, error);
-    }, 10000);
+    }, 100000);
 
     return () => clearInterval(intervalId);
   }, []);

@@ -1,27 +1,71 @@
 import { useRef, useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { history } from "./history";
 
 function CameraApp() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
   const [imageDataUrl, setImageDataUrl] = useState<string>("");
-
+  const [cameraState, setCameraState] = useState(0);
   const navigate = useNavigate();
 
   const moveToHiking = () => {
     navigate("/hiking/");
   };
 
+  console.log(cameraStream);
+  // // 1번째 방법
   useEffect(() => {
     startCamera();
+    // const handleBackButton = async () => {
+    //   await stopCamera();
+    // };
+    // window.addEventListener("popstate", handleBackButton);
+    // return () => {
+    //   window.removeEventListener("popstate", handleBackButton);
+    // };
   }, []);
+
+  useEffect(() => {
+    // const listenBackEvent = () => {
+    //   stopCamera();
+    //   console.log("카메라 꺼지나? ");
+    // };
+    const unlistenHistoryEvent = history.listen(async ({ action }) => {
+      if (action === "POP") {
+        // await listenBackEvent();
+        await stopCamera();
+        window.confirm("뒤로 가시?");
+        console.log("뒤로가기 버튼 클릭됨!@" + cameraStream);
+      }
+    });
+    return unlistenHistoryEvent;
+  }, []);
+
+  // 2번째 방법
+  // useEffect(() => {
+  //   startCamera();
+
+  //   let unlisten = history.listen(async (location) => {
+  //     if (history.action === "PUSH") {
+  //     }
+  //     if (history.action === "POP") {
+  //       await stopCamera();
+  //     }
+  //   });
+
+  //   return () => {
+  //     unlisten();
+  //   };
+  // }, [history]);
 
   const startCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       setCameraStream(stream);
+      // console.log(cameraStream);
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
@@ -30,10 +74,13 @@ function CameraApp() {
     }
   };
 
-  const stopCamera = () => {
+  const stopCamera = async () => {
+    console.log(cameraStream);
     if (cameraStream) {
       cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);
+      console.log("카메라 끄기");
+      console.log(cameraStream);
     }
     moveToHiking();
   };
