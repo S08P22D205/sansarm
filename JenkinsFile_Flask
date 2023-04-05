@@ -23,6 +23,7 @@ pipeline {
                     docker.withRegistry('', 'Docker-Hub') {
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push("latest")
+                        dockerImage.push("localversion")
                     }
                     sh "docker rmi xronace/d205-flask:$BUILD_NUMBER"
                 }
