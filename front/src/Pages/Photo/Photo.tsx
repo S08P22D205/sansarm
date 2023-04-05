@@ -15,7 +15,6 @@ function CameraApp() {
     navigate("/hiking");
   };
 
-  console.log(cameraStream);
   // // 1번째 방법
   useEffect(() => {
     startCamera();
@@ -77,7 +76,7 @@ function CameraApp() {
   const stopCamera = async () => {
     console.log(cameraStream);
     if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);
       console.log("카메라 끄기");
       console.log(cameraStream);
@@ -143,7 +142,7 @@ function CameraApp() {
 }
 
 const StyledDiv = styled.div`
-  padding-top: 60%;
+  padding-top: 20%;
 `;
 
 const StyledCircle = styled.div`
@@ -176,7 +175,7 @@ const StyledButton = styled.button`
 
 const StyledButton2 = styled.button`
   margin-left: 30%;
-  margin-top: 5%;
+  margin-top: 8%;
   background-color: #ff1900d8;
   width: 40vw;
   height: 5vh;
@@ -188,6 +187,7 @@ const StyledButton2 = styled.button`
   border-radius: 5px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
   letter-spacing: 2px;
+  font-family: "GmarketSansLight";
 `;
 
 export default CameraApp;
