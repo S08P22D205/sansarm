@@ -7,23 +7,6 @@ import "swiper/css/free-mode";
 import "swiper/css/effect-cards";
 import ListCard from "./ListCard";
 
-const StyledH = styled.p`
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: 4vw;
-  text-align: left;
-  margin-bottom: 5px;
-`;
-
-const StyledSlide = styled(SwiperSlide)`
-  width: 30vw;
-  /* background-color: #f0f5ee; */
-  background-color: #f5f5f5;
-  border: none;
-  border-radius: 5px;
-  margin-bottom: 3vw;
-`;
-
 function ListItem({
   courseName,
   USER_AGE_POOL,
@@ -62,5 +45,22 @@ function ListItem({
     </div>
   );
 }
+
+const StyledH = styled.p`
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: 4vw;
+  text-align: left;
+  margin-bottom: 5px;
+`;
+
+const StyledSlide = styled(SwiperSlide)`
+  width: 30vw;
+  /* background-color: #f0f5ee; */
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 3vw;
+`;
 
 export default ListItem;

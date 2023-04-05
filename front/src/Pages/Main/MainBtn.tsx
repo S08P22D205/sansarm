@@ -2,13 +2,6 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import RecBtn from "./RecBtn";
 
-const RecommendBtn = styled.div`
-  display: flex;
-  padding-left: 8px;
-  padding-right: 8px;
-  margin-bottom: 3vw;
-`;
-
 function MainBtn() {
   const navigate = useNavigate();
   return (
@@ -36,5 +29,12 @@ function MainBtn() {
     </div>
   );
 }
+
+const RecommendBtn = styled.div`
+  display: flex;
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-bottom: 3vw;
+`;
 
 export default MainBtn;

@@ -7,19 +7,6 @@ import { UserInfo } from "../../store/loginSlice";
 import { courseInfo } from "../../store/courseSlice";
 import ListItemTopTen from "./ListItemTopTen";
 
-const StyledDiv = styled.div`
-  padding-left: 20px;
-  padding-right: 20px;
-`;
-
-const StyledH = styled.p`
-  text-align: center;
-  font-family: "GmarketSansLight";
-  font-weight: bold;
-  font-size: 5vw;
-  margin-bottom: 3vw;
-`;
-
 function List() {
   // store에 저장된 각 코스정보를 useSelector로 받아온다!
   const ageGender: RecInfo = useAppSelector(state => state.recommend.genderAge);
@@ -65,5 +52,18 @@ function List() {
     </StyledDiv>
   );
 }
+
+const StyledDiv = styled.div`
+  padding-left: 20px;
+  padding-right: 20px;
+`;
+
+const StyledH = styled.p`
+  text-align: center;
+  font-family: "GmarketSansLight";
+  font-weight: bold;
+  font-size: 5vw;
+  margin-bottom: 3vw;
+`;
 
 export default List;
