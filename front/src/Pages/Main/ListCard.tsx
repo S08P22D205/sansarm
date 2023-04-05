@@ -3,6 +3,7 @@ import { CourseInfo } from "../../store/RecommendSlice";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import defImg from "./DefaultImg";
 
 const StyledH = styled.p`
   font-family: "GmarketSansLight";
@@ -49,13 +50,17 @@ function ListCard({
   COURSE_NO,
   courseIdx,
 }: CourseInfo) {
+  // navigate 사용하기 위해 선언
   const navigate = useNavigate();
 
+  // 산림청에서 이미지 못받아올 때 사용할 랜덤 사진 주소
+  const randomVal = defImg[Math.floor(Math.random() * defImg.length)];
+
+  // 산림청에서 산 이미지이름 받아와 저장해줄 state
   const [imgName, setImgName] = useState("");
   const imgUrl =
     "https://www.forest.go.kr/images/data/down/mountain/" + imgName;
 
-  // console.log(imgName);
   useEffect(() => {
     const getImgSrc = async () => {
       const res = await axios.get(
@@ -91,10 +96,7 @@ function ListCard({
           {imgName ? (
             <LargeImg src={imgUrl} alt={imgName} />
           ) : (
-            <LargeImg
-              src="https://san.chosun.com/news/photo/202205/15750_66157_37.jpg"
-              alt="img"
-            />
+            <LargeImg src={randomVal} alt="img" />
           )}
           <StyledLank>{courseIdx}위</StyledLank>
           <StyledCourse>{COURSE_MT_NM}</StyledCourse>
@@ -105,10 +107,7 @@ function ListCard({
           {imgName ? (
             <StyledImg src={imgUrl} alt={imgName} />
           ) : (
-            <StyledImg
-              src="https://san.chosun.com/news/photo/202205/15750_66157_37.jpg"
-              alt="img"
-            />
+            <StyledImg src={randomVal} alt="img" />
           )}
           <StyledH>{COURSE_MT_NM}</StyledH>
           <StyledH>{COURSE_MT_NO}코스</StyledH>
