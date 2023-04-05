@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Route, Routes, Link } from "react-router-dom";
-import MyHeart from "./MyHeart";
 import { userApi } from "../../api";
+
+import MyHeart from "./MyHeart";
 import MyReview from "./MyReview";
+import MyExpMap from "./MyExpMap";
 
 const StyledH2 = styled.h2`
   padding-top: 8vw;
@@ -33,10 +35,11 @@ function MyPage() {
 
   return (
     <div className="MyPage">
-      <StyledH2>{userName}님의 등산기록</StyledH2>
+      <StyledH2>{userName}님의 산삶</StyledH2>
       <Routes>
         <Route path="/myheart" element={<MyHeart />} />
         <Route path="/myreview" element={<MyReview />} />
+        <Route path="/myexpmap" element={<MyExpMap />} />
       </Routes>
     </div>
   );

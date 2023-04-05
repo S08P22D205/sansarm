@@ -117,6 +117,9 @@ function MyHeart() {
         <StyledLink to="/mypage/myreview">
           <StyledIcon2 src="/img/flag_black.png" />
         </StyledLink>
+        <StyledLink to="/mypage/myexpmap">
+          <StyledIcon2 src="/img/map_black.png" />
+        </StyledLink>
       </StyledTab>
       <StyledDiv>
         {favoriteCourses.map((course, idx) => (

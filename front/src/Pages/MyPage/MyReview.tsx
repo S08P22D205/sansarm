@@ -140,6 +140,9 @@ function MyReview() {
         <StyledLink to="/mypage/myreview">
           <StyledIcon2 src="/img/flag_red.png" />
         </StyledLink>
+        <StyledLink to="/mypage/myexpmap">
+          <StyledIcon2 src="/img/map_black.png" />
+        </StyledLink>
       </StyledTab>
       <StyledDiv>
         {reviewCourses.map((review, idx) => (
@@ -148,11 +151,12 @@ function MyReview() {
               {" "}
               {review.courseMtNm} {review.courseMtNo}코스{" "}
               {review.reviewRelDiff === "H" ? (
-                <span>⭐⭐⭐</span>
+                <span>🌋🌋🌋</span>
               ) : review.reviewRelDiff === "N" ? (
-                <span>⭐⭐</span>
+                <span>🗻🗻</span>
               ) : (
-                <span>⭐</span>
+                <span>🌄</span>
+                // <span>⭐🌄</span>
               )}
             </StyledH3>
             <StyledHr />

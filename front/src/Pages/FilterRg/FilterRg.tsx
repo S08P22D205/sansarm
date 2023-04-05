@@ -165,9 +165,13 @@ function FilterRg() {
   // 반경정보 받아오기
   const [volumePercent, setVolumePercent] = useState(0);
   const [volset, SetvolSet] = useState(0)
+  
 
   const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
     const bar = e.currentTarget;
+    console.log('이거',e.nativeEvent.offsetX)
+    // e.nativeEvent.offsetX를 담는 useState하나더
+
     SetvolSet(e.nativeEvent.offsetX);
     const barWidth = bar.clientWidth;
     const volumePercent = (volset / barWidth);
