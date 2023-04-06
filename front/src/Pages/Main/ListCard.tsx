@@ -49,8 +49,6 @@ function ListCard({
     getImgSrc();
   }, []);
 
-  console.log(COURSE_LOCATION);
-
   return (
     <div
       className="ListCard"
