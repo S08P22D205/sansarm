@@ -40,7 +40,7 @@ function Hiking() {
 
   function handleStart() {
     intervalRef.current = window.setInterval(() => {
-      setElapsedTime(Date.now() - (startTime - 4000000));
+      setElapsedTime(Date.now() - startTime);
     }, 1000);
     setIsRunning(true);
   }

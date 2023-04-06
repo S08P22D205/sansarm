@@ -29,7 +29,7 @@ function HikingKakaomap({
     const length = courseXCoords.length;
     const walked = hikingXCoords.length;
     
-    console.log('들어오는지 확인', hikingXCoords)
+    // console.log('들어오는지 확인', hikingXCoords)
   
     // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
   
@@ -46,7 +46,7 @@ function HikingKakaomap({
 
     var options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
+      center: new kakao.maps.LatLng(hikingXCoords[0], hikingYCoords[0]), //지도의 중심좌표.
       level: 7, //지도의 레벨(확대, 축소 정도)
     };
 
@@ -101,14 +101,14 @@ function HikingKakaomap({
     // }
 
     const drawingHiking = (
-      courseXCoords: number[],
-      courseYCoords: number[],
-      length: number
+      hikingXCoords: number[],
+      hikingYCoords: number[],
+      walked: number
     ) => {
       var linePath = [];
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < walked; i++) {
         linePath.push(
-          new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
+          new kakao.maps.LatLng(hikingXCoords[i], hikingYCoords[i])
         );
         // console.log(linePath);
 
@@ -124,7 +124,7 @@ function HikingKakaomap({
       }
     };
 
-    drawingHiking(courseXCoords, courseYCoords, length);
+    drawingHiking(courseXCoords, courseYCoords, walked);
     // console.log(hikingXCoords, hikingYCoords);
   }, []);
 
