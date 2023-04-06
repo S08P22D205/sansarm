@@ -235,7 +235,7 @@ function FilterMt() {
       <StyledHr />
 
       {/* 산행 시간 */}
-      <StyledP>산행 시간</StyledP>
+      <StyledP>산행 시간 (h)</StyledP>
       <StyledDiff>
         {time.map((data, index) => {
           return (

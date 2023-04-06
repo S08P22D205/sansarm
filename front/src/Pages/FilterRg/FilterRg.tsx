@@ -32,6 +32,12 @@ interface Region {
 }
 
 
+interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  timeState?: number;
+  lengthState?: number;
+  index?: number;
+}
+
 function FilterRg() {
 
   // accessToken, refreshToken 세션스토리지에서 가져와주기
@@ -379,7 +385,7 @@ function FilterRg() {
                 handleMt(index, "courseTimeBtNo");
                 setOnTime(index);
               }}
-              onTime={onTime}
+              timeState={onTime}
               index={index}
             >
               {data}
@@ -400,7 +406,7 @@ function FilterRg() {
                 handleMt(index, "courseLengthBtNo");
                 setOnLength(index);
               }}
-              onLength={onLength}
+              lengthState={onLength}
               index={index}
             >
               {data}
@@ -686,32 +692,36 @@ const StyledHr = styled.hr`
   border: 1px solid #e3e3e3;
 `;
 
-const StyledBtn = styled.button<{ onTime: number; index: number }>`
+const StyledBtn = styled.button<ButtonInfo>`
   width: 20vw;
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) => (props.index === props.onTime ? "#238C47" : "#818181")};
-  border: 2px solid
-    ${(props) => (props.index === props.onTime ? "#238C47" : "#818181")};
+  color: ${(props) =>
+    props.index === props.timeState ? "#238C47 " : "#818181"};
+  border: solid
+    ${(props) =>
+      props.index === props.timeState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
   border-radius: 13px;
   margin: 5px;
 `;
 
-const StyledBtn1 = styled.button<{ onLength: number; index: number }>`
-  width: 16.5vw;
-  height: 30px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) => (props.index === props.onLength ? "#238C47" : "#818181")};
-  border: 2px solid
-    ${(props) => (props.index === props.onLength ? "#238C47" : "#818181")};
-  font-size: 15px;
-  font-family: "GmarketSansMedium";
-  border-radius: 13px;
-  margin: 3px;
+const StyledBtn1 = styled.button<ButtonInfo>`
+width: 16.5vw;
+height: 30px;
+background-color: white;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
+color: ${(props) =>
+  props.index === props.lengthState ? "#238C47" : "#818181"};
+border: solid
+  ${(props) =>
+    props.index === props.lengthState ? "#238C47 3px" : "#818181 2px"};
+font-size: 15px;
+font-family: "GmarketSansMedium";
+border-radius: 13px;
+margin: 3px;
 `;
 
 const StyledDiv = styled.div`
