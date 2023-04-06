@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearchParams } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -37,6 +37,8 @@ const genders: Option[] = [
 
 function SignUp1() {
   const navigate = useNavigate();
+  const nickNmRef = useRef<HTMLInputElement>(null);
+  const ageRef = useRef<HTMLInputElement>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -51,8 +53,17 @@ function SignUp1() {
     });
   }, []);
 
+  useEffect(() => {
+    if (nickNmRef.current?.value !== "") {
+      nickNmRef.current!.style.borderColor = "black";
+    }
+    if (ageRef.current?.value !== "") {
+      ageRef.current!.style.borderColor = "black";
+    }
+  }, [nickNmRef.current?.value, ageRef.current?.value]);
+
   const moveToMain = () => {
-    navigate("/main/*");
+    navigate("/main/");
   };
 
   const [signUp, setSignUp] = useState({
@@ -86,6 +97,8 @@ function SignUp1() {
 
   const apiSignUp1 = () => {
     console.log(signUp);
+    if (signUp.userNicknm === "") {
+    }
     if (signUp.userNicknm !== "" && signUp.userAge !== "") {
       axios
         .post("/user/signup", {
@@ -106,8 +119,11 @@ function SignUp1() {
         .catch((error) => {
           console.log(error);
         });
+    } else if (signUp.userNicknm === "") {
+      nickNmRef.current!.style.borderColor = "red";
     } else {
-      alert("회원정보를 입력해주세요");
+      nickNmRef.current!.style.borderColor = "black";
+      ageRef.current!.style.borderColor = "red";
     }
   };
 
@@ -123,8 +139,10 @@ function SignUp1() {
             changeSignUp(event, "userNicknm");
           }}
           placeholder="별명"
+          ref={nickNmRef}
         />
       </StyledDiv2>
+      <StyledErr>별명을 입력해주세요</StyledErr>
       <StyledDiv2>
         <StyledInput
           type="number"
@@ -133,6 +151,7 @@ function SignUp1() {
             changeSignUp(event, "userAge");
           }}
           placeholder="나이"
+          ref={ageRef}
         />
       </StyledDiv2>
       <StyledDiv2>
@@ -162,8 +181,7 @@ function SignUp1() {
 }
 
 const StyledDiv = styled.div`
-  /* padding-top: 30%; */
-  height: 100vh;
+  padding-top: 30%;
   font-family: "GmarketSansLight";
 `;
 
@@ -195,6 +213,13 @@ const StyledInput = styled.input`
   border: 1px solid black;
 `;
 
+const StyledErr = styled.div`
+  /* visibility: none; */
+  display: none;
+  color: red;
+  font-family: "GmarketSansLight";
+`;
+
 const StyledSelect = styled.select`
   width: 75vw;
   height: 5vh;
@@ -204,7 +229,7 @@ const StyledSelect = styled.select`
 `;
 
 const StyledOption = styled.option`
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 `;
 
 const StyledButton = styled.button`

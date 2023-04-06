@@ -39,11 +39,20 @@ function Review() {
   };
 
   const [endTime, setEndTime] = useState(0);
-  useEffect(() => {
-    setEndTime(Date.now());
-  }, []);
+  const [hikingTime, setHikingTime] = useState(0);
 
   const startTime: number = useAppSelector((state) => state.course.timeInfo);
+
+  useEffect(() => {
+    setEndTime(Date.now());
+    const consumedTime = endTime - startTime;
+    setHikingTime(consumedTime);
+
+    setReview({
+      ...review,
+      reviewTime: Math.floor(hikingTime / 60000),
+    });
+  }, [startTime, endTime]);
 
   const [easy, setEasy] = useState(false);
   const [soso, setSoso] = useState(false);
@@ -85,7 +94,7 @@ function Review() {
 
   const [review, setReview] = useState({
     courseNo: courseData.courseNo,
-    reviewTime: Math.floor((endTime - startTime) / 60000),
+    reviewTime: courseData.reviewTime,
     reviewDiff: "", // E,N,M 순
     reviewContent: "",
   });

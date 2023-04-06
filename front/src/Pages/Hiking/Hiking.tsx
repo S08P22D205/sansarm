@@ -21,9 +21,6 @@ function Hiking() {
 
   const navigate = useNavigate();
 
-  // props로 넘긴 courseData의 state를 location이라는 변수에 담는다.
-  const location = useLocation();
-
   const moveToPhotoPage = () => {
     if (window.confirm("사진을 찍을까요?")) {
       navigate("/photo", {});
@@ -39,11 +36,9 @@ function Hiking() {
     handleStart();
   }, []);
 
-  const dispatch = useAppDispatch();
   const startTime: number = useAppSelector((state) => state.course.timeInfo);
 
   function handleStart() {
-    console.log(startTime);
     intervalRef.current = window.setInterval(() => {
       setElapsedTime(Date.now() - startTime);
     }, 1000);
