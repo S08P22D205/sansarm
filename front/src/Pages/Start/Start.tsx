@@ -22,11 +22,6 @@ const Start = () => {
   );
 };
 
-// const StyledDiv = styled.div`
-//   text-align: center;
-//   line-height: 70vh;
-// `;
-
 const StyledDiv = styled.div`
   position: relative;
   width: 100%;
@@ -34,6 +29,7 @@ const StyledDiv = styled.div`
 
 const StyledImg = styled.img`
   width: 100%;
+  height: 650px;
 `;
 
 const StyledDiv2 = styled.div`

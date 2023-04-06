@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "../../store/baseURL";
 
 interface reviewInfo {
+  reviewNo?: number;
   reviewerNicknm?: string;
   reviewDate?: Date;
   reviewTime?: number;
@@ -13,6 +14,7 @@ interface reviewInfo {
 }
 
 function ReviewItem({
+  reviewNo,
   reviewerNicknm,
   reviewDate,
   reviewTime,
@@ -23,6 +25,9 @@ function ReviewItem({
 }: reviewInfo) {
   // 수정 여부 flag
   const [revised, setRevised] = useState<boolean>(false);
+
+  // 삭제 여부 flag'
+  const [deleted, setDeleted] = useState<boolean>(false);
 
   // 수정된 리뷰 내용
   const [newData, setNewData] = useState<string | undefined>(reviewContent);
@@ -55,7 +60,7 @@ function ReviewItem({
     console.log(newData);
 
     axios.put(
-      `/user/review/update/${id}`,
+      `/user/review/update/${reviewNo}`,
       {
         reviewRelDiff: reviewRelDiff,
         reviewContent: newData,
@@ -73,7 +78,7 @@ function ReviewItem({
   // 삭제 버튼 클릭
   const deleteData = () => {
     console.log("데이터 삭제하자");
-    axios.delete(`/user/review/delete/${id}`, {
+    axios.delete(`/user/review/delete/${reviewNo}`, {
       headers: {
         "X-ACCESS-TOKEN": AccessToken,
         "X-REFRESH-TOKEN": RefreshToken,
@@ -82,64 +87,77 @@ function ReviewItem({
         courseNo: id,
       },
     });
+    setDeleted(true);
   };
 
   return (
-    <StyledDiv>
-      <StyledDiv2>
-        <StyledP>{reviewerNicknm}</StyledP>
-        <br />
-        {reviewRelDiff === "E" ? (
-          <div>
-            <StyledImg src="\img\filled_mt.png" alt="mt" />
-            <StyledImg src="\img\unfilled_mt.png" alt="mt" />
-            <StyledImg src="\img\unfilled_mt.png" alt="mt" />
-          </div>
-        ) : reviewRelDiff === "N" ? (
-          <div>
-            <StyledImg src="\img\filled_mt.png" alt="mt" />
-            <StyledImg src="\img\filled_mt.png" alt="mt" />
-            <StyledImg src="\img\unfilled_mt.png" alt="mt" />
-          </div>
-        ) : (
-          <div>
-            <StyledImg src="\img\filled_mt.png" alt="mt" />
-            <StyledImg src="\img\filled_mt.png" alt="mt" />
-            <StyledImg src="\img\filled_mt.png" alt="mt" />
-          </div>
-        )}
-      </StyledDiv2>
+    <div>
+      {deleted ? null : (
+        <StyledDiv>
+          <StyledDiv2>
+            <StyledP>{reviewerNicknm}</StyledP>
+            <br />
+            {reviewRelDiff === "E" ? (
+              <div>
+                <StyledImg src="\img\filled_mt.png" alt="mt" />
+                <StyledImg src="\img\unfilled_mt.png" alt="mt" />
+                <StyledImg src="\img\unfilled_mt.png" alt="mt" />
+              </div>
+            ) : reviewRelDiff === "N" ? (
+              <div>
+                <StyledImg src="\img\filled_mt.png" alt="mt" />
+                <StyledImg src="\img\filled_mt.png" alt="mt" />
+                <StyledImg src="\img\unfilled_mt.png" alt="mt" />
+              </div>
+            ) : (
+              <div>
+                <StyledImg src="\img\filled_mt.png" alt="mt" />
+                <StyledImg src="\img\filled_mt.png" alt="mt" />
+                <StyledImg src="\img\filled_mt.png" alt="mt" />
+              </div>
+            )}
+          </StyledDiv2>
 
-      {reviewerNicknm === userNickname ? (
-        revised ? (
-          <StyledDiv3>
-            <StyledInputDiv>
-              <StyledInput
-                type="text"
-                value={newData}
-                onChange={changeReview}
-              />
-            </StyledInputDiv>
-            <div>
-              <StyledButton onClick={sendData}>확인</StyledButton>
-              <StyledButton onClick={notRevised}>취소</StyledButton>
-            </div>
-          </StyledDiv3>
-        ) : (
-          <StyledDiv3>
-            <StyledP2>{newData}</StyledP2>
-            <StyledDiv4>
-              <RevisedImg src="\img\revise.png" alt="" onClick={changeData} />
-              <RevisedImg src="\img\delete.png" alt="" onClick={deleteData} />
-            </StyledDiv4>
-          </StyledDiv3>
-        )
-      ) : (
-        <StyledDiv3>
-          <StyledP2>{reviewContent}</StyledP2>
-        </StyledDiv3>
+          {reviewerNicknm === userNickname ? (
+            revised ? (
+              <StyledDiv3>
+                <StyledInputDiv>
+                  <StyledInput
+                    type="text"
+                    value={newData}
+                    onChange={changeReview}
+                  />
+                </StyledInputDiv>
+                <div>
+                  <StyledButton onClick={sendData}>확인</StyledButton>
+                  <StyledButton onClick={notRevised}>취소</StyledButton>
+                </div>
+              </StyledDiv3>
+            ) : (
+              <StyledDiv3>
+                <StyledP2>{newData}</StyledP2>
+                <StyledDiv4>
+                  <RevisedImg
+                    src="\img\revise.png"
+                    alt=""
+                    onClick={changeData}
+                  />
+                  <RevisedImg
+                    src="\img\delete.png"
+                    alt=""
+                    onClick={deleteData}
+                  />
+                </StyledDiv4>
+              </StyledDiv3>
+            )
+          ) : (
+            <StyledDiv3>
+              <StyledP2>{reviewContent}</StyledP2>
+            </StyledDiv3>
+          )}
+        </StyledDiv>
       )}
-    </StyledDiv>
+    </div>
   );
 }
 
@@ -150,6 +168,7 @@ const StyledDiv = styled.div`
   border-radius: 15px;
   background-color: #cfe2c8;
   margin-top: 20px;
+  margin-bottom: 10px;
 `;
 
 const StyledDiv2 = styled.div`

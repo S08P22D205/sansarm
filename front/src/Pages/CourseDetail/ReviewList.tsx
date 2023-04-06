@@ -8,6 +8,7 @@ interface idInfo {
 }
 
 interface reviewInfo {
+  reviewNo?: number;
   reviewerNicknm?: string;
   reviewDate?: Date;
   reviewTime?: number;
@@ -37,8 +38,8 @@ function ReviewList({ id }: idInfo) {
         },
       })
       .then((res) => {
-        // console.log("리뷰 정보 받아오기 :: 성공!");
-        // console.log(res.data.reviewList);
+        console.log("리뷰 정보 받아오기 :: 성공!");
+        console.log(res.data.reviewList);
         setReviewList(res.data.reviewList);
       })
       .catch((err) => {
@@ -70,6 +71,7 @@ function ReviewList({ id }: idInfo) {
         return (
           <ReviewItem
             key={index}
+            reviewNo={data.reviewNo}
             reviewerNicknm={data.reviewerNicknm}
             reviewDate={data.reviewDate}
             reviewTime={data.reviewTime}
