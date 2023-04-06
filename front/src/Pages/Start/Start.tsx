@@ -33,7 +33,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledImg = styled.img`
-  width: 100%;
+  width: 102%;
 `;
 
 const StyledDiv2 = styled.div`
