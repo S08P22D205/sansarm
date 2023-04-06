@@ -8,7 +8,7 @@ function MyKakaoMap(props: { ExpMtInfo: mtInfo[] }) {
   useEffect(() => {
     let container = document.getElementById("map");
     let options = {
-      center: new window.kakao.maps.LatLng(36.3039, 127.9212), // 지도의 중심좌표
+      center: new window.kakao.maps.LatLng(36.3039, 127.8212), // 지도의 중심좌표
       level: 13,
     };
     const map = new window.kakao.maps.Map(container, options);
@@ -45,7 +45,7 @@ const StyledMap = styled.div`
   margin-top: 10px;
   width: 90vw;
   /* height: 150vw; */
-  height: 63%;
+  height: 100%;
   border-radius: 5px;
 `;
 export default MyKakaoMap;

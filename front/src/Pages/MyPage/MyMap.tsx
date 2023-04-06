@@ -52,7 +52,7 @@ function MyMap() {
   }, []);
 
   return (
-    <div className="MyExpMap">
+    <StyledMyMap className="MyExpMap">
       <StyledTab>
         <StyledLink to="/mypage/myheart">
           <StyledIcon src="/img/heart_black.png" />
@@ -68,10 +68,14 @@ function MyMap() {
         <MyKakaoMap ExpMtInfo={ExpMtInfo} />
         {/* <MyExpMapKakaoMap XCoords={XCoords} YCoords={YCoords} Mtname={Mtname} CourseNo={CourseNo}/> */}
       </StyledDiv>
-    </div>
+    </StyledMyMap>
   );
 }
 export default MyMap;
+
+const StyledMyMap = styled.div`
+  height: 100%;
+`;
 
 const StyledTab = styled.div`
   padding-top: 3vw;
@@ -95,9 +99,9 @@ const StyledLink = styled(Link)`
 
 const StyledDiv = styled.div`
   width: 100vw;
-  height: 200vw;
+  height: 65vh;
   padding-left: 5vw;
   padding-right: 5vw;
-  margin-top: 5vw;
+  margin-top: 3vh;
   font-family: "GmarketSansLight";
 `;
