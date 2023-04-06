@@ -96,9 +96,6 @@ function SignUp1() {
   };
 
   const apiSignUp1 = () => {
-    console.log(signUp);
-    if (signUp.userNicknm === "") {
-    }
     if (signUp.userNicknm !== "" && signUp.userAge !== "") {
       axios
         .post("/user/signup", {
@@ -120,10 +117,12 @@ function SignUp1() {
           console.log(error);
         });
     } else if (signUp.userNicknm === "") {
-      nickNmRef.current!.style.borderColor = "red";
+      nickNmRef.current!.style.border = "2px solid red";
+      // alert("별명을 입력해주세요!");
     } else {
-      nickNmRef.current!.style.borderColor = "black";
-      ageRef.current!.style.borderColor = "red";
+      nickNmRef.current!.style.border = "1px solid black";
+      ageRef.current!.style.border = "2px solid red";
+      // alert("나이를 입력해주세요!");
     }
   };
 
