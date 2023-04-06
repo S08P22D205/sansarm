@@ -158,7 +158,7 @@ public class UserController {
 
     @ApiOperation(
 			value = "리뷰 목록",
-			notes = "해당 유저의 리뷰 목록을 조회하고 성공하면 찜 목록을, 실패하면 Fail message를 반환한다.")
+			notes = "해당 유저의 리뷰 목록을 조회하고 성공하면 리뷰 목록을, 실패하면 Fail message를 반환한다.")
     @GetMapping("/review")
     public ResponseEntity<?> getReviewList(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
