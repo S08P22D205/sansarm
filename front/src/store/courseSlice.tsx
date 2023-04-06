@@ -20,6 +20,7 @@ interface HikingInfo {
   timeInfo: number;
   coordXInfo: Array<number>;
   coordYInfo: Array<number>;
+  courseMap: any;
 }
 
 const initialState: HikingInfo = {
@@ -40,6 +41,7 @@ const initialState: HikingInfo = {
   timeInfo: 0,
   coordXInfo: [],
   coordYInfo: [],
+  courseMap: {},
 };
 
 export const courseSlice = createSlice({
@@ -57,6 +59,9 @@ export const courseSlice = createSlice({
     },
     addCoordY: (state, action: PayloadAction<number>) => {
       state.coordYInfo.push(action.payload);
+    },
+    addCourseMap: (state, action: PayloadAction<any>) => {
+      state.courseMap = action.payload;
     },
   },
 });

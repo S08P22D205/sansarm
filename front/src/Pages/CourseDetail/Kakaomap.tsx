@@ -1,5 +1,7 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "../../store/hooks";
+import { courseActions } from "../../store/courseSlice";
 
 declare global {
   interface Window {
@@ -15,6 +17,11 @@ interface Icoords {
 const { kakao } = window;
 
 function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
+  const dispatch = useAppDispatch();
+  const [courseMap, setCourseMap] = useState<any>();
+
+  console.log(courseMap);
+
   useEffect(() => {
     const length = courseXCoords.length;
 
@@ -53,11 +60,17 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
         });
 
         polyline.setMap(map);
+        const courseMap = polyline.getMap();
+        setCourseMap(courseMap);
       }
     };
 
     drawingLines(courseXCoords, courseYCoords, length);
   }, []);
+
+  useEffect(() => {
+    dispatch(courseActions.addCourseMap(courseMap));
+  }, [courseMap]);
 
   return <StyledMap id="map" />;
 }

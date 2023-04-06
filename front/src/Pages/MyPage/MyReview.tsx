@@ -151,11 +151,12 @@ function MyReview() {
               {" "}
               {review.courseMtNm} {review.courseMtNo}코스{" "}
               {review.reviewRelDiff === "H" ? (
-                <span>⭐⭐⭐</span>
+                <span>🌋🌋🌋</span>
               ) : review.reviewRelDiff === "N" ? (
-                <span>⭐⭐</span>
+                <span>🗻🗻</span>
               ) : (
-                <span>⭐</span>
+                <span>🌄</span>
+                // <span>⭐🌄</span>
               )}
             </StyledH3>
             <StyledHr />

@@ -2,10 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import axios from "../../store/baseURL";
 
-import Navbar from "../../Common/Navbar/Navbar";
-// import ResultList from "../../Common/Result/ResultList";
+import { Slider } from "@mui/material/";
+import { resolve } from "path";
+import { rejects } from "assert";
+
+import flaskApi from "../../api";
+import ResultList from "./ResultList";
+
 
 interface Option {
   value: string;
@@ -18,74 +22,61 @@ interface UserLocation {
   error: string | null;
 }
 
-// 위치정보 받아오기 관련 레거시 코드2
-// interface IPosition {
-//   latitude: number;
-//   longitude: number;
-// }
+interface Region {
+  courseLocation: string;
+  coordX: number | null;
+  coordY: number | null;
+  courseRadius: number;
+  courseLengthBtNo: number;
+  courseTimeBtNo: number;
+}
+
 
 function FilterRg() {
-  // 위치정보 받아오기 관련 레거시 코드2
-  //   function getLocation(): Promise<IPosition> {
-  //     return new Promise((resolve, reject) => {
-  //       navigator.geolocation.getCurrentPosition(
-  //         position => {
-  //           const { latitude, longitude } = position.coords;
-  //           resolve({ latitude, longitude });
-  //           console.log(latitude, longitude)
-  //         },
-  //         error => reject(error)
-  //       );
-  //     });
-  //   }
+
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
+  const [mtList, setMtList] = useState<Array<string>>([""]);
+
+  // axios 요청으로 받아올 courseList
+  const [courseList, setCourseList] = useState<any[]>([]);
+
+  // axios
+  const doAxios = () => {
+    flaskApi
+      .post(
+        "/course/search/mt",
+        {
+          courseLocation: searchRg.courseLocation,
+          coordX: searchRg.coordX,
+          coordY: searchRg.coordY,
+          courseRadius: searchRg.courseRadius,
+          courseTimeBtNo: searchRg.courseTimeBtNo,
+          courseLengthBtNo: searchRg.courseLengthBtNo,
+        },
+        {
+          headers: {
+            "X-ACCESS-TOKEN": accessToken,
+            "X-REFRESH-TOKEN": refreshToken,
+          },
+        }
+      )
+      .then((res) => {
+        console.log('axios에 들어가는 값', searchRg)
+        setCourseList(res.data.course_list);
+      })
+      .catch((err) => console.log(err));
+
+  }
 
   // 탭 버튼으로 지역/위치 선택
   const [rgBtn, setRgBtn] = useState(1);
   const [locBtn, setLocBtn] = useState(0);
 
   function ChangeTab() {
-    // 유저 위치정보 받아오기 레거시코드 4
-    // const Geo = () => {
-    //   if (!navigator.geolocation) {
-    //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
-    //     return;
-    //   }
-
-    //   const success = (position:any) => {
-    //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-    //   };
-
-    //   const error = () => {
-    //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
-    //   };
-
-    //   navigator.geolocation.getCurrentPosition(success, error);
-    //   console.log('위치 받아옴')
-    // }
-
-    // 위치정보 받아오기 관련 레거시 코드1
-    // function Geo(): UserLocation {
-    //   // const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
-
-    //   useEffect(() => {
-    //     if (!navigator.geolocation) {
-    //       setLocation({ latitude: null, longitude: null, error: "Geolocation is not supported by your browser" });
-    //       return;
-    //     }
-
-    //     const success = (position: any) => {
-    //       setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-    //     };
-
-    //     const error = () => {
-    //       setLocation({ latitude: null, longitude: null, error: "Unable to retrieve your location" });
-    //     };
-
-    //     navigator.geolocation.getCurrentPosition(success, error);
-    //   }, []);
-
-    //   return location;
-    // }
 
     // 지역 -> 위치 : 탭 변경하며 유저 위치와 반경 정보 받아오기
     if (rgBtn === 1) {
@@ -100,31 +91,31 @@ function FilterRg() {
       setRgBtn(1);
       setLocBtn(0);
       setLocation({ latitude: null, longitude: null, error: null });
+      handleMt(0, "courseRadius");
+      setVolVal(0);
     }
 
-    // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
   }
-
   // 지역기반 드랍박스 목록
   const regions: Option[] = [
-    { value: "미선택", label: "지역을 선택해주세요" },
-    { value: "서울시", label: "서울시" },
-    { value: "부산시", label: "부산시" },
-    { value: "대구시", label: "대구시" },
-    { value: "인천시", label: "인천시" },
-    { value: "광주시", label: "광주시" },
-    { value: "대전시", label: "대전시" },
-    { value: "울산시", label: "울산시" },
-    { value: "세종시", label: "세종시" },
-    { value: "경기도", label: "경기도" },
-    { value: "강원도", label: "강원도" },
-    { value: "충청북도", label: "충청북도" },
-    { value: "충청남도", label: "충청남도" },
-    { value: "전라북도", label: "전라북도" },
-    { value: "전라남도", label: "전라남도" },
-    { value: "경상북도", label: "경상북도" },
-    { value: "경상남도", label: "경상남도" },
-    { value: "제주도", label: "제주도" },
+    { value: "", label: "지역을 선택해주세요" },
+    { value: "서울", label: "서울시" },
+    { value: "부산", label: "부산시" },
+    { value: "대구", label: "대구시" },
+    { value: "인천", label: "인천시" },
+    { value: "광주", label: "광주시" },
+    { value: "대전", label: "대전시" },
+    { value: "울산", label: "울산시" },
+    { value: "세종", label: "세종시" },
+    { value: "경기", label: "경기도" },
+    { value: "강원", label: "강원도" },
+    { value: "충북", label: "충청북도" },
+    { value: "충남", label: "충청남도" },
+    { value: "전북", label: "전라북도" },
+    { value: "전남", label: "전라남도" },
+    { value: "경북", label: "경상북도" },
+    { value: "경남", label: "경상남도" },
+    { value: "제주", label: "제주도" },
   ];
 
   // 지역명 갱신
@@ -135,41 +126,11 @@ function FilterRg() {
     handleMt(event.target.value, type);
   };
 
-  // 유저 위치정보 받아오기 레거시코드 3
-  //   function Geo() {
-
-  //   if (!navigator.geolocation) {
-  //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
-  //     return;
-  //   }
-
-  //   const success = (position:any) => {
-  //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-  //   };
-
-  //   const error = () => {
-  //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
-  //   };
-
-  //   navigator.geolocation.getCurrentPosition(success, error);
-
-  // }
-  // useEffect(() => {
-  //   handleMt(location.latitude, "coordX");
-  //   handleMt(location.longitude, "coordY");
-  //   console.log('위치넣기', location.latitude, location.longitude)
-  // }, [location])
-
   // 반경정보 받아오기
-  const [volumePercent, setVolumePercent] = useState(0);
+  const [volval, setVolVal] = useState<number>(0);
 
-  const handleVolumeChange = (e: React.MouseEvent<HTMLDivElement>) => {
-    const bar = e.currentTarget;
-    const clickX = e.nativeEvent.offsetX;
-    const barWidth = bar.clientWidth;
-    const volumePercent = clickX / barWidth;
-    setVolumePercent(volumePercent);
-    // Call a function to handle the volume change here
+  const volChange = (event: any, newValue: number | number[]) => {
+    setVolVal(newValue as number); // Update the state variable when the slider's value changes
   };
 
   // 지역/위치 이하---------------------------------------
@@ -180,7 +141,7 @@ function FilterRg() {
   const length: string[] = ["전체", "1미만", "1-3", "3-5", "5초과"];
   const [onLength, setOnLength] = useState<number>(0);
 
-  const [searchRg, setSearchRg] = useState<object>({
+  const [searchRg, setSearchRg] = useState<Region>({
     courseLocation: "",
     coordX: null,
     coordY: null,
@@ -194,8 +155,6 @@ function FilterRg() {
       ...searchRg,
       [type]: data,
     });
-    // console.log('handleMt에서 콘솔')
-    // console.log(searchRg)
   };
 
   function initializer() {
@@ -208,7 +167,8 @@ function FilterRg() {
       courseTimeBtNo: 0,
     });
     setRgBtn(1);
-    ChangeTab();
+    setLocBtn(0);
+    // ChangeTab();
   }
 
   const [location, setLocation] = useState<UserLocation>({
@@ -217,82 +177,102 @@ function FilterRg() {
     error: null,
   });
 
-
-
   // # 현재위치 정보 받아와서 searchRg에 넣기
 
-  function GetGeo () {
-    return new Promise((resolve, reject) => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(resolve, reject);
-        
-      } else {
-        reject(new Error('Geolocation is not supported'));
-      }
-    })
+  function GetGeo() {
+    // return new Promise<void>((resolve, reject) => {
+      
+    if (!navigator.geolocation) {
+      setLocation({
+        latitude: null,
+        longitude: null,
+        error: "Geolocation이 브라우저에서 작동하지 않음",
+      });
+      // reject("Geolocation이 브라우저에서 작동하지 않음");
+    }
 
-    // 작동 잘하던 GetGeo코드
-    // if (!navigator.geolocation) {
-    //   setLocation({
-    //     latitude: null,
-    //     longitude: null,
-    //     error: "Geolocation이 브라우저에서 작동하지 않음",
-    //   });
-    //   // return;
-    // }
+    const success = (position: any) => {
+      setLocation({
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        error: null,
+      });
+    };
 
-    // const success = (position: any) => {
-    //   setLocation({
-    //     latitude: position.coords.latitude,
-    //     longitude: position.coords.longitude,
-    //     error: null,
-    //   });
-    // };
+    const error = () => {
+      setLocation({
+        latitude: null,
+        longitude: null,
+        error: "Geolocation 에러",
+      });
+    };
 
-    // const error = () => {
-    //   setLocation({
-    //     latitude: null,
-    //     longitude: null,
-    //     error: "Geolocation 에러",
-    //   });
-    // };
+    navigator.geolocation.getCurrentPosition(success, error);
+    console.log("위치 받아옴");
+    // })
+  }
 
-    // navigator.geolocation.getCurrentPosition(success, error);
-    // console.log("위치 받아옴");
-  };
-
-  function GetGeoCehck () {
+  function GetGeoCehck() {
     console.log("위치 들어옴");
     console.log(location.latitude, location.longitude);
-  };
+  }
 
   function AddGeoX() {
     handleMt(location.latitude, "coordX");
-  };
+    console.log('X들어감')
+  }
 
   function AddGeoY() {
     handleMt(location.longitude, "coordY");
-  };
+    console.log('Y들어감')
+  }
 
   function AddGeoCheck() {
     console.log("리스트에 들어감");
     console.log(searchRg);
+  }
+
+  function AddVol() {
+    handleMt(volval, "courseRadius");
+  }
+
+  const AllInOne = async() => {
+    await GetGeo()
+    await GetGeoCehck()
+    await AddGeoX()
+    await AddGeoY()
+    await AddGeoCheck()
+    await AddVol()
+    await console.log('완료')
+    // await doAxios()
+  }
+
+  const SearchSinal = () => {
+    if (rgBtn === 1) {
+      // console.log('지역검색')
+      if (searchRg.courseLocation === "") {
+        alert("지역을 선택해주세요")
+      } else {
+        console.log(searchRg)
+        console.log('axios')
+        // doAxios()
+      }
+    } else if (locBtn === 1) {
+      // console.log("위치검색");
+
+      // 좌표 받아오고
+      // searchRg저장
+      // 반경 값 저장
+      // 후에
+      AllInOne()
+      // if (searchRg.courseRadius === 0) {
+      //   alert("반경을 설정해주세요")
+      // } else {
+      //   console.log(searchRg)
+      //   console.log('axios')
+      // }
+    }
   };
-
-  function SearchSinal() {
-
-    GetGeo()
-      .then(GetGeoCehck)
-      .then(AddGeoX)
-      .then(AddGeoY)
-      .then(AddGeoCheck)
-      .catch((error) => {
-        console.log(error)
-      })
-  };
-  
-
-
 
   function getLocation() {
     console.log(searchRg);
@@ -301,11 +281,7 @@ function FilterRg() {
   return (
     <div>
       {/* <Navbar /> */}
-
-      <p>Navbar 들어갈 예정</p>
-      <p>원하는 등산 조건을 선택해주세요</p>
-      <p>(이상은 FilterMt와 통일할 예정)</p>
-
+      <StyledP2>원하는 등산코스 조건을 선택해주세요</StyledP2>
       <TabDiv>
         {rgBtn === 1 ? (
           <Tab1>지역검색</Tab1>
@@ -324,9 +300,9 @@ function FilterRg() {
             현재위치
           </UnTab2>
         )}
-        <Tabcontent>
-          {rgBtn === 1 ? (
-            <StyledDiv2>
+        {rgBtn === 1 ? (
+          <TabcontentRg>
+            <StyledDropBox>
               <StyledSelect
                 onChange={(event) => SelectRegion(event, "courseLocation")}
               >
@@ -340,16 +316,30 @@ function FilterRg() {
                   </StyledOption>
                 ))}
               </StyledSelect>
-            </StyledDiv2>
-          ) : (
+            </StyledDropBox>
+          </TabcontentRg>
+        ) : (
+          <TabcontentLoc>
             <VolBarDiv>
-              <p>반경</p>
-              <VolBar onClick={handleVolumeChange}>
-                <VolBarFill percent={volumePercent} />
-              </VolBar>
+              <VolP>반경 (km)</VolP>
+              <SliderDiv>
+                <Slider
+                  // color="primary"
+                  aria-label="Temperature"
+                  defaultValue={0}
+                  // getAriaValueText={valuetext}
+                  valueLabelDisplay="auto"
+                  step={1}
+                  marks={true}
+                  min={0}
+                  max={30}
+                  value={volval}
+                  onChange={volChange}
+                />
+              </SliderDiv>
             </VolBarDiv>
-          )}
-        </Tabcontent>
+          </TabcontentLoc>
+        )}
       </TabDiv>
 
       {/* -------------------------------------------------- */}
@@ -402,6 +392,7 @@ function FilterRg() {
           onClick={() => {
             setOnTime(0);
             setOnLength(0);
+            setVolVal(0);
             initializer();
           }}
         >
@@ -410,7 +401,18 @@ function FilterRg() {
         <button onClick={getLocation}>실험</button>
       </StyledDiv>
 
-      {/* <ResultList />       */}
+      {courseList[0] ? (
+        <ResultList courseList={courseList} />
+      ) : (
+        <StyledDiv2>
+          <StyledImg src="\img\filled_mt.png" alt="filledMt" />
+          <div>
+            <StyledP4>결과값이 없습니다. </StyledP4>
+            <StyledP4>원하시는 조건으로 검색해주세요</StyledP4>
+          </div>
+        </StyledDiv2>
+      )}
+
     </div>
   );
 }
@@ -421,68 +423,103 @@ function FilterRg() {
 //   font-family: "GmarketSansLight";
 // `;
 
+const StyledP2 = styled.p`
+  color: black;
+  margin-top: 30px;
+  margin-left: 25px;
+  margin-bottom: 15px;
+  font-size: 19px;
+  font-family: "GmarketSansMedium";
+`;
+
 const TabDiv = styled.div`
   width: 93vw;
-  height: 40vw;
+  height: 36vw;
   margin-left: 3.5vw;
   border-radius: 20px;
   background-color: #cfe2c8;
   font-family: "GmarketSansMedium";
+  margin-top: 5vw;
+  margin-bottom: 10vw;
 `;
 const Tab1 = styled.button`
   width: 45vw;
-  height: 15vw;
+  height: 13vw;
   margin-left: 1.5vw;
-  margin-top: 1vw;
-  border-radius: 20px;
+  margin-top: 1.5vw;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
   border: none;
   background-color: white;
-  box-shadow: 3px 3px 3px #818181 inset;
-  font-size: 7vw;
+  // box-shadow: 3px 3px 3px #818181 inset;
+  font-size: 6vw;
 `;
 const UnTab1 = styled.button`
   width : 45vw;
-  height : 15vw;
+  height : 13vw;
   margin-left : 1.5vw;
-  margin-top : 1vw;
-  border-radius : 20px;
+  margin-top : 1.5vw;
+  border-top-right-radius : 20px;
+  border-top-left-radius : 20px;
   border : none;
   background-color: #CFE2C8;
-  font-size : 7vw;
+  font-size : 6vw;
   &: hover{
     cursor : pointer;
 `;
 const Tab2 = styled.button`
   width: 45vw;
-  height: 15vw;
+  height: 13vw;
   // margin-left : 4vw;
-  margin-top: 1vw;
-  border-radius: 20px;
+  margin-top: 1.5vw;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
   border: none;
   background-color: white;
-  box-shadow: 3px 3px 3px #818181 inset;
-  font-size: 7vw;
+  // box-shadow: 3px 3px 3px #818181 inset;
+  font-size: 6vw;
 `;
 
 const UnTab2 = styled.button`
   width : 45vw;
-  height : 15vw;
+  height : 13vw;
   // margin-left : 4vw;
-  margin-top : 1vw;
-  border-radius : 20px;
+  margin-top : 1.5vw;
+  border-top-right-radius : 20px;
+  border-top-left-radius : 20px;
   border : none;
   background-color: #CFE2C8;
-  font-size : 7vw;
+  font-size : 6vw;
   &: hover{
     cursor : pointer;
 `;
-const Tabcontent = styled.div`
+const TabcontentRg = styled.div`
   width: 90vw;
-  height: 21vw;
+  height: 20vw;
   margin-left: 1.5vw;
-  margin-top: 1vw;
+  // margin-top: 1vw;
   background-color: white;
-  border-radius: 20px;
+  // border : 1px solid #CFE2C8;
+  // border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const TabcontentLoc = styled.div`
+  width: 90vw;
+  height: 20vw;
+  margin-left: 1.5vw;
+  // margin-top: 1vw;
+  background-color: white;
+  // border : 1px solid #CFE2C8;
+  border-top-left-radius: 20px;
+  // border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -497,10 +534,38 @@ const StyledSpace = styled.div`
   margin-top: 10%;
 `;
 
+const StyledDropBox = styled.div`
+// margin-bottom: 4%;
+text-align: center;
+
+`
+
 const StyledDiv2 = styled.div`
-  // margin-bottom: 4%;
-  text-align: center;
+  display: flex;
+  margin-top: 50px;
+  margin-left: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #dfdcdc;
+  width: 330px;
+  border-radius: 15px;
 `;
+
+const StyledImg = styled.img`
+  width: 80px;
+`;
+
+const StyledP4 = styled.p`
+  font-family: "GmarketSansMedium";
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 3px;
+  margin-left: 15px;
+`;
+
+
 
 const StyledInput = styled.input`
   width: 75vw;
@@ -511,16 +576,62 @@ const StyledInput = styled.input`
 
 const StyledSelect = styled.select`
   width: 80vw;
-  height: 7vh;
+  height: 6vh;
   border: 3px solid black;
   border-radius: 10px;
   overflow-y: auto;
-  font-size: 7vw;
+  font-size: 6vw;
 `;
 
 const StyledOption = styled.option`
   overflow-y: scroll;
+  font-size: 4vw;
+`;
+
+const VolP = styled.p`
   font-size: 5vw;
+  padding-top: 5vw;
+`;
+
+const SliderDiv = styled.div`
+  width: 75vw;
+  // padding-top : 4vw;
+  && {
+    color: #1b954c;
+    height: 16vw;
+    padding: 13px 0;
+  }
+
+  && .MuiSlider-rail {
+    height: 3vw;
+    opacity: 1;
+    background-color: #bdbdbd;
+  }
+
+  && .MuiSlider-track {
+    height: 3vw;
+    opacity: 1;
+    background-color: #1b954c;
+  }
+
+  && .MuiSlider-thumb {
+    width: 6vw;
+    height: 6vw;
+    background-color: #1b954c;
+    border: 2px solid #fff;
+    margin-top: -0.4vw;
+    margin-left: -10px;
+
+    &:focus,
+    &:hover,
+    &:active {
+      box-shadow: 0 0 0 8px rgba(27, 149, 76, 0.16);
+    }
+
+    &.Mui-focusVisible {
+      box-shadow: 0 0 0 8px rgba(27, 149, 76, 0.16);
+    }
+  }
 `;
 
 const VolBarDiv = styled.div`
@@ -529,21 +640,6 @@ const VolBarDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-
-const VolBar = styled.div`
-  width: 60vw;
-  height: 4vw;
-  font-size: 7vw;
-  background-color: #d8d8d8;
-  border: 1px solid #999;
-`;
-
-const VolBarFill = styled.div<{ percent: number }>`
-  height: 100%;
-  background-color: #238c47;
-  transition: width 0.3s ease-in-out;
-  width: ${(props) => props.percent * 100}%;
 `;
 
 // ----------------------------------------

@@ -34,7 +34,7 @@ function MyPage() {
 
   return (
     <div className="MyPage">
-      <StyledH2>{userName}님의 등산기록</StyledH2>
+      <StyledH2>{userName}님의 산삶</StyledH2>
       <Routes>
         <Route path="/myheart" element={<MyHeart />} />
         <Route path="/myreview" element={<MyReview />} />
