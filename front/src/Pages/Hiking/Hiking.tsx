@@ -103,7 +103,7 @@ function Hiking() {
 
     const intervalId = setInterval(() => {
       navigator.geolocation.getCurrentPosition(success, error);
-    }, 100000);
+    }, 60000);
 
     return () => clearInterval(intervalId);
   }, []);
