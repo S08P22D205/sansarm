@@ -50,8 +50,7 @@ function ResultItem({
             mntiListNo: COURSE_MT_CD,
             pageNo: "1",
             numOfRows: "10",
-            ServiceKey:
-              "52XfZNd3Dlkjj7X/01Wm4ons+WSiajtOTo2O7WCEv993o1qWWflHTiRuM9aig/FBuf7VUON5y3sw7cKfrhUu1w==",
+            ServiceKey: "REACT_APP_MT_PHOTO_API_KEY",
           },
         }
       )
@@ -79,7 +78,7 @@ function ResultItem({
       )}
       <StyledDiv2>
         <StyledTitle>
-          {COURSE_MT_NM} {COURSE_MT_NO}코스
+          {COURSE_LOCATION} {COURSE_MT_NM} {COURSE_MT_NO}코스
         </StyledTitle>
         <StyledHr />
         <StyledP>코스 길이 : {COURSE_LENGTH} km</StyledP>

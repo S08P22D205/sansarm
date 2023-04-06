@@ -14,7 +14,6 @@ function Hiking() {
   const courseData: courseInfo = useAppSelector(
     (state) => state.course.detailInfo
   );
-  // console.log(courseData);
 
   const [isRunning, setIsRunning] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
@@ -27,15 +26,16 @@ function Hiking() {
 
   const moveToPhotoPage = () => {
     if (window.confirm("사진을 찍을까요?")) {
-      navigate("/photo/", {});
+      navigate("/photo", {});
     }
   };
 
   const moveToReviewPage = () => {
-    navigate("/review/");
+    navigate("/review");
   };
 
   useEffect(() => {
+    // window.location.reload();
     handleStart();
   }, []);
 
@@ -43,7 +43,7 @@ function Hiking() {
   const startTime: number = useAppSelector((state) => state.course.timeInfo);
 
   function handleStart() {
-    // console.log(startTime);
+    console.log(startTime);
     intervalRef.current = window.setInterval(() => {
       setElapsedTime(Date.now() - startTime);
     }, 1000);
@@ -52,7 +52,7 @@ function Hiking() {
 
   function handleStop() {
     if (window.confirm("등산을 끝내시겠습니까?")) {
-      dispatch(courseActions.addTime(elapsedTime));
+      // dispatch(courseActions.addTime(elapsedTime));
       moveToReviewPage();
       setIsRunning(false);
       window.clearInterval(intervalRef.current!);
@@ -108,7 +108,7 @@ function Hiking() {
 
     const intervalId = setInterval(() => {
       navigator.geolocation.getCurrentPosition(success, error);
-    }, 30000);
+    }, 100000);
 
     return () => clearInterval(intervalId);
   }, []);
@@ -129,6 +129,7 @@ function Hiking() {
         ) : null}
       </StyledMap>
       <StyledH1>
+        {courseData.courseLocation}&nbsp;
         {courseData.courseMtNm}&nbsp;
         {courseData.courseMtNo}코스
       </StyledH1>
@@ -179,13 +180,13 @@ const StyledStopwatch = styled.div`
 const StyledBtn = styled.div`
   text-align: center;
   margin-left: 25%;
-  padding: 2.5%;
+  padding-top: 3%;
   background-color: #238c47;
   width: 50vw;
-  height: 5vh;
+  height: 6vh;
   color: white;
   font-weight: bold;
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   border: none;
   border-radius: 5px;
@@ -207,7 +208,7 @@ const StyledCircle = styled.div`
   height: 70px;
   float: right;
   margin-right: 12%;
-  margin-top: 10%;
+  /* margin-top: 10%; */
   border: 3.5px solid #119426;
 `;
 

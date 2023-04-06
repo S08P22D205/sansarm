@@ -2,10 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-// import axios from "../../store/baseURL";
-
-import Navbar from "../../Common/Navbar/Navbar";
-// import ResultList from "../../Common/Result/ResultList";
 
 import { Slider } from "@mui/material/";
 import { resolve } from "path";
@@ -35,11 +31,6 @@ interface Region {
   courseTimeBtNo: number;
 }
 
-// 위치정보 받아오기 관련 레거시 코드2
-// interface IPosition {
-//   latitude: number;
-//   longitude: number;
-// }
 
 function FilterRg() {
 
@@ -81,67 +72,11 @@ function FilterRg() {
 
   }
 
-  // 위치정보 받아오기 관련 레거시 코드2
-  //   function getLocation(): Promise<IPosition> {
-  //     return new Promise((resolve, reject) => {
-  //       navigator.geolocation.getCurrentPosition(
-  //         position => {
-  //           const { latitude, longitude } = position.coords;
-  //           resolve({ latitude, longitude });
-  //           console.log(latitude, longitude)
-  //         },
-  //         error => reject(error)
-  //       );
-  //     });
-  //   }
-
   // 탭 버튼으로 지역/위치 선택
   const [rgBtn, setRgBtn] = useState(1);
   const [locBtn, setLocBtn] = useState(0);
 
   function ChangeTab() {
-    // 유저 위치정보 받아오기 레거시코드 4
-    // const Geo = () => {
-    //   if (!navigator.geolocation) {
-    //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
-    //     return;
-    //   }
-
-    //   const success = (position:any) => {
-    //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-    //   };
-
-    //   const error = () => {
-    //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
-    //   };
-
-    //   navigator.geolocation.getCurrentPosition(success, error);
-    //   console.log('위치 받아옴')
-    // }
-
-    // 위치정보 받아오기 관련 레거시 코드1
-    // function Geo(): UserLocation {
-    //   // const [location, setLocation] = useState<UserLocation>({ latitude: null, longitude: null, error: null });
-
-    //   useEffect(() => {
-    //     if (!navigator.geolocation) {
-    //       setLocation({ latitude: null, longitude: null, error: "Geolocation is not supported by your browser" });
-    //       return;
-    //     }
-
-    //     const success = (position: any) => {
-    //       setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-    //     };
-
-    //     const error = () => {
-    //       setLocation({ latitude: null, longitude: null, error: "Unable to retrieve your location" });
-    //     };
-
-    //     navigator.geolocation.getCurrentPosition(success, error);
-    //   }, []);
-
-    //   return location;
-    // }
 
     // 지역 -> 위치 : 탭 변경하며 유저 위치와 반경 정보 받아오기
     if (rgBtn === 1) {
@@ -160,9 +95,7 @@ function FilterRg() {
       setVolVal(0);
     }
 
-    // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
   }
-
   // 지역기반 드랍박스 목록
   const regions: Option[] = [
     { value: "", label: "지역을 선택해주세요" },
@@ -193,31 +126,6 @@ function FilterRg() {
     handleMt(event.target.value, type);
   };
 
-  // 유저 위치정보 받아오기 레거시코드 3
-  //   function Geo() {
-
-  //   if (!navigator.geolocation) {
-  //     setLocation({ latitude: null, longitude: null, error: "Geolocation이 브라우저에서 작동하지 않음" });
-  //     return;
-  //   }
-
-  //   const success = (position:any) => {
-  //     setLocation({ latitude: position.coords.latitude, longitude: position.coords.longitude, error: null });
-  //   };
-
-  //   const error = () => {
-  //     setLocation({ latitude: null, longitude: null, error: "Geolocation 에러" });
-  //   };
-
-  //   navigator.geolocation.getCurrentPosition(success, error);
-
-  // }
-  // useEffect(() => {
-  //   handleMt(location.latitude, "coordX");
-  //   handleMt(location.longitude, "coordY");
-  //   console.log('위치넣기', location.latitude, location.longitude)
-  // }, [location])
-
   // 반경정보 받아오기
   const [volval, setVolVal] = useState<number>(0);
 
@@ -247,8 +155,6 @@ function FilterRg() {
       ...searchRg,
       [type]: data,
     });
-    // console.log('handleMt에서 콘솔')
-    // console.log(searchRg)
   };
 
   function initializer() {
@@ -337,7 +243,8 @@ function FilterRg() {
     await AddGeoY()
     await AddGeoCheck()
     await AddVol()
-    await doAxios()
+    await console.log('완료')
+    // await doAxios()
   }
 
   const SearchSinal = () => {
@@ -348,7 +255,7 @@ function FilterRg() {
       } else {
         console.log(searchRg)
         console.log('axios')
-        doAxios()
+        // doAxios()
       }
     } else if (locBtn === 1) {
       // console.log("위치검색");
@@ -365,19 +272,6 @@ function FilterRg() {
       //   console.log('axios')
       // }
     }
-
-    // GetGeo()
-    // console.log(location)
-
-    // GetGeo()
-    //   .then(GetGeoCehck)
-    //   .then(AddGeoX)
-    //   .then(AddGeoY)
-    //   .then(AddGeoCheck)
-    //   .then(AddVol)
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
   };
 
   function getLocation() {

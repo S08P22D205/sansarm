@@ -16,10 +16,7 @@ const springApi = axios.create({
 });
 
 export const userApi = {
-  userInfo: (
-    accessToken: string | null | undefined,
-    refreshToken: string | null | undefined
-  ) =>
+  userInfo: (accessToken: string | null, refreshToken: string | null) =>
     springApi.get("user/info", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
@@ -31,6 +28,13 @@ export const userApi = {
     refreshToken: string | null | undefined
   ) =>
     springApi.get("user/signout", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  isRec: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("user/main/is-recommendable", {
       headers: {
         "X-ACCESS-TOKEN": accessToken,
         "X-REFRESH-TOKEN": refreshToken,
@@ -53,9 +57,20 @@ export const courseApi = {
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  easy: () => flaskApi.get("course/main/easy"),
-  normal: () => flaskApi.get("course/main/normal"),
-  hard: () => flaskApi.get("course/main/hard"),
+  recommend: (accessToken: string | null, refreshToken: string | null) =>
+    flaskApi.get("course/main/recommend", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
+  topTen: (accessToken: string | null, refreshToken: string | null) =>
+    springApi.get("course/top-ten", {
+      headers: {
+        "X-ACCESS-TOKEN": accessToken,
+        "X-REFRESH-TOKEN": refreshToken,
+      },
+    }),
   // filterMt: (accessToken: string | null, refreshToken: string | null) =>
   //   flaskApi.post("course/search/mt", {
   //     headers: {

@@ -6,6 +6,7 @@ import Kakaomap from "./Kakaomap";
 import ReviewList from "./ReviewList";
 import { useAppDispatch } from "../../store/hooks";
 import { courseActions } from "../../store/courseSlice";
+import Loading from "../../Common/Loading/Loading";
 
 interface courseInfo {
   courseNo?: number;
@@ -25,6 +26,9 @@ interface courseInfo {
 function CourseDetail() {
   const [courseData, setCourseData] = useState<courseInfo>({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
+
+  // 로딩 중
+  const [loading, setLoading] = useState(true);
 
   // navigate, location 사용
   const navigate = useNavigate();
@@ -89,10 +93,11 @@ function CourseDetail() {
         },
       })
       .then((res) => {
-        console.log("코스 정보 받아오기 :: 성공!");
-        console.log(res.data);
+        // console.log("코스 정보 받아오기 :: 성공!");
+        // console.log(res.data);
         setCourseData(res.data);
         dispatch(courseActions.addCourse(res.data));
+        setLoading(false);
       })
       .catch((err) => console.log(err));
   }, []);
@@ -113,51 +118,66 @@ function CourseDetail() {
 
   return (
     <div className="CourseDetail">
-      <StyledDiv>
-        <StyledTitle>
-          {courseData.courseMtNm}&nbsp;
-          {courseData.courseMtNo}코스
-          {isClicked ? (
-            <StyledIcon
-              src="/img/heart_pink.png"
-              alt="하트"
-              onClick={unClickedHeart}
+      {loading ? (
+        <Loading />
+      ) : (
+        <div>
+          <StyledDiv>
+            <StyledTitle>
+              {courseData.courseLocation}&nbsp;
+              {courseData.courseMtNm}&nbsp;
+              {courseData.courseMtNo}코스
+              {isClicked ? (
+                <StyledIcon
+                  src="/img/heart_pink.png"
+                  alt="하트"
+                  onClick={unClickedHeart}
+                />
+              ) : (
+                <StyledIcon
+                  src="/img/heart_black.png"
+                  alt="하트"
+                  onClick={clickHeart}
+                />
+              )}
+            </StyledTitle>
+          </StyledDiv>
+          {courseData.courseXCoords && courseData.courseYCoords ? (
+            <Kakaomap
+              courseXCoords={courseData.courseXCoords}
+              courseYCoords={courseData.courseYCoords}
             />
-          ) : (
-            <StyledIcon
-              src="/img/heart_black.png"
-              alt="하트"
-              onClick={clickHeart}
-            />
-          )}
-        </StyledTitle>
-      </StyledDiv>
-      {courseData.courseXCoords && courseData.courseYCoords ? (
-        <Kakaomap
-          courseXCoords={courseData.courseXCoords}
-          courseYCoords={courseData.courseYCoords}
-        />
-      ) : null}
-      <StyledDiv2>
-        <StyledContent>코스 길이 : {courseData.courseLength}km</StyledContent>
-        {courseData.courseUptime ? (
-          <StyledContent>
-            상행 시간 : {Math.floor(courseData.courseUptime / 60)}시간{" "}
-            {Math.floor(courseData.courseUptime % 60)}분
-          </StyledContent>
-        ) : null}
+          ) : null}
+          <StyledDiv2>
+            <StyledContent>
+              코스 길이 : <StyledSpan>{courseData.courseLength}km</StyledSpan>
+            </StyledContent>
+            {courseData.courseUptime ? (
+              <StyledContent>
+                상행 시간 :{" "}
+                <StyledSpan>
+                  {Math.floor(courseData.courseUptime / 60)}시간{" "}
+                  {Math.floor(courseData.courseUptime % 60)}분
+                </StyledSpan>
+              </StyledContent>
+            ) : null}
 
-        {courseData.courseDowntime ? (
-          <StyledContent>
-            하행 시간 : {Math.floor(courseData.courseDowntime / 60)}시간{" "}
-            {Math.floor(courseData.courseDowntime % 60)}분
-          </StyledContent>
-        ) : null}
-      </StyledDiv2>
+            {courseData.courseDowntime ? (
+              <StyledContent>
+                하행 시간 :{" "}
+                <StyledSpan>
+                  {Math.floor(courseData.courseDowntime / 60)}
+                  시간 {Math.floor(courseData.courseDowntime % 60)}분
+                </StyledSpan>
+              </StyledContent>
+            ) : null}
+          </StyledDiv2>
 
-      <StyledBtn onClick={moveToHiking}>등산 시작하기</StyledBtn>
+          <StyledBtn onClick={moveToHiking}>시작하기</StyledBtn>
 
-      <ReviewList id={id} />
+          <ReviewList id={id} />
+        </div>
+      )}
     </div>
   );
 }
@@ -168,7 +188,7 @@ const StyledDiv = styled.div`
 `;
 
 const StyledDiv2 = styled.div`
-  margin-top: 20px;
+  margin-top: 30px;
   margin-left: 40px;
 `;
 
@@ -185,9 +205,14 @@ const StyledIcon = styled.img`
 
 const StyledContent = styled.p`
   font-family: "GmarketSansLight";
+  font-size: 18px;
   margin: 5px;
 `;
 
+const StyledSpan = styled.span`
+  font-family: "GmarketSansMedium";
+  /* font-weight: 1000; */
+`;
 const StyledBtn = styled.button`
   background-color: #238c47;
   color: white;
@@ -200,7 +225,7 @@ const StyledBtn = styled.button`
   width: 70%;
   height: 50px;
   margin-left: 15%;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 20px;
 `;
 

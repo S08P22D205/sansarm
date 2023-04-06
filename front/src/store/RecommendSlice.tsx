@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { courseInfo } from "./courseSlice";
 
 export interface CourseInfo {
   COURSE_NO?: number;
@@ -11,17 +12,13 @@ export interface CourseInfo {
   COURSE_LENGTH?: number;
   COURSE_LOCATION?: string;
   COURSE_ADDRESS?: string;
-  // courseNo?: number;
-  // courseMtNm?: string;
-  // courseMtCd?: number;
-  // courseMtNo?: number;
-  // courseXCoords?: Array<number>;
-  // courseYCoords?: Array<number>;
-  // courseAbsDiff?: string;
-  // courseUptime?: number;
-  // courseDowntime?: number;
-  // courseLength?: number;
-  // courseLocation?: string;
+  courseIdx?: number;
+}
+
+export interface DiffInfo {
+  EASY_COURSE_LIST: CourseInfo[];
+  NORMAL_COURSE_LIST: CourseInfo[];
+  HARD_COURSE_LIST: CourseInfo[];
 }
 
 export interface RecInfo {
@@ -29,16 +26,12 @@ export interface RecInfo {
   USER_GENDER?: string;
   COURSE_LIST: CourseInfo[];
   courseName?: string;
-  // userAge?: number;
-  // userGender?: string;
-  // courseList: courseInfo[];
 }
 
 interface MainState {
   genderAge: RecInfo;
-  easyCourse: RecInfo;
-  normalCourse: RecInfo;
-  hardCourse: RecInfo;
+  difficultyCourse: DiffInfo;
+  topTen: courseInfo[];
 }
 
 const initialState: MainState = {
@@ -46,25 +39,21 @@ const initialState: MainState = {
     USER_AGE_POOL: 0,
     USER_GENDER: "",
     COURSE_LIST: [],
-    // userAge: 0,
-    // userGender: "",
-    // courseList: [],
   },
-
-  easyCourse: {
-    COURSE_LIST: [],
-    // courseList: [],
+  difficultyCourse: {
+    EASY_COURSE_LIST: [{}],
+    NORMAL_COURSE_LIST: [{}],
+    HARD_COURSE_LIST: [{}],
   },
-
-  normalCourse: {
-    COURSE_LIST: [],
-    // courseList: [],
-  },
-
-  hardCourse: {
-    COURSE_LIST: [],
-    // courseList: [],
-  },
+  topTen: [
+    {
+      courseNo: 0,
+      courseLength: 0,
+      courseMtNm: "",
+      courseMtNo: 0,
+      courseUptime: 0,
+    },
+  ],
 };
 
 export const RecommendSlice = createSlice({
@@ -74,22 +63,15 @@ export const RecommendSlice = createSlice({
     changeAgeGender: (state, action: PayloadAction<RecInfo>) => {
       state.genderAge = action.payload;
     },
-    changeEasyCourses: (state, action: PayloadAction<RecInfo>) => {
-      state.easyCourse = action.payload;
+    changeCourses: (state, action: PayloadAction<DiffInfo>) => {
+      state.difficultyCourse = action.payload;
     },
-    changeNormalCourses: (state, action: PayloadAction<RecInfo>) => {
-      state.normalCourse = action.payload;
-    },
-    changeHardCourses: (state, action: PayloadAction<RecInfo>) => {
-      state.hardCourse = action.payload;
+    changeTopTen: (state, action: PayloadAction<courseInfo[]>) => {
+      state.topTen = action.payload;
     },
   },
 });
 
-export const {
-  changeAgeGender,
-  changeEasyCourses,
-  changeNormalCourses,
-  changeHardCourses,
-} = RecommendSlice.actions;
+export const { changeAgeGender, changeCourses, changeTopTen } =
+  RecommendSlice.actions;
 export default RecommendSlice.reducer;

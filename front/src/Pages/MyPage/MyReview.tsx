@@ -3,7 +3,7 @@ import axios from "../../store/baseURL.js";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-interface courseInfo {
+export interface reviewInfo {
   courseNo?: number;
   courseMtNm?: string;
   courseMtCd?: number;
@@ -116,7 +116,7 @@ function MyReview() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
-  const [reviewCourses, setReviewCourses] = useState<courseInfo[]>([{}]);
+  const [reviewCourses, setReviewCourses] = useState<reviewInfo[]>([{}]);
 
   useEffect(() => {
     const getReviewCourse = async () => {
@@ -140,7 +140,7 @@ function MyReview() {
         <StyledLink to="/mypage/myreview">
           <StyledIcon2 src="/img/flag_red.png" />
         </StyledLink>
-        <StyledLink to="/mypage/myexpmap">
+        <StyledLink to="/mypage/mymap">
           <StyledIcon2 src="/img/map_black.png" />
         </StyledLink>
       </StyledTab>

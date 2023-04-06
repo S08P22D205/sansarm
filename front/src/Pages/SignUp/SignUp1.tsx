@@ -11,23 +11,23 @@ interface Option {
 }
 
 const locations: Option[] = [
-  { value: "서울시", label: "서울시" },
-  { value: "부산시", label: "부산시" },
-  { value: "대구시", label: "대구시" },
-  { value: "인천시", label: "인천시" },
-  { value: "광주시", label: "광주시" },
-  { value: "대전시", label: "대전시" },
-  { value: "울산시", label: "울산시" },
-  { value: "세종시", label: "세종시" },
-  { value: "경기도", label: "경기도" },
-  { value: "강원도", label: "강원도" },
-  { value: "충청북도", label: "충청북도" },
-  { value: "충청남도", label: "충청남도" },
-  { value: "전라북도", label: "전라북도" },
-  { value: "전라남도", label: "전라남도" },
-  { value: "경상북도", label: "경상북도" },
-  { value: "경상남도", label: "경상남도" },
-  { value: "제주도", label: "제주도" },
+  { value: "서울", label: "서울시" },
+  { value: "부산", label: "부산시" },
+  { value: "대구", label: "대구시" },
+  { value: "인천", label: "인천시" },
+  { value: "광주", label: "광주시" },
+  { value: "대전", label: "대전시" },
+  { value: "울산", label: "울산시" },
+  { value: "세종", label: "세종시" },
+  { value: "경기", label: "경기도" },
+  { value: "강원", label: "강원도" },
+  { value: "충북", label: "충청북도" },
+  { value: "충남", label: "충청남도" },
+  { value: "전북", label: "전라북도" },
+  { value: "전남", label: "전라남도" },
+  { value: "경북", label: "경상북도" },
+  { value: "경남", label: "경상남도" },
+  { value: "제주", label: "제주도" },
 ];
 
 const genders: Option[] = [
@@ -85,6 +85,7 @@ function SignUp1() {
   };
 
   const apiSignUp1 = () => {
+    console.log(signUp);
     if (signUp.userNicknm !== "" && signUp.userAge !== "") {
       axios
         .post("/user/signup", {
@@ -161,14 +162,16 @@ function SignUp1() {
 }
 
 const StyledDiv = styled.div`
-  padding-top: 40%;
+  /* padding-top: 30%; */
   height: 100vh;
   font-family: "GmarketSansLight";
 `;
 
 const StyledH1 = styled.div`
   text-align: center;
-  padding: 4vw;
+  /* padding: 4vw; */
+  font-size: 2.5vh;
+  font-weight: bold;
 `;
 
 const StyledSpace = styled.div`
@@ -181,10 +184,15 @@ const StyledDiv2 = styled.div`
 `;
 
 const StyledInput = styled.input`
+  ::placeholder,
+  ::-webkit-input-placeholder {
+    color: black;
+  }
   width: 75vw;
   height: 5vh;
   padding: 12px 12px;
-  border-radius: 10px;
+  border-radius: 5px;
+  border: 1px solid black;
 `;
 
 const StyledSelect = styled.select`
@@ -203,25 +211,17 @@ const StyledButton = styled.button`
   float: right;
   font-weight: 600;
   width: 35vw;
-  height: 5vh;
+  height: 6vh;
   color: white;
   background-color: #238c47;
-  font-size: 4vw;
-  margin-top: 60%;
+  font-size: 5vw;
+  margin-top: 30%;
   margin-right: 15vw;
   padding: 10px;
   cursor: pointer;
   border: none;
   border-radius: 15px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-  :hover {
-    letter-spacing: 2px;
-    transform: scale(1.2);
-    cursor: pointer;
-    background-color: #ff5f2e;
-    color: white;
-    outline: 0;
-  }
 `;
 
 export default SignUp1;

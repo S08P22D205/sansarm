@@ -1,30 +1,41 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-export interface LoginInfo {
-  accessToken?: string | null;
-  refreshToken?: string | null;
+export interface UserInfo {
+  userEmail: string;
+  userNicknm: string;
+  userAge: number;
+  userGender: string;
+  userLocation: string;
 }
 
 interface LoginState {
-  loginInfo: LoginInfo;
+  userInfo: UserInfo;
+  isRec: boolean;
 }
 
 const initialState: LoginState = {
-  loginInfo: {
-    accessToken: "",
-    refreshToken: "",
+  userInfo: {
+    userEmail: "",
+    userNicknm: "",
+    userAge: 0,
+    userGender: "",
+    userLocation: "",
   },
+  isRec: false,
 };
 
 export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    changeLoginInfo: (state, action: PayloadAction<LoginInfo>) => {
-      state.loginInfo = action.payload;
+    changeUserInfo: (state, action: PayloadAction<UserInfo>) => {
+      state.userInfo = action.payload;
+    },
+    changeIsRec: (state, action: PayloadAction<boolean>) => {
+      state.isRec = action.payload;
     },
   },
 });
 
-export const { changeLoginInfo } = loginSlice.actions;
+export const { changeUserInfo, changeIsRec } = loginSlice.actions;
 export default loginSlice.reducer;
