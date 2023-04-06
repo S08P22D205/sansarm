@@ -8,6 +8,11 @@ import Navbar from "../../Common/Navbar/Navbar";
 // import ResultList from "../../Common/Result/ResultList";
 
 import { Slider } from "@mui/material/";
+import { resolve } from "path";
+import { rejects } from "assert";
+
+import flaskApi from "../../api";
+import ResultList from "./ResultList";
 
 
 interface Option {
@@ -21,7 +26,14 @@ interface UserLocation {
   error: string | null;
 }
 
-
+interface Region {
+  courseLocation: string;
+  coordX: number | null;
+  coordY: number | null;
+  courseRadius: number;
+  courseLengthBtNo: number;
+  courseTimeBtNo: number;
+}
 
 // 위치정보 받아오기 관련 레거시 코드2
 // interface IPosition {
@@ -29,8 +41,46 @@ interface UserLocation {
 //   longitude: number;
 // }
 
-
 function FilterRg() {
+
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
+  const [mtList, setMtList] = useState<Array<string>>([""]);
+
+  // axios 요청으로 받아올 courseList
+  const [courseList, setCourseList] = useState<any[]>([]);
+
+  // axios
+  const doAxios = () => {
+    flaskApi
+      .post(
+        "/course/search/mt",
+        {
+          courseLocation: searchRg.courseLocation,
+          coordX: searchRg.coordX,
+          coordY: searchRg.coordY,
+          courseRadius: searchRg.courseRadius,
+          courseTimeBtNo: searchRg.courseTimeBtNo,
+          courseLengthBtNo: searchRg.courseLengthBtNo,
+        },
+        {
+          headers: {
+            "X-ACCESS-TOKEN": accessToken,
+            "X-REFRESH-TOKEN": refreshToken,
+          },
+        }
+      )
+      .then((res) => {
+        console.log('axios에 들어가는 값', searchRg)
+        setCourseList(res.data.course_list);
+      })
+      .catch((err) => console.log(err));
+
+  }
+
   // 위치정보 받아오기 관련 레거시 코드2
   //   function getLocation(): Promise<IPosition> {
   //     return new Promise((resolve, reject) => {
@@ -106,8 +156,8 @@ function FilterRg() {
       setRgBtn(1);
       setLocBtn(0);
       setLocation({ latitude: null, longitude: null, error: null });
-      handleMt(0, "courseRadius")
-      setVolVal(0)
+      handleMt(0, "courseRadius");
+      setVolVal(0);
     }
 
     // console.log('rgBtn :', rgBtn, 'locBtn: ', locBtn, 'location :', location.latitude, location.longitude)
@@ -169,13 +219,11 @@ function FilterRg() {
   // }, [location])
 
   // 반경정보 받아오기
-  const [volval, setVolVal] = useState<number>(0)
+  const [volval, setVolVal] = useState<number>(0);
 
   const volChange = (event: any, newValue: number | number[]) => {
     setVolVal(newValue as number); // Update the state variable when the slider's value changes
   };
-    
-
 
   // 지역/위치 이하---------------------------------------
 
@@ -185,7 +233,7 @@ function FilterRg() {
   const length: string[] = ["전체", "1미만", "1-3", "3-5", "5초과"];
   const [onLength, setOnLength] = useState<number>(0);
 
-  const [searchRg, setSearchRg] = useState<object>({
+  const [searchRg, setSearchRg] = useState<Region>({
     courseLocation: "",
     coordX: null,
     coordY: null,
@@ -213,7 +261,7 @@ function FilterRg() {
       courseTimeBtNo: 0,
     });
     setRgBtn(1);
-    setLocBtn(0)
+    setLocBtn(0);
     // ChangeTab();
   }
 
@@ -223,28 +271,18 @@ function FilterRg() {
     error: null,
   });
 
-
-
   // # 현재위치 정보 받아와서 searchRg에 넣기
 
-  function GetGeo () {
-    // return new Promise((resolve, reject) => {
-    //   if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(resolve, reject);
-        
-    //   } else {
-    //     reject(new Error('Geolocation is not supported'));
-    //   }
-    // })
-
-    // 작동 잘하던 GetGeo코드
+  function GetGeo() {
+    // return new Promise<void>((resolve, reject) => {
+      
     if (!navigator.geolocation) {
       setLocation({
         latitude: null,
         longitude: null,
         error: "Geolocation이 브라우저에서 작동하지 않음",
       });
-      // return;
+      // reject("Geolocation이 브라우저에서 작동하지 않음");
     }
 
     const success = (position: any) => {
@@ -265,42 +303,71 @@ function FilterRg() {
 
     navigator.geolocation.getCurrentPosition(success, error);
     console.log("위치 받아옴");
-  };
+    // })
+  }
 
-  function GetGeoCehck () {
+  function GetGeoCehck() {
     console.log("위치 들어옴");
     console.log(location.latitude, location.longitude);
-  };
+  }
 
   function AddGeoX() {
     handleMt(location.latitude, "coordX");
-  };
+    console.log('X들어감')
+  }
 
   function AddGeoY() {
     handleMt(location.longitude, "coordY");
-  };
+    console.log('Y들어감')
+  }
 
   function AddGeoCheck() {
     console.log("리스트에 들어감");
     console.log(searchRg);
-  };
-
-  function AddVol(){
-    handleMt(volval, "courseRadius")
   }
 
-  function SearchSinal() {
-    if (rgBtn === 1){
-      // console.log('지역검색')
-      // if (|)
-    } else if (locBtn === 1){
-      console.log('위치검색')
-    }
+  function AddVol() {
+    handleMt(volval, "courseRadius");
+  }
 
+  const AllInOne = async() => {
+    await GetGeo()
+    await GetGeoCehck()
+    await AddGeoX()
+    await AddGeoY()
+    await AddGeoCheck()
+    await AddVol()
+    await doAxios()
+  }
+
+  const SearchSinal = () => {
+    if (rgBtn === 1) {
+      // console.log('지역검색')
+      if (searchRg.courseLocation === "") {
+        alert("지역을 선택해주세요")
+      } else {
+        console.log(searchRg)
+        console.log('axios')
+        doAxios()
+      }
+    } else if (locBtn === 1) {
+      // console.log("위치검색");
+
+      // 좌표 받아오고
+      // searchRg저장
+      // 반경 값 저장
+      // 후에
+      AllInOne()
+      // if (searchRg.courseRadius === 0) {
+      //   alert("반경을 설정해주세요")
+      // } else {
+      //   console.log(searchRg)
+      //   console.log('axios')
+      // }
+    }
 
     // GetGeo()
     // console.log(location)
-
 
     // GetGeo()
     //   .then(GetGeoCehck)
@@ -312,9 +379,6 @@ function FilterRg() {
     //     console.log(error)
     //   })
   };
-  
-
-
 
   function getLocation() {
     console.log(searchRg);
@@ -344,7 +408,7 @@ function FilterRg() {
         )}
         {rgBtn === 1 ? (
           <TabcontentRg>
-            <StyledDiv2>
+            <StyledDropBox>
               <StyledSelect
                 onChange={(event) => SelectRegion(event, "courseLocation")}
               >
@@ -358,16 +422,12 @@ function FilterRg() {
                   </StyledOption>
                 ))}
               </StyledSelect>
-            </StyledDiv2>
+            </StyledDropBox>
           </TabcontentRg>
-          ) : 
-          (
-            <TabcontentLoc>
+        ) : (
+          <TabcontentLoc>
             <VolBarDiv>
-              <VolP>
-                반경
-                (km)  
-              </VolP>
+              <VolP>반경 (km)</VolP>
               <SliderDiv>
                 <Slider
                   // color="primary"
@@ -385,7 +445,7 @@ function FilterRg() {
               </SliderDiv>
             </VolBarDiv>
           </TabcontentLoc>
-          )}
+        )}
       </TabDiv>
 
       {/* -------------------------------------------------- */}
@@ -447,7 +507,18 @@ function FilterRg() {
         <button onClick={getLocation}>실험</button>
       </StyledDiv>
 
-      {/* <ResultList />       */}
+      {courseList[0] ? (
+        <ResultList courseList={courseList} />
+      ) : (
+        <StyledDiv2>
+          <StyledImg src="\img\filled_mt.png" alt="filledMt" />
+          <div>
+            <StyledP4>결과값이 없습니다. </StyledP4>
+            <StyledP4>원하시는 조건으로 검색해주세요</StyledP4>
+          </div>
+        </StyledDiv2>
+      )}
+
     </div>
   );
 }
@@ -474,16 +545,16 @@ const TabDiv = styled.div`
   border-radius: 20px;
   background-color: #cfe2c8;
   font-family: "GmarketSansMedium";
-  margin-top : 5vw;
-  margin-bottom : 10vw;
+  margin-top: 5vw;
+  margin-bottom: 10vw;
 `;
 const Tab1 = styled.button`
   width: 45vw;
   height: 13vw;
   margin-left: 1.5vw;
   margin-top: 1.5vw;
-  border-top-right-radius : 20px;
-  border-top-left-radius : 20px;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
   border: none;
   background-color: white;
   // box-shadow: 3px 3px 3px #818181 inset;
@@ -507,8 +578,8 @@ const Tab2 = styled.button`
   height: 13vw;
   // margin-left : 4vw;
   margin-top: 1.5vw;
-  border-top-right-radius : 20px;
-  border-top-left-radius : 20px;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
   border: none;
   background-color: white;
   // box-shadow: 3px 3px 3px #818181 inset;
@@ -569,10 +640,38 @@ const StyledSpace = styled.div`
   margin-top: 10%;
 `;
 
+const StyledDropBox = styled.div`
+// margin-bottom: 4%;
+text-align: center;
+
+`
+
 const StyledDiv2 = styled.div`
-  // margin-bottom: 4%;
-  text-align: center;
+  display: flex;
+  margin-top: 50px;
+  margin-left: 15px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: #dfdcdc;
+  width: 330px;
+  border-radius: 15px;
 `;
+
+const StyledImg = styled.img`
+  width: 80px;
+`;
+
+const StyledP4 = styled.p`
+  font-family: "GmarketSansMedium";
+  font-size: 14px;
+  margin-top: 8px;
+  margin-bottom: 3px;
+  margin-left: 15px;
+`;
+
+
 
 const StyledInput = styled.input`
   width: 75vw;
@@ -596,15 +695,15 @@ const StyledOption = styled.option`
 `;
 
 const VolP = styled.p`
-  font-size : 5vw;
-  padding-top : 5vw;
-`
+  font-size: 5vw;
+  padding-top: 5vw;
+`;
 
 const SliderDiv = styled.div`
-  width : 75vw;
+  width: 75vw;
   // padding-top : 4vw;
   && {
-    color: #1B954C;
+    color: #1b954c;
     height: 16vw;
     padding: 13px 0;
   }
@@ -612,19 +711,19 @@ const SliderDiv = styled.div`
   && .MuiSlider-rail {
     height: 3vw;
     opacity: 1;
-    background-color: #BDBDBD;
+    background-color: #bdbdbd;
   }
 
   && .MuiSlider-track {
     height: 3vw;
     opacity: 1;
-    background-color: #1B954C;
+    background-color: #1b954c;
   }
 
   && .MuiSlider-thumb {
     width: 6vw;
     height: 6vw;
-    background-color: #1B954C;
+    background-color: #1b954c;
     border: 2px solid #fff;
     margin-top: -0.4vw;
     margin-left: -10px;
@@ -639,7 +738,7 @@ const SliderDiv = styled.div`
       box-shadow: 0 0 0 8px rgba(27, 149, 76, 0.16);
     }
   }
-`
+`;
 
 const VolBarDiv = styled.div`
   width: 80vw;
@@ -648,7 +747,6 @@ const VolBarDiv = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-
 
 // ----------------------------------------
 
