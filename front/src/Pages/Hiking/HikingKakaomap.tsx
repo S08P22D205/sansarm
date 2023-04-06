@@ -124,7 +124,7 @@ function HikingKakaomap({
       }
     };
 
-    drawingHiking(courseXCoords, courseYCoords, walked);
+    drawingHiking(hikingXCoords, hikingYCoords, walked);
     // console.log(hikingXCoords, hikingYCoords);
   }, [hikingXCoords]);
 
