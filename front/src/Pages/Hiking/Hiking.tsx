@@ -114,9 +114,6 @@ function Hiking() {
 
     return () => clearInterval(intervalId);
   }, []);
-  // console.log(latitudeList, longitudeList);
-
-  // }
 
   return (
     <StyledDiv>
@@ -152,7 +149,7 @@ function Hiking() {
 }
 
 const StyledDiv = styled.div`
-  padding-top: 10%;
+  /* padding-top: 10%; */
   font-family: "GmarketSansLight";
   text-align: center;
 `;

@@ -53,13 +53,14 @@ function ResultItem({
         }
       )
       .then((res) => {
+        console.log(res.data.response.body.items.item[0]);
         if (res.data.response.body.items) {
           setImgName("");
           setImgName(res.data.response.body.items.item[0].imgfilename);
         }
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   }, []);
 
