@@ -29,7 +29,7 @@ function HikingKakaomap({
     const length = courseXCoords.length;
     const walked = hikingXCoords.length;
     
-    // console.log('들어오는지 확인', hikingXCoords)
+    console.log('들어오는지 확인', hikingXCoords, hikingYCoords)
   
     // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
   
@@ -105,15 +105,15 @@ function HikingKakaomap({
       hikingYCoords: number[],
       walked: number
     ) => {
-      var linePath = [];
+      var linePath1 = [];
       for (let i = 0; i < walked; i++) {
-        linePath.push(
+        linePath1.push(
           new kakao.maps.LatLng(hikingXCoords[i], hikingYCoords[i])
         );
         // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
-          path: linePath, // 선을 구성하는 좌표배열
+          path: linePath1, // 선을 구성하는 좌표배열
           strokeWeight: 4, // 선의 두께
           strokeColor: "#238C47", // 선의 색깔
           strokeOpacity: 0.8, // 선의 불투명도 (1에서 0 사이의 값이며 0에 가까울수록 투명)
@@ -124,9 +124,9 @@ function HikingKakaomap({
       }
     };
 
-    drawingHiking(courseXCoords, courseYCoords, walked);
+    drawingHiking(hikingXCoords, hikingYCoords, walked);
     // console.log(hikingXCoords, hikingYCoords);
-  }, []);
+  }, [hikingXCoords]);
 
   // useEffect(() => {
   //   const walked = hikingXCoords.length;

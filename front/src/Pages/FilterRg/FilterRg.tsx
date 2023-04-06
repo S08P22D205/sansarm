@@ -74,7 +74,7 @@ function FilterRg() {
         // console.log('axios에 들어가는 값', searchRg)
         setCourseList(res.data.COURSE_LIST);
       })
-      .catch((err) => console.log(err));
+      // .catch((err) => console.log(err));
 
   }
 
