@@ -4,6 +4,9 @@ import styled from "styled-components";
 import { history } from "./history";
 
 function CameraApp() {
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [cameraStream, setCameraStream] = useState<MediaStream | null>(null);
@@ -17,14 +20,12 @@ function CameraApp() {
 
   // // 1번째 방법
   useEffect(() => {
-    startCamera();
-    // const handleBackButton = async () => {
-    //   await stopCamera();
-    // };
-    // window.addEventListener("popstate", handleBackButton);
-    // return () => {
-    //   window.removeEventListener("popstate", handleBackButton);
-    // };
+    if (accessToken) {
+      startCamera();
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
   }, []);
 
   useEffect(() => {
@@ -37,7 +38,6 @@ function CameraApp() {
         // await listenBackEvent();
         await stopCamera();
         // window.confirm("사진 촬영을 종료하시겠습니까?");
-        console.log("뒤로가기 버튼 클릭됨!@" + cameraStream);
       }
     });
     return unlistenHistoryEvent;
@@ -74,12 +74,9 @@ function CameraApp() {
   };
 
   const stopCamera = async () => {
-    console.log(cameraStream);
     if (cameraStream) {
-      cameraStream.getTracks().forEach((track) => track.stop());
+      cameraStream.getTracks().forEach(track => track.stop());
       setCameraStream(null);
-      console.log("카메라 끄기");
-      console.log(cameraStream);
     }
     moveToHiking();
   };

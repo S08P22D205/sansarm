@@ -26,11 +26,15 @@ interface courseInfo {
 }
 
 function Review() {
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  const navigate = useNavigate();
+
   const courseData: courseInfo = useAppSelector(
     state => state.course.detailInfo
   );
-
-  const navigate = useNavigate();
 
   const moveToPhotoPage = () => {
     navigate("/mypage/myreview");
@@ -51,6 +55,13 @@ function Review() {
       reviewTime: Math.floor(hikingTime / 60000),
     });
   }, [startTime, endTime]);
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
+  });
 
   const [easy, setEasy] = useState(false);
   const [soso, setSoso] = useState(false);
@@ -126,7 +137,6 @@ function Review() {
         )
         .then(response => {
           if (response.data) {
-            //res.data.response.body.items.
             sessionStorage.setItem(
               "accessToken",
               response.headers["x-access-token"]

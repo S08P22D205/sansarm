@@ -9,7 +9,7 @@ import { rejects } from "assert";
 
 import flaskApi from "../../api";
 import ResultList from "./ResultList";
-
+import { useNavigate } from "react-router-dom";
 
 interface Option {
   value: string;
@@ -31,7 +31,6 @@ interface Region {
   courseTimeBtNo: number;
 }
 
-
 interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   timeState?: number;
   lengthState?: number;
@@ -39,16 +38,21 @@ interface ButtonInfo extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 function FilterRg() {
-
   // accessToken, refreshToken 세션스토리지에서 가져와주기
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
-  // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
-  const [mtList, setMtList] = useState<Array<string>>([""]);
+  const navigate = useNavigate();
 
   // axios 요청으로 받아올 courseList
   const [courseList, setCourseList] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
+  }, []);
 
   // axios
   const doAxios = () => {
@@ -70,27 +74,26 @@ function FilterRg() {
           },
         }
       )
-      .then((res) => {
-        // console.log('axios에 들어가는 값', searchRg)
+      .then(res => {
         setCourseList(res.data.COURSE_LIST);
+        // 세션스토리지 내 accessToken 갱신
+        sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
       })
-      .catch((err) => console.log(err));
-
-  }
+      .catch(err => console.log(err));
+  };
 
   // 탭 버튼으로 지역/위치 선택
   const [rgBtn, setRgBtn] = useState(1);
   const [locBtn, setLocBtn] = useState(0);
 
   function ChangeTab() {
-
     // 지역 -> 위치 : 탭 변경하며 유저 위치 정보 받아오기
     if (rgBtn === 1) {
       setRgBtn(0);
       setLocBtn(1);
       handleMt("현재 위치", "courseLocation");
       GetGeo();
-      setJebal(1)
+      setJebal(1);
       // 볼륨바0
 
       // 위치 -> 지역 : 탭 변경하며 유저 위치와 반경 null
@@ -136,8 +139,8 @@ function FilterRg() {
   const [volval, setVolVal] = useState<number>(0);
 
   const volChange = (event: any, newValue: number | number[]) => {
-    setVolVal(newValue as number)
-    handleMt((newValue as number), "courseRadius"); // Update the state variable when the slider's value changes
+    setVolVal(newValue as number);
+    handleMt(newValue as number, "courseRadius"); // Update the state variable when the slider's value changes
   };
 
   // 지역/위치 이하---------------------------------------
@@ -177,18 +180,17 @@ function FilterRg() {
     setSearchRg({
       ...searchRg,
       coordX: location.latitude,
-      coordY: location.longitude
-    })
+      coordY: location.longitude,
+    });
     // console.log('handleCoords')
   }
 
   // handleCoords 동기처리
-  const [jebal, setJebal] = useState<number | null>(null)
+  const [jebal, setJebal] = useState<number | null>(null);
   useEffect(() => {
-    handleCoords()
-    setJebal(null)
-  },[jebal])
-  
+    handleCoords();
+    setJebal(null);
+  }, [jebal]);
 
   // 초기화
   function initializer() {
@@ -205,11 +207,10 @@ function FilterRg() {
     // ChangeTab();
   }
 
-
   // # 현재위치 정보 받아오기
   function GetGeo() {
     // return new Promise<void>((resolve, reject) => {
-      
+
     if (!navigator.geolocation) {
       setLocation({
         latitude: null,
@@ -274,16 +275,15 @@ function FilterRg() {
   //   // await doAxios()
   // }
 
-
   const SearchSinal = () => {
     if (rgBtn === 1) {
       // console.log('지역검색')
       if (searchRg.courseLocation === "현재 위치") {
-        alert("지역을 선택해주세요")
+        alert("지역을 선택해주세요");
       } else {
         // console.log(searchRg)
         // console.log('axios')
-        doAxios()
+        doAxios();
       }
     } else if (locBtn === 1) {
       // console.log("위치검색");
@@ -294,11 +294,11 @@ function FilterRg() {
       // 후에
       // handleCoords()
       if (searchRg.courseRadius === 0) {
-        alert("반경을 설정해주세요")
+        alert("반경을 설정해주세요");
       } else {
         // console.log(searchRg)
         // console.log('axios')
-        doAxios()
+        doAxios();
       }
     }
   };
@@ -333,9 +333,9 @@ function FilterRg() {
           <TabcontentRg>
             <StyledDropBox>
               <StyledSelect
-                onChange={(event) => SelectRegion(event, "courseLocation")}
+                onChange={event => SelectRegion(event, "courseLocation")}
               >
-                {regions.map((region) => (
+                {regions.map(region => (
                   <StyledOption
                     value={region.value}
                     key={region.value}
@@ -442,7 +442,6 @@ function FilterRg() {
           </div>
         </StyledDiv2>
       )}
-
     </div>
   );
 }
@@ -565,10 +564,9 @@ const StyledSpace = styled.div`
 `;
 
 const StyledDropBox = styled.div`
-// margin-bottom: 4%;
-text-align: center;
-
-`
+  // margin-bottom: 4%;
+  text-align: center;
+`;
 
 const StyledDiv2 = styled.div`
   display: flex;
@@ -594,8 +592,6 @@ const StyledP4 = styled.p`
   margin-bottom: 3px;
   margin-left: 15px;
 `;
-
-
 
 const StyledInput = styled.input`
   width: 75vw;
@@ -697,10 +693,9 @@ const StyledBtn = styled.button<ButtonInfo>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) =>
-    props.index === props.timeState ? "#238C47 " : "#818181"};
+  color: ${props => (props.index === props.timeState ? "#238C47 " : "#818181")};
   border: solid
-    ${(props) =>
+    ${props =>
       props.index === props.timeState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
@@ -709,19 +704,19 @@ const StyledBtn = styled.button<ButtonInfo>`
 `;
 
 const StyledBtn1 = styled.button<ButtonInfo>`
-width: 16.5vw;
-height: 30px;
-background-color: white;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-color: ${(props) =>
-  props.index === props.lengthState ? "#238C47" : "#818181"};
-border: solid
-  ${(props) =>
-    props.index === props.lengthState ? "#238C47 3px" : "#818181 2px"};
-font-size: 15px;
-font-family: "GmarketSansMedium";
-border-radius: 13px;
-margin: 3px;
+  width: 16.5vw;
+  height: 30px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
+  color: ${props =>
+    props.index === props.lengthState ? "#238C47" : "#818181"};
+  border: solid
+    ${props =>
+      props.index === props.lengthState ? "#238C47 3px" : "#818181 2px"};
+  font-size: 15px;
+  font-family: "GmarketSansMedium";
+  border-radius: 13px;
+  margin: 3px;
 `;
 
 const StyledDiv = styled.div`

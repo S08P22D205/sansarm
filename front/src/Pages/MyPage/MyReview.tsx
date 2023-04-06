@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "../../store/baseURL.js";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export interface reviewInfo {
@@ -19,6 +19,111 @@ export interface reviewInfo {
   reviewTime?: number;
   reviewRelDiff?: string;
   reviewContent?: string;
+}
+
+function MyReview() {
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+
+  const navigate = useNavigate();
+
+  const [reviewCourses, setReviewCourses] = useState<reviewInfo[]>([{}]);
+
+  useEffect(() => {
+    const getReviewCourse = async () => {
+      try {
+        const res = await axios.get("/user/review", {
+          headers: {
+            "X-ACCESS-TOKEN": accessToken,
+            "X-REFRESH-TOKEN": refreshToken,
+          },
+        });
+        setReviewCourses(res.data.reviewCourses);
+        sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (accessToken) {
+      getReviewCourse();
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
+  }, []);
+
+  return (
+    <div className="MyReview">
+      <StyledTab>
+        <StyledLink to="/mypage/myheart">
+          <StyledIcon src="/img/heart_black.png" />
+        </StyledLink>
+        <StyledLink to="/mypage/myreview">
+          <StyledIcon2 src="/img/flag_red.png" />
+        </StyledLink>
+        <StyledLink to="/mypage/mymap">
+          <StyledIcon2 src="/img/map_black.png" />
+        </StyledLink>
+      </StyledTab>
+      <StyledDiv>
+        {reviewCourses.map((review, idx) => (
+          <ReviewCard key={idx}>
+            <StyledH3>
+              {" "}
+              {review.courseMtNm} {review.courseMtNo}코스{" "}
+              {review.reviewRelDiff === "H" ? (
+                <span>🌋🌋🌋</span>
+              ) : review.reviewRelDiff === "N" ? (
+                <span>🗻🗻</span>
+              ) : (
+                <span>🌄</span>
+                // <span>⭐🌄</span>
+              )}
+            </StyledH3>
+            <StyledHr />
+            <StyledP>
+              <StyledSpan>방문일 </StyledSpan>
+              {review.reviewDate?.toString()}
+            </StyledP>
+            <StyledP1>
+              <StyledSpan>소요시간 </StyledSpan>
+              {review.reviewTime ? (
+                <span>
+                  {/* 시간 있으면 */}
+                  {Math.floor(review.reviewTime / 60) ? (
+                    <span>
+                      {Math.floor(review.reviewTime / 60)}시간{" "}
+                      {review.reviewTime % 60 ? (
+                        <span>{review.reviewTime % 60}분</span>
+                      ) : null}
+                    </span>
+                  ) : null}
+                </span>
+              ) : (
+                <span>0분</span>
+              )}
+              {/* {review.reviewTime ? (
+                <span>
+
+
+                  {Math.floor(review.reviewTime / 60)}시간{" "}
+                  {Math.floor(review.reviewTime / 60) === 0 ||
+                  review.reviewTime % 60 ? (
+                    <span>{review.reviewTime % 60}분</span>
+                  ) : (
+                    <span></span>
+                  )}
+                </span>
+              ) : (
+                <span></span>
+              )} */}
+            </StyledP1>
+            <StyledP1>{review.reviewContent}</StyledP1>
+          </ReviewCard>
+        ))}
+      </StyledDiv>
+    </div>
+  );
 }
 
 const StyledDiv = styled.div`
@@ -111,98 +216,5 @@ const StyledIcon2 = styled.img`
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
-
-function MyReview() {
-  const accessToken = sessionStorage.getItem("accessToken");
-  const refreshToken = sessionStorage.getItem("refreshToken");
-
-  const [reviewCourses, setReviewCourses] = useState<reviewInfo[]>([{}]);
-
-  useEffect(() => {
-    const getReviewCourse = async () => {
-      const res = await axios.get("/user/review", {
-        headers: {
-          "X-ACCESS-TOKEN": accessToken,
-          "X-REFRESH-TOKEN": refreshToken,
-        },
-      });
-      setReviewCourses(res.data.reviewCourses);
-    };
-    getReviewCourse();
-  }, []);
-
-  return (
-    <div className="MyReview">
-      <StyledTab>
-        <StyledLink to="/mypage/myheart">
-          <StyledIcon src="/img/heart_black.png" />
-        </StyledLink>
-        <StyledLink to="/mypage/myreview">
-          <StyledIcon2 src="/img/flag_red.png" />
-        </StyledLink>
-        <StyledLink to="/mypage/mymap">
-          <StyledIcon2 src="/img/map_black.png" />
-        </StyledLink>
-      </StyledTab>
-      <StyledDiv>
-        {reviewCourses.map((review, idx) => (
-          <ReviewCard key={idx}>
-            <StyledH3>
-              {" "}
-              {review.courseMtNm} {review.courseMtNo}코스{" "}
-              {review.reviewRelDiff === "H" ? (
-                <span>🌋🌋🌋</span>
-              ) : review.reviewRelDiff === "N" ? (
-                <span>🗻🗻</span>
-              ) : (
-                <span>🌄</span>
-                // <span>⭐🌄</span>
-              )}
-            </StyledH3>
-            <StyledHr />
-            <StyledP>
-              <StyledSpan>방문일 </StyledSpan>
-              {review.reviewDate?.toString()}
-            </StyledP>
-            <StyledP1>
-              <StyledSpan>소요시간 </StyledSpan>
-              {review.reviewTime ? (
-                <span>
-                  {/* 시간 있으면 */}
-                  {Math.floor(review.reviewTime / 60) ? (
-                    <span>
-                      {Math.floor(review.reviewTime / 60)}시간{" "}
-                      {review.reviewTime % 60 ? (
-                        <span>{review.reviewTime % 60}분</span>
-                      ) : null}
-                    </span>
-                  ) : null}
-                </span>
-              ) : (
-                <span>0분</span>
-              )}
-              {/* {review.reviewTime ? (
-                <span>
-
-
-                  {Math.floor(review.reviewTime / 60)}시간{" "}
-                  {Math.floor(review.reviewTime / 60) === 0 ||
-                  review.reviewTime % 60 ? (
-                    <span>{review.reviewTime % 60}분</span>
-                  ) : (
-                    <span></span>
-                  )}
-                </span>
-              ) : (
-                <span></span>
-              )} */}
-            </StyledP1>
-            <StyledP1>{review.reviewContent}</StyledP1>
-          </ReviewCard>
-        ))}
-      </StyledDiv>
-    </div>
-  );
-}
 
 export default MyReview;

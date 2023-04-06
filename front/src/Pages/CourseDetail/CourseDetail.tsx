@@ -4,9 +4,10 @@ import styled from "styled-components";
 import axios from "../../store/baseURL.js";
 import Kakaomap from "./Kakaomap";
 import ReviewList from "./ReviewList";
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { courseActions } from "../../store/courseSlice";
 import Loading from "../../Common/Loading/Loading";
+import { UserInfo } from "../../store/loginSlice";
 
 interface courseInfo {
   courseNo?: number;
@@ -27,7 +28,7 @@ function CourseDetail() {
   const [courseData, setCourseData] = useState<courseInfo>({});
   const [isClicked, setIsClicked] = useState<boolean>(false);
 
-  // 로딩 중
+  // 로딩 중 state
   const [loading, setLoading] = useState(true);
 
   // navigate, location 사용
@@ -65,16 +66,20 @@ function CourseDetail() {
 
   // 꽉 찬 하트 클릭 시 찜 해제 axios 요청 & isClicked 상태 변경
   const unClickedHeart = async () => {
-    await axios.delete("user/favorite/delete", {
-      headers: {
-        "X-ACCESS-TOKEN": AccessToken,
-        "X-REFRESH-TOKEN": RefreshToken,
-      },
-      data: {
-        courseNo: id,
-      },
-    });
-    setIsClicked(!isClicked);
+    try {
+      await axios.delete("user/favorite/delete", {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+        data: {
+          courseNo: id,
+        },
+      });
+      setIsClicked(!isClicked);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   // redux에 값 저장
@@ -82,38 +87,51 @@ function CourseDetail() {
 
   // axios 요청 : 코스 데이터 가져오기
   useEffect(() => {
-    axios
-      .get(`/course/search/${id}`, {
-        headers: {
-          "X-ACCESS-TOKEN": AccessToken,
-          "X-REFRESH-TOKEN": RefreshToken,
-        },
-        params: {
-          courseNo: id,
-        },
-      })
-      .then((res) => {
-        // console.log("코스 정보 받아오기 :: 성공!");
-        // console.log(res.data);
-        setCourseData(res.data);
-        dispatch(courseActions.addCourse(res.data));
-        setLoading(false);
-      })
-      .catch((err) => console.log(err));
+    if (AccessToken) {
+      axios
+        .get(`/course/search/${id}`, {
+          headers: {
+            "X-ACCESS-TOKEN": AccessToken,
+            "X-REFRESH-TOKEN": RefreshToken,
+          },
+          params: {
+            courseNo: id,
+          },
+        })
+        .then(res => {
+          setCourseData(res.data);
+          dispatch(courseActions.addCourse(res.data));
+          setLoading(false);
+          // 세션스토리지 내 accessToken 갱신
+          sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+        })
+        .catch(err => console.log(err));
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
   }, []);
 
   // isClicked 변경될때마다 찜 여부 받아와 state에 반영
   useEffect(() => {
-    const getIsEnrolled = async () => {
-      const res = await axios.get(`/user/favorite/is-enrolled/${id}`, {
-        headers: {
-          "X-ACCESS-TOKEN": AccessToken,
-          "X-REFRESH-TOKEN": RefreshToken,
-        },
-      });
-      setIsClicked(res.data);
-    };
-    getIsEnrolled();
+    if (AccessToken) {
+      try {
+        const getIsEnrolled = async () => {
+          const res = await axios.get(`/user/favorite/is-enrolled/${id}`, {
+            headers: {
+              "X-ACCESS-TOKEN": AccessToken,
+              "X-REFRESH-TOKEN": RefreshToken,
+            },
+          });
+          setIsClicked(res.data);
+          // 세션스토리지 내 accessToken 갱신
+          sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+        };
+        getIsEnrolled();
+      } catch (err) {
+        console.log(err);
+      }
+    }
   }, [isClicked]);
 
   return (
