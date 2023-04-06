@@ -13,7 +13,7 @@ import springfox.documentation.oas.web.WebMvcOpenApiTransformationFilter;
 import springfox.documentation.spi.DocumentationType;
 
 @Component
-public class Workaround implements WebMvcOpenApiTransformationFilter {
+public class SwaggerServerConfig implements WebMvcOpenApiTransformationFilter {
 
 	@Override
     public OpenAPI transform(OpenApiTransformationContext<HttpServletRequest> context) {
