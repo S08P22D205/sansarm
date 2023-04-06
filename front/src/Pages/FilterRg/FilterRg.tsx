@@ -48,7 +48,7 @@ function FilterRg() {
   const doAxios = () => {
     flaskApi
       .post(
-        "/course/search/mt",
+        "/course/search/area",
         {
           courseLocation: searchRg.courseLocation,
           coordX: searchRg.coordX,
@@ -65,8 +65,8 @@ function FilterRg() {
         }
       )
       .then((res) => {
-        console.log('axios에 들어가는 값', searchRg)
-        setCourseList(res.data.course_list);
+        // console.log('axios에 들어가는 값', searchRg)
+        setCourseList(res.data.COURSE_LIST);
       })
       .catch((err) => console.log(err));
 
@@ -78,12 +78,13 @@ function FilterRg() {
 
   function ChangeTab() {
 
-    // 지역 -> 위치 : 탭 변경하며 유저 위치와 반경 정보 받아오기
+    // 지역 -> 위치 : 탭 변경하며 유저 위치 정보 받아오기
     if (rgBtn === 1) {
       setRgBtn(0);
       setLocBtn(1);
-      handleMt("", "courseLocation");
-      // Geo();
+      handleMt("현재 위치", "courseLocation");
+      GetGeo();
+      setJebal(1)
       // 볼륨바0
 
       // 위치 -> 지역 : 탭 변경하며 유저 위치와 반경 null
@@ -94,7 +95,6 @@ function FilterRg() {
       handleMt(0, "courseRadius");
       setVolVal(0);
     }
-
   }
   // 지역기반 드랍박스 목록
   const regions: Option[] = [
@@ -130,7 +130,8 @@ function FilterRg() {
   const [volval, setVolVal] = useState<number>(0);
 
   const volChange = (event: any, newValue: number | number[]) => {
-    setVolVal(newValue as number); // Update the state variable when the slider's value changes
+    setVolVal(newValue as number)
+    handleMt((newValue as number), "courseRadius"); // Update the state variable when the slider's value changes
   };
 
   // 지역/위치 이하---------------------------------------
@@ -150,6 +151,7 @@ function FilterRg() {
     courseTimeBtNo: 0,
   });
 
+  // searchRg에 데이터 저장
   const handleMt = (data: string | number | null, type: string) => {
     setSearchRg({
       ...searchRg,
@@ -157,6 +159,32 @@ function FilterRg() {
     });
   };
 
+  // 위치정보
+  const [location, setLocation] = useState<UserLocation>({
+    latitude: null,
+    longitude: null,
+    error: null,
+  });
+
+  // 받아온 위치를 searchRg에 저장
+  function handleCoords() {
+    setSearchRg({
+      ...searchRg,
+      coordX: location.latitude,
+      coordY: location.longitude
+    })
+    // console.log('handleCoords')
+  }
+
+  // handleCoords 동기처리
+  const [jebal, setJebal] = useState<number | null>(null)
+  useEffect(() => {
+    handleCoords()
+    setJebal(null)
+  },[jebal])
+  
+
+  // 초기화
   function initializer() {
     setSearchRg({
       courseLocation: "",
@@ -171,14 +199,8 @@ function FilterRg() {
     // ChangeTab();
   }
 
-  const [location, setLocation] = useState<UserLocation>({
-    latitude: null,
-    longitude: null,
-    error: null,
-  });
 
-  // # 현재위치 정보 받아와서 searchRg에 넣기
-
+  // # 현재위치 정보 받아오기
   function GetGeo() {
     // return new Promise<void>((resolve, reject) => {
       
@@ -208,54 +230,54 @@ function FilterRg() {
     };
 
     navigator.geolocation.getCurrentPosition(success, error);
-    console.log("위치 받아옴");
+    // console.log("위치 받아옴");
     // })
   }
 
-  function GetGeoCehck() {
-    console.log("위치 들어옴");
-    console.log(location.latitude, location.longitude);
-  }
+  // function GetGeoCehck() {
+  //   console.log("위치 들어옴");
+  //   console.log(location.latitude, location.longitude);
+  // }
 
-  function AddGeoX() {
-    handleMt(location.latitude, "coordX");
-    console.log('X들어감')
-  }
+  // function AddGeoX() {
+  //   handleMt(location.latitude, "coordX");
+  //   console.log('X들어감')
+  // }
 
-  function AddGeoY() {
-    handleMt(location.longitude, "coordY");
-    console.log('Y들어감')
-  }
+  // function AddGeoY() {
+  //   handleMt(location.longitude, "coordY");
+  //   console.log('Y들어감')
+  // }
 
-  function AddGeoCheck() {
-    console.log("리스트에 들어감");
-    console.log(searchRg);
-  }
+  // function AddGeoCheck() {
+  //   console.log("리스트에 들어감");
+  //   console.log(searchRg);
+  // }
 
-  function AddVol() {
-    handleMt(volval, "courseRadius");
-  }
+  // function AddVol() {
+  //   handleMt(volval, "courseRadius");
+  // }
 
-  const AllInOne = async() => {
-    await GetGeo()
-    await GetGeoCehck()
-    await AddGeoX()
-    await AddGeoY()
-    await AddGeoCheck()
-    await AddVol()
-    await console.log('완료')
-    // await doAxios()
-  }
+  // const AllInOne = async() => {
+  //   // await GetGeo()
+  //   await GetGeoCehck()
+  //   await handleCoords()
+  //   await AddGeoCheck()
+  //   await AddVol()
+  //   await console.log('완료')
+  //   // await doAxios()
+  // }
+
 
   const SearchSinal = () => {
     if (rgBtn === 1) {
       // console.log('지역검색')
-      if (searchRg.courseLocation === "") {
+      if (searchRg.courseLocation === "현재 위치") {
         alert("지역을 선택해주세요")
       } else {
-        console.log(searchRg)
-        console.log('axios')
-        // doAxios()
+        // console.log(searchRg)
+        // console.log('axios')
+        doAxios()
       }
     } else if (locBtn === 1) {
       // console.log("위치검색");
@@ -264,13 +286,14 @@ function FilterRg() {
       // searchRg저장
       // 반경 값 저장
       // 후에
-      AllInOne()
-      // if (searchRg.courseRadius === 0) {
-      //   alert("반경을 설정해주세요")
-      // } else {
-      //   console.log(searchRg)
-      //   console.log('axios')
-      // }
+      // handleCoords()
+      if (searchRg.courseRadius === 0) {
+        alert("반경을 설정해주세요")
+      } else {
+        // console.log(searchRg)
+        // console.log('axios')
+        doAxios()
+      }
     }
   };
 
@@ -341,6 +364,7 @@ function FilterRg() {
           </TabcontentLoc>
         )}
       </TabDiv>
+      <StyledHr />
 
       {/* -------------------------------------------------- */}
 
@@ -398,7 +422,7 @@ function FilterRg() {
         >
           초기화
         </StyledBtn3>
-        <button onClick={getLocation}>실험</button>
+        {/* <button onClick={getLocation}>실험</button> */}
       </StyledDiv>
 
       {courseList[0] ? (
