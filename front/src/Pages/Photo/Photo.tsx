@@ -75,7 +75,7 @@ function CameraApp() {
 
   const stopCamera = async () => {
     if (cameraStream) {
-      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream.getTracks().forEach((track) => track.stop());
       setCameraStream(null);
     }
     moveToHiking();
@@ -107,7 +107,7 @@ function CameraApp() {
         ref={videoRef}
         autoPlay
         playsInline
-        width={380}
+        width={360}
         height={300}
       ></video>
       <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
