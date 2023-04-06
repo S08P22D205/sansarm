@@ -99,7 +99,7 @@ const StyledLink = styled(Link)`
 
 const StyledDiv = styled.div`
   width: 100vw;
-  height: 65vh;
+  height: 62vh;
   padding-left: 5vw;
   padding-right: 5vw;
   margin-top: 3vh;
