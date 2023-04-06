@@ -27,10 +27,7 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
 
     var options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(
-        courseXCoords[length / 2],
-        courseYCoords[length / 2]
-      ), //지도의 중심좌표.
+      center: new kakao.maps.LatLng(courseXCoords[0], courseYCoords[0]), //지도의 중심좌표.
       level: 8, //지도의 레벨(확대, 축소 정도)
     };
 
