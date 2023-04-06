@@ -162,7 +162,7 @@ function SignUp1() {
 }
 
 const StyledDiv = styled.div`
-  padding-top: 30%;
+  /* padding-top: 30%; */
   height: 100vh;
   font-family: "GmarketSansLight";
 `;

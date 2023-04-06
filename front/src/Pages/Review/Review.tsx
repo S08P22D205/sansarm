@@ -44,7 +44,6 @@ function Review() {
   }, []);
 
   const startTime: number = useAppSelector((state) => state.course.timeInfo);
-  console.log("startTime: " + startTime + " ,endTime: " + endTime);
 
   const [easy, setEasy] = useState(false);
   const [soso, setSoso] = useState(false);
