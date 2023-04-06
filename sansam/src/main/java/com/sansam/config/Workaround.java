@@ -24,7 +24,7 @@ public class Workaround implements WebMvcOpenApiTransformationFilter {
 
         Server serverForEC2 = new Server();
         serverForEC2.setDescription("EC2");
-        serverForEC2.setUrl("http://j8d205.p.ssafy.io:5000");
+        serverForEC2.setUrl("http://172.17.0.1:5000");
         openApi.setServers(Arrays.asList(serverForLocal, serverForEC2));
         return openApi;
     }
