@@ -36,15 +36,15 @@ function List() {
         <div>
           <ListItem
             COURSE_LIST={courses.EASY_COURSE_LIST}
-            courseName="당신을 위한 편안한 코스"
+            courseName="당신에게 쉬운 코스"
           />
           <ListItem
             COURSE_LIST={courses.NORMAL_COURSE_LIST}
-            courseName="이정도면 할만한데?"
+            courseName="적당히 힘든 코스"
           />
           <ListItem
             COURSE_LIST={courses.HARD_COURSE_LIST}
-            courseName="이 길은 쉽지 않을걸..."
+            courseName="도전! 어려운 코스"
           />
         </div>
       ) : (

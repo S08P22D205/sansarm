@@ -49,6 +49,8 @@ function ListCard({
     getImgSrc();
   }, []);
 
+  console.log(COURSE_LOCATION);
+
   return (
     <div
       className="ListCard"
@@ -62,7 +64,9 @@ function ListCard({
             <LargeImg src={randomVal} alt="img" />
           )}
           <StyledLank>{courseIdx}위</StyledLank>
-          <StyledCourse>{COURSE_MT_NM}</StyledCourse>
+          <StyledCourse>
+            {COURSE_LOCATION} {COURSE_MT_NM}
+          </StyledCourse>
           <StyledCourse>{COURSE_MT_NO}코스</StyledCourse>
         </div>
       ) : (

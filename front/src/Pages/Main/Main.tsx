@@ -11,6 +11,7 @@ import {
 import { courseApi, userApi } from "../../api";
 import SearchBar from "./SearchBar";
 import { changeUserInfo, changeIsRec } from "../../store/loginSlice";
+import Loading from "../../Common/Loading/Loading";
 
 function Main() {
   // dispatch 사용하기 위해 정의해주기
@@ -19,12 +20,12 @@ function Main() {
   // 코스 추천 가능 여부 state
   const [isRec, setIsRec] = useState<boolean>(false);
 
+  // 로딩 여부 state
+  const [loading, setLoading] = useState(true);
+
   // accessToken, refreshToken 세션스토리지에서 가져와주기
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
-
-  // store에 저장된 난이도별 코스 추천 가능 여부 받아오기
-  // const isRec: boolean = useAppSelector(state => state.login.isRec);
 
   // 처음 마운트 됐을 때
   useEffect(() => {
@@ -45,6 +46,7 @@ function Main() {
       const res = await userApi.isRec(accessToken, refreshToken);
       setIsRec(res.data);
       dispatch(changeIsRec(res.data));
+      setLoading(false);
     };
     // 3-3. 리뷰 최다 top10 코스 목록 store에 저장해주기
     const getTopTen = async () => {
@@ -70,10 +72,16 @@ function Main() {
 
   return (
     <StyledDiv className="Main">
-      <StyledH>어떤 산으로 떠나고 싶으신가요?</StyledH>
-      <SearchBar />
-      <MainBtn />
-      <List />
+      {loading ? (
+        <Loading />
+      ) : (
+        <div>
+          <StyledH>어떤 산으로 떠나고 싶으신가요?</StyledH>
+          <SearchBar />
+          <MainBtn />
+          <List />
+        </div>
+      )}
     </StyledDiv>
   );
 }
