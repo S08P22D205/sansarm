@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import StyledButtonEasy from "./StyledButtonEasy";
 import StyledButtonSoso from "./StyledButtonSoso";
 import StyledButtonHard from "./StyledButtonHard";
@@ -38,7 +38,13 @@ function Review() {
     navigate("/mypage/myreview");
   };
 
-  const time: number = useAppSelector((state) => state.course.timeInfo);
+  const [endTime, setEndTime] = useState(0);
+  useEffect(() => {
+    setEndTime(Date.now());
+  }, []);
+
+  const startTime: number = useAppSelector((state) => state.course.timeInfo);
+  console.log("startTime: " + startTime + " ,endTime: " + endTime);
 
   const [easy, setEasy] = useState(false);
   const [soso, setSoso] = useState(false);
@@ -80,7 +86,7 @@ function Review() {
 
   const [review, setReview] = useState({
     courseNo: courseData.courseNo,
-    reviewTime: Math.floor(time / 60000),
+    reviewTime: Math.floor((endTime - startTime) / 60000),
     reviewDiff: "", // E,N,M 순
     reviewContent: "",
   });
@@ -152,7 +158,7 @@ function Review() {
         </StyledContainer>
       </StyledBox>
       <StyledTextBox
-        rows={10}
+        rows={8}
         placeholder="등산 후기를 자유롭게 입력해주세요"
         value={review.reviewContent}
         onChange={(event) => {
