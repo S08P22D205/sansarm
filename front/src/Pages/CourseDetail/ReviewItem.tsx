@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "../../store/baseURL";
 
 interface reviewInfo {
+  reviewNo?: number;
   reviewerNicknm?: string;
   reviewDate?: Date;
   reviewTime?: number;
@@ -13,6 +14,7 @@ interface reviewInfo {
 }
 
 function ReviewItem({
+  reviewNo,
   reviewerNicknm,
   reviewDate,
   reviewTime,
@@ -55,7 +57,7 @@ function ReviewItem({
     console.log(newData);
 
     axios.put(
-      `/user/review/update/${id}`,
+      `/user/review/update/${reviewNo}`,
       {
         reviewRelDiff: reviewRelDiff,
         reviewContent: newData,
@@ -73,7 +75,7 @@ function ReviewItem({
   // 삭제 버튼 클릭
   const deleteData = () => {
     console.log("데이터 삭제하자");
-    axios.delete(`/user/review/delete/${id}`, {
+    axios.delete(`/user/review/delete/${reviewNo}`, {
       headers: {
         "X-ACCESS-TOKEN": AccessToken,
         "X-REFRESH-TOKEN": RefreshToken,
