@@ -65,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
         User user;
         for (Review review : reviews) {
             user = userRepository.findByUserNo(review.getUserNo());
-            courseReviewList.add(new ReviewResponse(user.getUserNicknm(), review.getReviewRelDiff(), review.getReviewDate(), review.getReviewTime(), review.getReviewContent()));
+            courseReviewList.add(new ReviewResponse(review.getReviewNo(), user.getUserNicknm(), review.getReviewRelDiff(), review.getReviewDate(), review.getReviewTime(), review.getReviewContent()));
         }
 
         return new CourseReviewListResponse(courseReviewList);
