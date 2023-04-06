@@ -43,7 +43,7 @@ function Hiking() {
   const startTime: number = useAppSelector((state) => state.course.timeInfo);
 
   function handleStart() {
-    // console.log(startTime);
+    console.log(startTime);
     intervalRef.current = window.setInterval(() => {
       setElapsedTime(Date.now() - startTime);
     }, 1000);
@@ -52,7 +52,7 @@ function Hiking() {
 
   function handleStop() {
     if (window.confirm("등산을 끝내시겠습니까?")) {
-      dispatch(courseActions.addTime(elapsedTime));
+      // dispatch(courseActions.addTime(elapsedTime));
       moveToReviewPage();
       setIsRunning(false);
       window.clearInterval(intervalRef.current!);
