@@ -161,20 +161,22 @@ function FilterMt() {
                 <ResultUl>
                   {resultData.length > 0 && keyword !== "" ? (
                     resultData.map((result, index) => (
-                      <Resultli
-                        key={index}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                        }}
-                        onClick={() => {
-                          setKeyword(result);
-                          setMtName("");
-                          handleMt(result, "courseMtNm");
-                          setIsFocus(false);
-                        }}
-                      >
-                        {result}
-                      </Resultli>
+                      <div key={index}>
+                        <Resultli
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                          }}
+                          onClick={() => {
+                            setKeyword(result);
+                            setMtName("");
+                            handleMt(result, "courseMtNm");
+                            setIsFocus(false);
+                          }}
+                        >
+                          {result}
+                        </Resultli>
+                        <hr />
+                      </div>
                     ))
                   ) : (
                     <Resultli2>산 이름을 정확히 입력해 주세요.</Resultli2>
@@ -205,19 +207,21 @@ function FilterMt() {
                 <ResultUl>
                   {resultData.length > 0 && keyword !== "" ? (
                     resultData.map((result, index) => (
-                      <Resultli
-                        key={index}
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                        }}
-                        onClick={() => {
-                          setKeyword(result);
-                          handleMt(result, "courseMtNm");
-                          setIsFocus(false);
-                        }}
-                      >
-                        {result}
-                      </Resultli>
+                      <div key={index}>
+                        <Resultli
+                          onMouseDown={(e) => {
+                            e.preventDefault();
+                          }}
+                          onClick={() => {
+                            setKeyword(result);
+                            handleMt(result, "courseMtNm");
+                            setIsFocus(false);
+                          }}
+                        >
+                          {result}
+                        </Resultli>
+                        <hr />
+                      </div>
                     ))
                   ) : (
                     <Resultli2>산 이름을 정확히 입력해 주세요.</Resultli2>
@@ -289,6 +293,7 @@ function FilterMt() {
             setKeyword("");
             initializeData();
             setCourseList([]);
+            setMtName("");
           }}
         >
           초기화
