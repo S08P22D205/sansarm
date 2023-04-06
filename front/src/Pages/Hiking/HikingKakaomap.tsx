@@ -106,7 +106,7 @@ function HikingKakaomap({
       length: number
     ) => {
       var linePath = [];
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < length/2; i++) {
         linePath.push(
           new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
         );
