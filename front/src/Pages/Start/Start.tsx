@@ -18,6 +18,7 @@ const Start = () => {
           onClick={handleLogin}
         />
       </StyledDiv2>
+      <StyledImg2 src="/img/main_footer.png" alt="footer" />
     </StyledDiv>
   );
 };
@@ -31,6 +32,10 @@ const StyledImg = styled.img`
   width: 100%;
   height: 650px;
 `;
+
+const StyledImg2 = styled.img`
+  width:100%
+`
 
 const StyledDiv2 = styled.div`
   position: fixed;
