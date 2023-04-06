@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReviewResponse {
+    private int reviewNo;
     private String reviewerNicknm;
     private Character reviewRelDiff;
     private LocalDate reviewDate;

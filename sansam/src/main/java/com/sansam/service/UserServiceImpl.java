@@ -102,16 +102,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateReview(int userNo, int courseNo, UpdateReviewRequest updateReviewRequest) {
-        Review review = reviewRepository.findByUserNoAndCourseNo(userNo, courseNo);
+    public void updateReview(int userNo, int reviewNo, UpdateReviewRequest updateReviewRequest) {
+        Review review = reviewRepository.findByUserNoAndReviewNo(userNo, reviewNo);
         review.updateReview(updateReviewRequest.getReviewRelDiff(), updateReviewRequest.getReviewContent());
         reviewRepository.save(review);
     }
 
     @Override
     @Transactional
-    public void deleteReview(int userNo, int courseNo) {
-        Review review = reviewRepository.findByUserNoAndCourseNo(userNo, courseNo);
+    public void deleteReview(int userNo, int reviewNo) {
+        Review review = reviewRepository.findByUserNoAndReviewNo(userNo, reviewNo);
         reviewRepository.delete(review);
     }
 

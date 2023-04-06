@@ -204,8 +204,8 @@ public class UserController {
     @ApiOperation(
             value = "리뷰 수정",
             notes = "해당 유저의 해당 코스 리뷰를 수정하고, 성공하면 Success를, 실패하면 Fail message를 반환한다.")
-    @PutMapping("/review/update/{courseNo}")
-    public ResponseEntity<String> updateReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo, @RequestBody UpdateReviewRequest updateReviewRequest) {
+    @PutMapping("/review/update/{reviewNo}")
+    public ResponseEntity<String> updateReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int reviewNo, @RequestBody UpdateReviewRequest updateReviewRequest) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
             accessToken = response.getHeader("X-ACCESS-TOKEN");
         } else {
@@ -216,7 +216,7 @@ public class UserController {
         User user = userRepository.findByUserEmail(userEmail);
 
         try {
-            userService.updateReview(user.getUserNo(), courseNo, updateReviewRequest);
+            userService.updateReview(user.getUserNo(), reviewNo, updateReviewRequest);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed updating review.", HttpStatus.BAD_REQUEST);
@@ -226,8 +226,8 @@ public class UserController {
     @ApiOperation(
             value = "리뷰 삭제",
             notes = "해당 유저의 해당 코스 리뷰를 삭제하고, 성공하면 Success를, 실패하면 Fail message를 반환한다.")
-    @DeleteMapping("/review/delete/{courseNo}")
-    public ResponseEntity<String> deleteReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int courseNo) {
+    @DeleteMapping("/review/delete/{reviewNo}")
+    public ResponseEntity<String> deleteReview(@RequestHeader(value = "X-ACCESS-TOKEN") String accessToken, HttpServletResponse response, @PathVariable int reviewNo) {
         if (response.getHeader("X-ACCESS-TOKEN") != null) {
             accessToken = response.getHeader("X-ACCESS-TOKEN");
         } else {
@@ -238,7 +238,7 @@ public class UserController {
         User user = userRepository.findByUserEmail(userEmail);
 
         try {
-            userService.deleteReview(user.getUserNo(), courseNo);
+            userService.deleteReview(user.getUserNo(), reviewNo);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("Failed deleting review.", HttpStatus.BAD_REQUEST);
