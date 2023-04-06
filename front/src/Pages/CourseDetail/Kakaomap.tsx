@@ -20,8 +20,6 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
   const dispatch = useAppDispatch();
   const [courseMap, setCourseMap] = useState<any>();
 
-  console.log(courseMap);
-
   useEffect(() => {
     const length = courseXCoords.length;
 
@@ -49,7 +47,6 @@ function Kakaomap({ courseXCoords, courseYCoords }: Icoords) {
         linePath.push(
           new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
         );
-        // console.log(linePath);
 
         var polyline = new kakao.maps.Polyline({
           path: linePath, // 선을 구성하는 좌표배열

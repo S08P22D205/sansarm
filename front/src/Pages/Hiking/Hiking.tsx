@@ -11,8 +11,11 @@ interface ILocation {
 }
 
 function Hiking() {
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+
   const courseData: courseInfo = useAppSelector(
-    (state) => state.course.detailInfo
+    state => state.course.detailInfo
   );
 
   const [isRunning, setIsRunning] = useState(false);
@@ -32,11 +35,15 @@ function Hiking() {
   };
 
   useEffect(() => {
-    // window.location.reload();
-    handleStart();
+    if (accessToken) {
+      handleStart();
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
   }, []);
 
-  const startTime: number = useAppSelector((state) => state.course.timeInfo);
+  const startTime: number = useAppSelector(state => state.course.timeInfo);
 
   function handleStart() {
     intervalRef.current = window.setInterval(() => {
@@ -87,8 +94,8 @@ function Hiking() {
       const long = position.coords.longitude;
 
       setLoc({ latitude: lat, longitude: long, error: null });
-      setLatitudeList((prevState) => [...prevState, lat]);
-      setLongitudeList((prevState) => [...prevState, long]);
+      setLatitudeList(prevState => [...prevState, lat]);
+      setLongitudeList(prevState => [...prevState, long]);
     };
 
     const error = () => {

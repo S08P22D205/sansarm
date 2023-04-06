@@ -24,40 +24,26 @@ function HikingKakaomap({
   hikingXCoords,
   hikingYCoords,
 }: Icoords) {
-  
   useEffect(() => {
     const length = courseXCoords.length;
     const walked = hikingXCoords.length;
-    
-    console.log('들어오는지 확인', hikingXCoords, hikingYCoords)
-  
-    // const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
-  
-    // const options = {
-    //   //지도를 생성할 때 필요한 기본 옵션
-    //   center: new kakao.maps.LatLng(hikingXCoords[0], hikingYCoords[0]), //지도의 중심좌표.
-    //   level: 7, //지도의 레벨(확대, 축소 정도)
-    // };
-  
-    // const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
-    
 
-    var container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
+    const container = document.getElementById("map"); //지도를 담을 영역의 DOM 레퍼런스
 
-    var options = {
+    const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(hikingXCoords[0], hikingYCoords[0]), //지도의 중심좌표.
       level: 7, //지도의 레벨(확대, 축소 정도)
     };
 
-    var map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
+    const map = new kakao.maps.Map(container, options); //지도 생성 및 객체 리턴
 
     // // 선을 그릴 좌표들
     const drawingLines = (
       courseXCoords: number[],
       courseYCoords: number[],
       length: number
-      ) => {
+    ) => {
       var linePath = [];
       for (let i = 0; i < length; i++) {
         linePath.push(
@@ -73,28 +59,23 @@ function HikingKakaomap({
           strokeStyle: "solid", // 선의 스타일
         });
 
-
-
-
-    // 선을 그릴 좌표들
-    // const drawingLines = (
-    //   courseXCoords: number[],
-    //   courseYCoords: number[],
-    //   length: number
-    // ) => {
-    //   var linePath = [];
-    //   for (let i = 0; i < length; i++) {
-    //     linePath.push(
-    //       new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
-    //     );
-    //     console.log(linePath);
+        // 선을 그릴 좌표들
+        // const drawingLines = (
+        //   courseXCoords: number[],
+        //   courseYCoords: number[],
+        //   length: number
+        // ) => {
+        //   var linePath = [];
+        //   for (let i = 0; i < length; i++) {
+        //     linePath.push(
+        //       new kakao.maps.LatLng(courseXCoords[i], courseYCoords[i])
+        //     );
+        //     console.log(linePath);
 
         polyline.setMap(map);
       }
     };
     drawingLines(courseXCoords, courseYCoords, length);
-
-
 
     // if (trigger === 0) {
     //   setTrigger(1)

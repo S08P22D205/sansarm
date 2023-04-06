@@ -17,6 +17,7 @@ export interface mtInfo {
 function MyMap() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
+  const navigate = useNavigate();
 
   const [ExpMtInfo, setExpMtInfo] = useState<Array<mtInfo>>([]);
 
@@ -28,7 +29,8 @@ function MyMap() {
           "X-REFRESH-TOKEN": refreshToken,
         },
       });
-      // console.log("리뷰내용", res.data.reviewCourses);
+      sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+
       const length = res.data.reviewCourses.length;
       for (let i = 0; i < length; i++) {
         const Coordslen = res.data.reviewCourses[i].courseXCoords.length;
@@ -47,8 +49,12 @@ function MyMap() {
         setExpMtInfo(prevInfo => [...prevInfo, MtInfo]);
       }
     };
-    getExpMtList();
-    // console.log(courseXCoords, courseYCoords)
+    if (accessToken) {
+      getExpMtList();
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
   }, []);
 
   return (
@@ -66,7 +72,6 @@ function MyMap() {
       </StyledTab>
       <StyledDiv>
         <MyKakaoMap ExpMtInfo={ExpMtInfo} />
-        {/* <MyExpMapKakaoMap XCoords={XCoords} YCoords={YCoords} Mtname={Mtname} CourseNo={CourseNo}/> */}
       </StyledDiv>
     </StyledMyMap>
   );

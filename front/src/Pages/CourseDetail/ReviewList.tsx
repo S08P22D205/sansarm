@@ -37,12 +37,12 @@ function ReviewList({ id }: idInfo) {
           courseNo: id,
         },
       })
-      .then((res) => {
-        console.log("리뷰 정보 받아오기 :: 성공!");
-        console.log(res.data.reviewList);
+      .then(res => {
         setReviewList(res.data.reviewList);
+        // 세션스토리지 내 accessToken 갱신
+        sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
 
@@ -54,12 +54,10 @@ function ReviewList({ id }: idInfo) {
           "X-REFRESH-TOKEN": RefreshToken,
         },
       })
-      .then((res) => {
-        // console.log("유저 정보 받아오기 :: 성공!");
-        // console.log(res.data.userNicknm);
+      .then(res => {
         setUserNickname(res.data.userNicknm);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   }, []);

@@ -18,6 +18,93 @@ interface courseInfo {
   courseAddress?: string;
 }
 
+function MyHeart() {
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
+  const navigate = useNavigate();
+
+  const [favoriteCourses, setFavoriteCourses] = useState<courseInfo[]>([{}]);
+
+  useEffect(() => {
+    const getFavoriteCourse = async () => {
+      const res = await axios.get("/user/favorite", {
+        headers: {
+          "X-ACCESS-TOKEN": accessToken,
+          "X-REFRESH-TOKEN": refreshToken,
+        },
+      });
+      setFavoriteCourses(res.data.favoriteCourses);
+      // 세션스토리지 내 accessToken 갱신
+      sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+    };
+    if (accessToken) {
+      getFavoriteCourse();
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
+  }, []);
+
+  return (
+    <div className="MyHeart">
+      <StyledTab>
+        <StyledLink to="/mypage/myheart">
+          <StyledIcon src="/img/heart_pink.png" />
+        </StyledLink>
+        <StyledLink to="/mypage/myreview">
+          <StyledIcon2 src="/img/flag_black.png" />
+        </StyledLink>
+        <StyledLink to="/mypage/mymap">
+          <StyledIcon2 src="/img/map_black.png" />
+        </StyledLink>
+      </StyledTab>
+      <StyledDiv>
+        {favoriteCourses.map((course, idx) => (
+          <ReviewCard
+            key={idx}
+            onClick={() => navigate(`/coursedetail/${course.courseNo}`)}
+          >
+            <StyledH3>
+              {course.courseMtNm} {course.courseMtNo}코스
+            </StyledH3>
+            <StyledHr />
+            <StyledP>
+              <StyledSpan>코스길이 </StyledSpan>
+              <span>{course.courseLength}km</span>
+            </StyledP>
+            <StyledP>
+              <StyledSpan>상행시간 </StyledSpan>
+              {course.courseUptime ? (
+                <span>
+                  {Math.floor(course.courseUptime / 60) ? (
+                    <span>{Math.floor(course.courseUptime / 60)}시간 </span>
+                  ) : null}
+                  {course.courseUptime % 60 ? (
+                    <span>{course.courseUptime % 60}분</span>
+                  ) : null}
+                </span>
+              ) : null}
+            </StyledP>
+            <StyledP1>
+              <StyledSpan>하행시간 </StyledSpan>
+              {course.courseDowntime ? (
+                <span>
+                  {Math.floor(course.courseDowntime / 60) ? (
+                    <span>{Math.floor(course.courseDowntime / 60)}시간 </span>
+                  ) : null}
+                  {course.courseDowntime % 60 ? (
+                    <span>{course.courseDowntime % 60}분</span>
+                  ) : null}
+                </span>
+              ) : null}
+            </StyledP1>
+          </ReviewCard>
+        ))}
+      </StyledDiv>
+    </div>
+  );
+}
+
 const StyledDiv = styled.div`
   padding-left: 15vw;
   padding-right: 15vw;
@@ -87,85 +174,5 @@ const StyledIcon2 = styled.img`
 const StyledLink = styled(Link)`
   text-decoration: none;
 `;
-
-function MyHeart() {
-  const accessToken = sessionStorage.getItem("accessToken");
-  const refreshToken = sessionStorage.getItem("refreshToken");
-  const navigate = useNavigate();
-
-  const [favoriteCourses, setFavoriteCourses] = useState<courseInfo[]>([{}]);
-
-  useEffect(() => {
-    const getFavoriteCourse = async () => {
-      const res = await axios.get("/user/favorite", {
-        headers: {
-          "X-ACCESS-TOKEN": accessToken,
-          "X-REFRESH-TOKEN": refreshToken,
-        },
-      });
-      setFavoriteCourses(res.data.favoriteCourses);
-    };
-    getFavoriteCourse();
-  }, []);
-
-  return (
-    <div className="MyHeart">
-      <StyledTab>
-        <StyledLink to="/mypage/myheart">
-          <StyledIcon src="/img/heart_pink.png" />
-        </StyledLink>
-        <StyledLink to="/mypage/myreview">
-          <StyledIcon2 src="/img/flag_black.png" />
-        </StyledLink>
-        <StyledLink to="/mypage/mymap">
-          <StyledIcon2 src="/img/map_black.png" />
-        </StyledLink>
-      </StyledTab>
-      <StyledDiv>
-        {favoriteCourses.map((course, idx) => (
-          <ReviewCard
-            key={idx}
-            onClick={() => navigate(`/coursedetail/${course.courseNo}`)}
-          >
-            <StyledH3>
-              {course.courseMtNm} {course.courseMtNo}코스
-            </StyledH3>
-            <StyledHr />
-            <StyledP>
-              <StyledSpan>코스길이 </StyledSpan>
-              <span>{course.courseLength}km</span>
-            </StyledP>
-            <StyledP>
-              <StyledSpan>상행시간 </StyledSpan>
-              {course.courseUptime ? (
-                <span>
-                  {Math.floor(course.courseUptime / 60) ? (
-                    <span>{Math.floor(course.courseUptime / 60)}시간 </span>
-                  ) : null}
-                  {course.courseUptime % 60 ? (
-                    <span>{course.courseUptime % 60}분</span>
-                  ) : null}
-                </span>
-              ) : null}
-            </StyledP>
-            <StyledP1>
-              <StyledSpan>하행시간 </StyledSpan>
-              {course.courseDowntime ? (
-                <span>
-                  {Math.floor(course.courseDowntime / 60) ? (
-                    <span>{Math.floor(course.courseDowntime / 60)}시간 </span>
-                  ) : null}
-                  {course.courseDowntime % 60 ? (
-                    <span>{course.courseDowntime % 60}분</span>
-                  ) : null}
-                </span>
-              ) : null}
-            </StyledP1>
-          </ReviewCard>
-        ))}
-      </StyledDiv>
-    </div>
-  );
-}
 
 export default MyHeart;

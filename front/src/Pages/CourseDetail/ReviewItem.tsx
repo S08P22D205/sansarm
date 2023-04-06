@@ -34,13 +34,11 @@ function ReviewItem({
 
   // 수정 버튼 클릭
   const changeData = () => {
-    console.log("데이터 바꾸자!");
     setRevised(!revised);
   };
 
   // 수정하기 => 수정 취소 버튼 클릭
   const notRevised = () => {
-    console.log("데이터 수정 취소!");
     setRevised(!revised);
   };
 
@@ -50,43 +48,53 @@ function ReviewItem({
 
   // 수정하기 => 수정하기 버튼 클릭
   const changeReview = (event: any) => {
-    // console.log(event.target.value);
     setNewData(event.target.value);
   };
 
   const sendData = () => {
-    console.log(id);
-    console.log(reviewRelDiff);
-    console.log(newData);
-
-    axios.put(
-      `/user/review/update/${reviewNo}`,
-      {
-        reviewRelDiff: reviewRelDiff,
-        reviewContent: newData,
-      },
-      {
-        headers: {
-          "X-ACCESS-TOKEN": AccessToken,
-          "X-REFRESH-TOKEN": RefreshToken,
+    axios
+      .put(
+        `/user/review/update/${reviewNo}`,
+        {
+          reviewRelDiff: reviewRelDiff,
+          reviewContent: newData,
         },
-      }
-    );
+        {
+          headers: {
+            "X-ACCESS-TOKEN": AccessToken,
+            "X-REFRESH-TOKEN": RefreshToken,
+          },
+        }
+      )
+      .then(res => {
+        // 세션스토리지 내 accessToken 갱신
+        sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     setRevised(!revised);
   };
 
   // 삭제 버튼 클릭
   const deleteData = () => {
-    console.log("데이터 삭제하자");
-    axios.delete(`/user/review/delete/${reviewNo}`, {
-      headers: {
-        "X-ACCESS-TOKEN": AccessToken,
-        "X-REFRESH-TOKEN": RefreshToken,
-      },
-      data: {
-        courseNo: id,
-      },
-    });
+    axios
+      .delete(`/user/review/delete/${reviewNo}`, {
+        headers: {
+          "X-ACCESS-TOKEN": AccessToken,
+          "X-REFRESH-TOKEN": RefreshToken,
+        },
+        data: {
+          courseNo: id,
+        },
+      })
+      .then(res => {
+        // 세션스토리지 내 accessToken 갱신
+        sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
     setDeleted(true);
   };
 

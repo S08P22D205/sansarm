@@ -16,16 +16,29 @@ function FilterMt() {
   const accessToken = sessionStorage.getItem("accessToken");
   const refreshToken = sessionStorage.getItem("refreshToken");
 
+  const navigate = useNavigate();
+
   // mtlist(axios로 받아오는 산 이름 값들) useState 세팅
   const [mtList, setMtList] = useState<Array<string>>([""]);
 
   // SearchBar가 랜더링되면 산목록 axios 받아서 mtlist에 저장
   useEffect(() => {
-    const getMtList = async () => {
-      const res = await courseApi.searchBar(accessToken, refreshToken);
-      setMtList(res.data.mountainList);
-    };
-    getMtList();
+    if (accessToken) {
+      const getMtList = async () => {
+        try {
+          const res = await courseApi.searchBar(accessToken, refreshToken);
+          setMtList(res.data.mountainList);
+          // 세션스토리지 내 accessToken 갱신
+          sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      getMtList();
+    } else {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
   }, []);
 
   // keyword(검색창에 입력하는 값) State 세팅
@@ -42,7 +55,7 @@ function FilterMt() {
   // 검색창에 keyword가 입력될 때 키워드를 포함하고 있는 산들만 filter해주기
   useEffect(() => {
     setResultData(
-      mtList.filter((mountain) => {
+      mtList.filter(mountain => {
         if (mountain.includes(keyword) && keyword.length !== 0) {
           return mountain.includes(keyword);
         }
@@ -109,16 +122,17 @@ function FilterMt() {
           },
         }
       )
-      .then((res) => {
+      .then(res => {
         setCourseList(res.data.course_list);
+        // 세션스토리지 내 accessToken 갱신
+        sessionStorage.setItem("accessToken", res.headers["x-access-token"]);
       })
-      .catch((err) => console.log(err));
+      .catch(err => console.log(err));
   };
 
   // 메인에서 필터페이지로 산 이름 넘겨줄 때 =========================
   const location = useLocation();
   const [mtName, setMtName] = useState<string | null>(location.state);
-  // console.log(location.state);
 
   // 2. mtName을 axios객체에 넣기
   useEffect(() => {
@@ -126,8 +140,6 @@ function FilterMt() {
       handleMt(mtName, "courseMtNm");
     }
   }, [mtName]);
-
-  // useEffect(() => {}, [keyword]);
 
   // console 확인창 ===============================================
   // console.log(searchMt);
@@ -163,7 +175,7 @@ function FilterMt() {
                     resultData.map((result, index) => (
                       <div key={index}>
                         <Resultli
-                          onMouseDown={(e) => {
+                          onMouseDown={e => {
                             e.preventDefault();
                           }}
                           onClick={() => {
@@ -209,7 +221,7 @@ function FilterMt() {
                     resultData.map((result, index) => (
                       <div key={index}>
                         <Resultli
-                          onMouseDown={(e) => {
+                          onMouseDown={e => {
                             e.preventDefault();
                           }}
                           onClick={() => {
@@ -388,10 +400,9 @@ const StyledBtn = styled.button<ButtonInfo>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) =>
-    props.index === props.timeState ? "#238C47 " : "#818181"};
+  color: ${props => (props.index === props.timeState ? "#238C47 " : "#818181")};
   border: solid
-    ${(props) =>
+    ${props =>
       props.index === props.timeState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
@@ -404,10 +415,10 @@ const StyledBtn1 = styled.button<ButtonInfo>`
   height: 30px;
   background-color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 3px 3px rgba(0, 0, 0, 0.22);
-  color: ${(props) =>
+  color: ${props =>
     props.index === props.lengthState ? "#238C47" : "#818181"};
   border: solid
-    ${(props) =>
+    ${props =>
       props.index === props.lengthState ? "#238C47 3px" : "#818181 2px"};
   font-size: 15px;
   font-family: "GmarketSansMedium";
@@ -474,7 +485,7 @@ const Search = styled.input<SearchProps>`
   width: 100%;
   height: 11vw;
   border: 1px solid gray;
-  border-radius: ${(props) =>
+  border-radius: ${props =>
     props.isFocus && props.value ? "10px 10px 0px 0px" : "10px 10px"};
   font-family: "GmarketSansLight";
   text-align: left;

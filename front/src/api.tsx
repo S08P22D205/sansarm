@@ -71,13 +71,6 @@ export const courseApi = {
         "X-REFRESH-TOKEN": refreshToken,
       },
     }),
-  // filterMt: (accessToken: string | null, refreshToken: string | null) =>
-  //   flaskApi.post("course/search/mt", {
-  //     headers: {
-  //       "X-ACCESS-TOKEN": accessToken,
-  //       "X-REFRESH-TOKEN": refreshToken,
-  //     },
-  //   }),
 };
 
 export default flaskApi;

@@ -1,12 +1,24 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 function NotFound() {
+  // navigate 사용 정의
   const navigate = useNavigate();
+
+  // accessToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
 
   const moveToMain = () => {
     navigate("/main");
   };
+
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
+  });
 
   return (
     <div>

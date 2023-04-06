@@ -26,22 +26,24 @@ interface courseInfo {
 }
 
 function Review() {
-  const courseData: courseInfo = useAppSelector(
-    (state) => state.course.detailInfo
-  );
+  // accessToken, refreshToken 세션스토리지에서 가져와주기
+  const accessToken = sessionStorage.getItem("accessToken");
+  const refreshToken = sessionStorage.getItem("refreshToken");
 
   const navigate = useNavigate();
 
+  const courseData: courseInfo = useAppSelector(
+    state => state.course.detailInfo
+  );
+
   const moveToPhotoPage = () => {
-    // navigate("/photo/", { state: props });                   // (2)
-    // navigate("/photo/");
     navigate("/mypage/myreview");
   };
 
   const [endTime, setEndTime] = useState(0);
   const [hikingTime, setHikingTime] = useState(0);
 
-  const startTime: number = useAppSelector((state) => state.course.timeInfo);
+  const startTime: number = useAppSelector(state => state.course.timeInfo);
 
   useEffect(() => {
     setEndTime(Date.now());
@@ -54,12 +56,18 @@ function Review() {
     });
   }, [startTime, endTime]);
 
+  useEffect(() => {
+    if (!accessToken) {
+      navigate("/");
+      window.alert("로그인이 필요한 페이지입니다.");
+    }
+  });
+
   const [easy, setEasy] = useState(false);
   const [soso, setSoso] = useState(false);
   const [hard, setHard] = useState(false);
 
   function easyToggle() {
-    console.log(easy);
     if (easy === false) setEasy(true);
     if (soso === true) setSoso(false);
     if (hard === true) setHard(false);
@@ -107,14 +115,10 @@ function Review() {
       ...review,
       [type]: event.target.value,
     });
-
-    console.log(review.reviewDiff + " " + review.reviewContent);
   };
 
   const apiReviewInsert = () => {
     if (review.reviewDiff !== "" && review.reviewContent !== "") {
-      console.log(review);
-      console.log(sessionStorage.getItem("accessToken"));
       axios
         .post(
           "/user/review/insert",
@@ -131,11 +135,8 @@ function Review() {
             },
           }
         )
-        .then((response) => {
-          console.log("success");
-          console.log(response);
+        .then(response => {
           if (response.data) {
-            //res.data.response.body.items.
             sessionStorage.setItem(
               "accessToken",
               response.headers["x-access-token"]
@@ -143,7 +144,7 @@ function Review() {
             moveToPhotoPage();
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     } else {
@@ -169,7 +170,7 @@ function Review() {
         rows={8}
         placeholder="등산 후기를 자유롭게 입력해주세요"
         value={review.reviewContent}
-        onChange={(event) => {
+        onChange={event => {
           changeReview(event, "reviewContent");
         }}
       ></StyledTextBox>
