@@ -168,8 +168,26 @@ function MyReview() {
               <StyledSpan>소요시간 </StyledSpan>
               {review.reviewTime ? (
                 <span>
+                  {/* 시간 있으면 */}
+                  {Math.floor(review.reviewTime / 60) ? (
+                    <span>
+                      {Math.floor(review.reviewTime / 60)}시간{" "}
+                      {review.reviewTime % 60 ? (
+                        <span>{review.reviewTime % 60}분</span>
+                      ) : null}
+                    </span>
+                  ) : null}
+                </span>
+              ) : (
+                <span>0분</span>
+              )}
+              {/* {review.reviewTime ? (
+                <span>
+
+
                   {Math.floor(review.reviewTime / 60)}시간{" "}
-                  {review.reviewTime % 60 ? (
+                  {Math.floor(review.reviewTime / 60) === 0 ||
+                  review.reviewTime % 60 ? (
                     <span>{review.reviewTime % 60}분</span>
                   ) : (
                     <span></span>
@@ -177,7 +195,7 @@ function MyReview() {
                 </span>
               ) : (
                 <span></span>
-              )}
+              )} */}
             </StyledP1>
             <StyledP1>{review.reviewContent}</StyledP1>
           </ReviewCard>

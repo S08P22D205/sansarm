@@ -27,21 +27,19 @@ interface courseInfo {
 
 function Review() {
   const courseData: courseInfo = useAppSelector(
-    (state) => state.course.detailInfo
+    state => state.course.detailInfo
   );
 
   const navigate = useNavigate();
 
   const moveToPhotoPage = () => {
-    // navigate("/photo/", { state: props });                   // (2)
-    // navigate("/photo/");
     navigate("/mypage/myreview");
   };
 
   const [endTime, setEndTime] = useState(0);
   const [hikingTime, setHikingTime] = useState(0);
 
-  const startTime: number = useAppSelector((state) => state.course.timeInfo);
+  const startTime: number = useAppSelector(state => state.course.timeInfo);
 
   useEffect(() => {
     setEndTime(Date.now());
@@ -59,7 +57,6 @@ function Review() {
   const [hard, setHard] = useState(false);
 
   function easyToggle() {
-    console.log(easy);
     if (easy === false) setEasy(true);
     if (soso === true) setSoso(false);
     if (hard === true) setHard(false);
@@ -107,14 +104,10 @@ function Review() {
       ...review,
       [type]: event.target.value,
     });
-
-    console.log(review.reviewDiff + " " + review.reviewContent);
   };
 
   const apiReviewInsert = () => {
     if (review.reviewDiff !== "" && review.reviewContent !== "") {
-      console.log(review);
-      console.log(sessionStorage.getItem("accessToken"));
       axios
         .post(
           "/user/review/insert",
@@ -131,9 +124,7 @@ function Review() {
             },
           }
         )
-        .then((response) => {
-          console.log("success");
-          console.log(response);
+        .then(response => {
           if (response.data) {
             //res.data.response.body.items.
             sessionStorage.setItem(
@@ -143,7 +134,7 @@ function Review() {
             moveToPhotoPage();
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     } else {
@@ -169,7 +160,7 @@ function Review() {
         rows={8}
         placeholder="등산 후기를 자유롭게 입력해주세요"
         value={review.reviewContent}
-        onChange={(event) => {
+        onChange={event => {
           changeReview(event, "reviewContent");
         }}
       ></StyledTextBox>
