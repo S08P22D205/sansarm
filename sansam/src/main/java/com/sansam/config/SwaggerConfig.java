@@ -19,7 +19,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         Server serverForLocal = new Server("local", "http://localhost:5000", "for local usages", Collections.emptyList(), Collections.emptyList());
-        Server serverForEC2 = new Server("EC2", "http://172.17.0.1:5000", "for EC2 usages", Collections.emptyList(), Collections.emptyList());
+        Server serverForEC2 = new Server("EC2", "https://j8d205.p.ssafy.io/api", "for EC2 usages", Collections.emptyList(), Collections.emptyList());
         return new Docket(DocumentationType.OAS_30)
                 .servers(serverForLocal, serverForEC2)
                 .apiInfo(apiInfo())
