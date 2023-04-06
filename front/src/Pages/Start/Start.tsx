@@ -18,7 +18,7 @@ const Start = () => {
           onClick={handleLogin}
         />
       </StyledDiv2>
-      <StyledImg2 src="/img/main_footer.png" alt="footer" />
+      <StyledImg2 src="/img/start_footer.png" alt="footer" />
     </StyledDiv>
   );
 };
