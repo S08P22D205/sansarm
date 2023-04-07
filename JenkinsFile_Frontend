@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    tools {nodejs "nodejs"}
+    stages {
+        stage('Gitlab') {
+            steps {
+                script {
+                    git branch: 'dev/fe',
+                    credentialsId: 'GitLab',
+                    url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22D205.git'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('front') {
+                    script {
+                        sh "npm install"
+                        sh "npm run build"
+                    }
+                }
+                dir('') {
+                    script {
+                        dockerImage = docker.build("xronace/d205-frontend:latest")
+                    }
+                }
+            }
+        }
+        stage('Docker hub push') {
+            steps {
+                script {
+                    docker.withRegistry('', 'Docker-Hub') {
+                        dockerImage.push("$BUILD_NUMBER")
+                    }
+                    sh "docker rmi xronace/d205-frontend:$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sshagent(credentials: ['ec2-ssh']) {
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker stop d205-frontend || true"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker rm -f d205-frontend || true"'
+                    sh 'ssh -o StrictHostKeyChecking=no ubuntu@j8d205.p.ssafy.io "docker run -dp 3000:80 --net=bridge --name d205-frontend xronace/d205-frontend:latest"'
+                    sh 'docker image prune -f'
+                }
+            }
+        }
+    }
+}
