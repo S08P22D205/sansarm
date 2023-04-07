@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    stages {
+        stage('Gitlab') {
+            steps {
+                git branch: 'dev/be',
+                credentialsId: 'GitLab',
+                url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22D205.git'
+            }
+        }
+        stage('Build') {
+            steps {
+                dir('flaskSansam') {
+                    script {
+                        dockerImage = docker.build "xronace/d205-flask:latest"
+                    }
+                }
+            }
+        }
+        stage('Docker hub push') {
+            steps {
+                script {
+                    docker.withRegistry('', 'Docker-Hub') {
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push("latest")
+                        dockerImage.push("localversion")
+                    }
+                    sh "docker rmi xronace/d205-flask:$BUILD_NUMBER"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                    sh 'docker stop d205-flask || true'
+                    sh 'docker rm -f d205-flask || true'
+                    sh 'docker run -dp 5001:5001 --net=bridge --name d205-flask xronace/d205-flask:latest'
+                    sh 'docker image prune -f'
+            }
+        }
+    }
+}
