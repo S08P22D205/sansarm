@@ -5,7 +5,7 @@ pipeline {
             steps {
                 git branch: 'dev/be',
                 credentialsId: 'GitLab',
-                url: 'https://lab.ssafy.com/s08-bigdata-recom-sub2/S08P22D205.git'
+                url: '${gitlab repository url}'
             }
         }
         stage('Build') {
@@ -17,7 +17,7 @@ pipeline {
                 }
                 dir('Dockerfiles/sansam') {
                     script {
-                        dockerImage = docker.build "xronace/d205-springboot:latest"
+                        dockerImage = docker.build "${docker hub url:latest}"
                     }
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
                         dockerImage.push("$BUILD_NUMBER")
                         dockerImage.push("latest")
                     }
-                    sh "docker rmi xronace/d205-springboot:$BUILD_NUMBER"
+                    sh "docker rmi ${docker hub url}:$BUILD_NUMBER"
                 }
             }
         }
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 sh 'docker stop d205-springboot || true'
                 sh 'docker rm -f d205-springboot || true'
-                sh 'docker run -dp 5000:5000 -e SPRING_DATASOURCE_URL=jdbc:mariadb://172.17.0.1:3306/sansam_db?serverTimezone=Asia/Seoul --net=bridge --name d205-springboot xronace/d205-springboot:latest'
+                sh 'docker run -dp 5000:5000 -e SPRING_DATASOURCE_URL=jdbc:mariadb://172.17.0.1:3306/sansam_db?serverTimezone=Asia/Seoul --net=bridge --name d205-springboot ${docker hub url}:latest'
                 sh 'docker image prune -f'
             }
         }
